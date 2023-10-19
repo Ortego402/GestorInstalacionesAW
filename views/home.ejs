@@ -21,32 +21,7 @@
 
     <!-- Contenido principal -->
     <main>
-        <!-- Título de la sección de destinos disponibles -->
-        <h2 class="text-center p-2 titulo-dest mb-3">DESTINOS DISPONIBLES</h2>
-        <!-- Cuadrícula de destinos -->
-        <div class="destinos-grid">
-            <!-- Iteración sobre los resultados para mostrar destinos -->
-            <% results.forEach(function(destino, index) { %>
-                <!-- Enlace a la página del destino -->
-                <a href="/destino/<%= destino.id %>" class="decoration">
-                    <!-- Tarjeta de destino -->
-                    <div class="card">
-                        <!-- Imagen del destino -->
-                        <img src="<%= destino.imagen %>" class="card-img-top" alt="<%= destino.nombre %>">
-                        <!-- Cuerpo de la tarjeta -->
-                        <div class="card-body">
-                            <!-- Contenido superior de la tarjeta (nombre y precio) -->
-                            <div class ="card-top">
-                                <!-- Nombre del destino -->
-                                <p class="card-title"><strong><%= destino.nombre %></strong></p>
-                                <!-- Precio del destino -->
-                                <h6 class="card-price"><strong><%= destino.precio %>€</strong></h6>
-                            </div>
-                        </div>
-                    </div>
-                </a>
-            <% }); %>
-        </div>
+
     </main>
 
     <!-- Inclusión del pie de página -->

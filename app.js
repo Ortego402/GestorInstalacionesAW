@@ -1,10 +1,16 @@
 // Importa las bibliotecas y módulos necesarios
 const express = require('express'); // Importa Express
 const dbConnection = require('./js/dbConfig'); // Importa la configuración de la base de datos
-// const bcrypt = require('bcrypt'); // Importa la biblioteca bcrypt para el hashing de contraseñas
 
 // Crea una instancia de Express
 const app = express();
+const bcrypt = require('bcrypt'); //guarda la contraseña en forma de hash instalar => npm install bcrypt
+const session = require('express-session'); //para manejar los incios de seseion es necesario instalarse =>npm install express express-session
+app.use(session({
+  secret: 'Epicscape',
+  resave: false,
+  saveUninitialized: true
+}));
 const port = 3000; // Puerto en el que se ejecutará el servidor
 
 // Configura Express para usar bodyParser y EJS como motor de plantillas
@@ -16,7 +22,7 @@ app.use(express.static('public'));
 
 // Ruta para mostrar todos los destinos
 app.get('/', (req, res) => {
-    res.render('login');
+    res.render('home');
 });
 
 // Rutas para otras páginas
@@ -44,103 +50,10 @@ app.get('/registro', (req, res) => {
   res.render('registro');
 });
 
-// Ruta para mostrar detalles de un destino específico
-app.get('/destino/:id', (req, res) => {
-  const id = req.params.id;
-  const reservaConfirmada = req.query.reserva === 'confirmada';
-  const comentarioConfirmado = req.query.comentario === 'confirmada';
-
-  // Mensaje que se mostrará en función de la confirmación de reserva o comentario
-  let mensaje = '';
-  if (reservaConfirmada) {
-    mensaje = '¡Reserva completada! Gracias por realizar la reserva.';
-  } else if (comentarioConfirmado) {
-    mensaje = 'Comentario realizado correctamente.';
-  } else if (req.query.reserva === 'null' || req.query.comentario === 'null') {
-    mensaje = '¡Ups! Ha ocurrido un error al realizar la acción.';
-  }
-
-  // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
-  dbConnection.query('SELECT * FROM destinos WHERE id = ?', [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error de la base de datos' });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).send('Destino no encontrado');
-    }
-
-    // Consultas para obtener imágenes y comentarios del destino específico
-    dbConnection.query('SELECT * FROM imagenes_destino WHERE destino_id = ?', [id], (err, results) => {
-      if (err) {
-        return res.status(500).json({ error: 'Error de la base de datos' });
-      }
-
-      dbConnection.query('SELECT * FROM comentarios WHERE destino_id = ?', [id], (err, comentarios) => {
-        if (err) {
-          return res.status(500).json({ error: 'Error de la base de datos' });
-        }
-        // Renderiza la vista "destino.ejs" con los detalles del destino, imágenes y comentarios
-        res.render('destino', { result: result[0], results: results, comentarios: comentarios, mensaje: mensaje });
-      });
-    });
-  });
-});
-
-// Ruta para buscar destinos por nombre o descripción
-app.get('/buscar', (req, res) => {
-  const searchTerm = req.query.nombreBuscar; // Obtiene el término de búsqueda del parámetro de consulta
-  // Realiza una consulta a la base de datos para buscar destinos por nombre o descripción
-  dbConnection.query('SELECT * FROM destinos WHERE nombre LIKE ? OR descripcion LIKE ?', [`%${searchTerm}%`, `%${searchTerm}%`], (err, results) => {
-    if (err) {
-      res.status(500).json({ error: 'Error de la base de datos' });
-      return;
-    }
-    // Renderiza la vista "home.ejs" con los resultados de la búsqueda
-    res.render('home', { results: results });
-  });
-});
-
-// Ruta para manejar la reserva de un destino específico
-app.post('/destino/:id/reservar', (req, res) => {
-  const { nombre, email, fecha_reserva } = req.body;
-  const id = req.params.id;
-
-  // Valida el formato del correo electrónico utilizando una expresión regular
-  if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
-    return res.status(400).json({ error: 'El correo no es válido' });
-  }
-
-  // Inserta los datos de la reserva en la base de datos
-  dbConnection.query('INSERT INTO reservas (destino_id, nombre_cliente, correo_cliente, fecha_reserva) VALUES (?, ?, ?, ?)', [id, nombre, email, fecha_reserva], (err, result) => {
-    if (err) {
-      return res.redirect(`/destino/${id}?reserva=null`);
-    }
-    // Redirige a la página del destino con confirmación de reserva
-    res.redirect(`/destino/${id}?reserva=confirmada`);
-  });
-});
-
-// Ruta para manejar la publicación de comentarios en un destino específico
-app.post('/destino/:id/comentarios', (req, res) => {
-  const { nombre_usuario, comentario } = req.body;
-  const id = req.params.id;
-
-  // Inserta los datos del comentario en la base de datos
-  dbConnection.query('INSERT INTO comentarios (destino_id, nombre_usuario, comentario) VALUES (?, ?, ?)', [id, nombre_usuario, comentario], (err, result) => {
-    if (err) {
-      return res.redirect(`/destino/${id}?comentario=null`);
-    }
-    // Redirige a la página del destino con confirmación de comentario
-    res.redirect(`/destino/${id}?comentario=confirmada`);
-  });
-});
-
-
 app.post('/registro', (req, res) => {
-  const { nombre, apellidos, correo, username, password } = req.body;
+  const { nombre, apellido1, apellido2, correo, username, password } = req.body;
 
-  const checkUsernameQuery = 'SELECT * FROM usuarios WHERE username = ?';
+  const checkUsernameQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
   db.query(checkUsernameQuery, [username], (checkUsernameErr, checkUsernameResult) => {
     if (checkUsernameErr) {
       return res.status(500).json({ error: 'Error interno del servidor' });
@@ -167,7 +80,7 @@ app.post('/registro', (req, res) => {
   }
 
   // Insertar datos en la base de datos
-  const query = 'INSERT INTO usuarios (nombre, apellidos, correo, username, password) VALUES (?, ?, ?, ?, ?)';
+  const query = 'INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellidos, correo, username, password) VALUES (?, ?, ?, ?, ?)';
   db.query(query, [username, bcrypt.hash(password, 10)], (err, result) => {
     if (err) {
       return res.status(500).json({ error: 'Error interno del servidor' });
@@ -176,6 +89,54 @@ app.post('/registro', (req, res) => {
     return res.status(200).json({ message: 'Registro exitoso.' });
   });
   
+});
+
+app.post('/InicioSesion', (req, res) => {
+  const { email, password } = req.body;
+  
+  const checkUsernameQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
+  dbConnection.query(checkUsernameQuery, [email], (checkUsernameErr, checkUsernameResult) => {
+    if (checkUsernameErr) {
+      return res.status(500).json({ error: 'Error interno del servidor' });
+    }
+    let mensaje = null;
+    if (checkUsernameResult.length === 0) {
+      // Nombre de usuario no existe, asignar un mensaje de error
+      mensaje = 'El email no existe';
+      return res.render('login', { mensaje: mensaje });
+    } else {
+      // Verificar la contraseña utilizando bcrypt
+      const storedPasswordHash = checkUsernameResult[0].password; // asumiendo que el campo en la base de datos se llama "password"
+      bcrypt.compare(password, storedPasswordHash, (compareErr, compareResult) => {
+        if (compareErr) {
+          return res.status(500).json({ error: 'Error interno del servidor' });
+        }
+
+        if (!compareResult) {
+          // Contraseña incorrecta, asignar un mensaje de error
+          mensaje = 'Contraseña incorrecta';
+          return res.render('login', { mensaje: mensaje });
+        }
+
+        // Las credenciales son válidas, almacenar información del usuario en la sesión
+        req.session.username = username;
+        return res.redirect('/home');
+      });
+    }
+  });
+});
+
+app.get('/home', (req, res) => {
+  //console.log('Username almacenado en la sesión:', req.session.username);
+  // Realiza una consulta a la base de datos para obtener todos los destinos
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones', (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Error de la base de datos' });
+      return;
+    }
+    // Renderiza la vista "home.ejs" con los resultados obtenidos de la base de datos
+    res.render('home', { results: results, session: req.session });
+  });
 });
 
 // Inicia el servidor y escucha en el puerto especificado

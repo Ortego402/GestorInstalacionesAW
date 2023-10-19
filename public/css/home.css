@@ -1,3 +1,11 @@
+/* Estilos para el contenedor del encabezado */
+header {
+    display: flex;
+    align-items: center;
+    background-color: #ffffff;
+    padding: 20px;
+}
+
 /* Estilos para el contenedor */
 .container {
     height: 100vh; /* Establece la altura del contenedor al 100% de la altura de la ventana */
@@ -21,4 +29,97 @@
     text-decoration: none;
     width: 100%;
     padding: 20px; /* Ajusta el relleno del cuerpo de la tarjeta según sea necesario */
+}
+
+.img {
+    width: 25em;
+    height: auto;
+    padding: 10px 10px;
+    float: right;
+}
+
+/* Estilos para los botones de perfil */
+.botonperfil {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-right: 20px;
+    font-size: 20px;
+}
+
+/* Estilos para la barra de búsqueda */
+.buscador {
+    display: flex;
+    width: 100%;
+    margin-right: 50px;
+}
+
+/* Estilos para el cuadro de búsqueda */
+.caja {
+    padding: 10px;
+    border: 2px solid #000000;
+    border-radius: 5px;
+    width: 600px;
+}
+
+/* Estilos para el botón de búsqueda */
+.boton {
+    background-color: #333;
+    color: #fff;
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    margin-left: 10px;
+}
+
+/* Estilos para el pie de página */
+footer {
+    background-color: #707070;
+    color: white;
+    text-align: center;
+    padding: 20px;
+    margin-top: auto;
+}
+
+/* Estilos para los botones de navegación */
+.botonnav {
+    background-color: #5fb7c3;
+    color: #fff;
+    transition: background-color 0.3s;
+    border: none;
+    padding: 10px 20px;
+}
+
+.navbar{
+    background-color:#5fb7c3;
+}
+
+/* Estilos para los botones del nav */
+.botonnav:hover{
+        background-color: #333;
+}
+
+/* Estilos para la barra de navegación */
+nav {
+    background-color: #00BCD4;
+    text-align: center;
+    padding: 10px 0;
+    display: flex;
+    justify-content: space-around;
+    width: 100%;
+}
+
+/* Estilos para los elementos <a> en la barra de navegación */
+nav a {
+    color: #fff;
+    text-decoration: none;
+    margin: 0;
+    padding: 10px 0;
+    width: calc(100% / 3);
+    box-sizing: border-box;
+    display: block;
 }

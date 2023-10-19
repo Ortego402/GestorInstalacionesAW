@@ -13,34 +13,62 @@
 <body class="bg-light">
 
     <div class="container">
-            <div class="col-md-6">
+            <div class="col-md-6 border border-1 border-dark rounded">
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">Registrarse</h5>
-                        <form action="/InicioSesion" method="POST">
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                        <form action="/registrar" method="POST">
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <label for="name" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="name" name="name" required>
+                                </div>
+                                <div class="col mb-2">
+                                    <label for="apellido1" class="form-label">Primer Apellido</label>
+                                    <input type="text" class="form-control" id="apellido1" name="apellido1" required>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="apellido2" class="form-label">Segundo Apellido</label>
+                                        <input type="text" class="form-control" id="apellido2" name="apellido2" required>
+                                    </div>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="email" class="form-label">Correo Electrónico</label>
+                                        <input type="email" class="form-control" id="email" name="email" required>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="curso" class="form-label">Curso</label>
+                                        <input type="text" class="form-control" id="curso" name="curso" required>
+                                    </div>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="grupo" class="form-label">Grupo</label>
+                                        <input type="text" class="form-control" id="grupo" name="grupo" required>
+                                    </div>
+                                </div>
                             </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="username" class="form-label">Nombre Usuario</label>
-                                <input type="text" class="form-control" id="username" name="username" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="password" class="form-label">Contraseña</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                </div>
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
+                                        <input type="confirmPassword" class="form-control" id="confirmPassword" name="password" required>
+                                    </div>
+                                </div>
                             </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Registrarse</button>
@@ -48,7 +76,7 @@
                             <br>
                         </form>
                         <div class="text-center">
-                            <p>¿Ya tienes cuenta? <a href="/InicioSesion">Registrarse</a></p>
+                            <p>¿Ya tienes cuenta? <a href="/login">Inicia sesión</a></p>
                         </div>
                     </div>
                 </div>
