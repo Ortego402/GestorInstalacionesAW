@@ -1,0 +1,40 @@
+<!-- Encabezado de la página -->
+<header class="container-fluid container-header">
+    <!-- Columna 1 vacía -->
+    <div class="col col-1"></div>
+    <!-- Columna 2 con el logo y el nombre del sitio -->
+    <div class="col col-5 d-flex align-items-center">
+        <!-- Contenedor para el logo -->
+        <div class="mb-1">
+            <!-- Imagen del logo -->
+            <img src="../images/logo.png" class="img" alt="Imagen">
+        </div>
+        <!-- Enlace al inicio con el nombre del sitio como botón -->
+        <a href="/" class="btn text-dark border-0">
+            <!-- Título del sitio -->
+            <h2 class="fst-italic"><strong>EpicScape</strong></h2>
+        </a>
+    </div>
+    <!-- Columna 3 con el formulario de búsqueda -->
+    <div class="col col-5">
+        <!-- Formulario de búsqueda -->
+        <form action="/buscar" method="get">
+            <!-- Contenedor para la caja de búsqueda y el botón de búsqueda -->
+            <div class="buscador">
+                <!-- Caja de búsqueda -->
+                <input id="busquedaGlobal" type="search" class="caja" placeholder="Próximo destino..." name="nombreBuscar" required>
+                <!-- Botón de búsqueda -->
+                <button class="boton" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
+    </div>
+    <div class="col col-1">
+        <div class="mb-1">
+            <!-- Imagen del login -->
+            <a href="/login" class="btn text-dark border-0">
+                <button class="boton" type="login"><i class="bi bi-person-circle"></i></button>
+            </a>
+        </div>
+    </div>
+</header>
+
