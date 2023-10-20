@@ -2,16 +2,17 @@
 header {
     display: flex;
     align-items: center;
-    background-color: #ffffff;
+    background-color: #cfcfcf;
     padding: 20px;
 }
 
-/* Estilos para el contenedor */
-.container {
-    height: 100vh; /* Establece la altura del contenedor al 100% de la altura de la ventana */
-    display: flex;
-    justify-content: center;
-    align-items: center;
+/* Estilos para los títulos de destino */
+.titulo-dest {
+    font-size: 2em;
+    font-weight: bold;
+    text-align: center;
+    color: #333;
+    text-transform: uppercase;
 }
 
 /* Estilos para las tarjetas */
@@ -23,6 +24,11 @@ header {
     color: #333;
 }
 
+/* Efecto de escala al pasar el mouse sobre las tarjetas */
+.card-destino:hover {
+    transform: scale(1.05);
+}
+
 /* Estilos para el cuerpo de las tarjetas */
 .card-body {
     background-color: rgb(222, 222, 222);
@@ -31,8 +37,28 @@ header {
     padding: 20px; /* Ajusta el relleno del cuerpo de la tarjeta según sea necesario */
 }
 
+/* Estilos para las imágenes en las tarjetas */
+.card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+/* Estilos para el texto de las tarjetas, truncando el texto largo */
+.card-text {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+/* Estilos para la parte superior de las tarjetas */
+.card-top {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+}
+
 .img {
-    width: 25em;
+    width: 20em;
     height: auto;
     padding: 10px 10px;
     float: right;
@@ -78,7 +104,7 @@ header {
 
 /* Estilos para el pie de página */
 footer {
-    background-color: #707070;
+    background-color: #555555;
     color: white;
     text-align: center;
     padding: 20px;
@@ -87,7 +113,7 @@ footer {
 
 /* Estilos para los botones de navegación */
 .botonnav {
-    background-color: #5fb7c3;
+    background-color: #b4b4b4;
     color: #fff;
     transition: background-color 0.3s;
     border: none;
@@ -95,7 +121,7 @@ footer {
 }
 
 .navbar{
-    background-color:#5fb7c3;
+    background-color:#b4b4b4;
 }
 
 /* Estilos para los botones del nav */
@@ -122,4 +148,16 @@ nav a {
     width: calc(100% / 3);
     box-sizing: border-box;
     display: block;
+}
+/* Estilos para las tarjetas en la vista de rejilla */
+.destinos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+    text-decoration: none;
+}
+
+/* Estilo para eliminar subrayado de los enlaces */
+.decoration {
+    text-decoration: none;
 }

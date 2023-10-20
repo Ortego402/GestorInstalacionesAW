@@ -34,4 +34,20 @@ CREATE TABLE UCM_AW_RIU_RES_Reservas (
     FOREIGN KEY (instId) REFERENCES UCM_AW_RIU_INS_Instalaciones(Id)
 );
 
+-- Insertar un registro con tipo de reserva colectivo
+INSERT INTO UCM_AW_RIU_INS_Instalaciones (Id, nombre, tipoReserva, imagen, aforo, horario)
+VALUES (1, 'Piscina', 'colectivo', 'piscina.jpg', 100, '09:00 AM - 08:00 PM');
+
+-- Insertar un registro con tipo de reserva individual
+INSERT INTO UCM_AW_RIU_INS_Instalaciones (Id, nombre, tipoReserva, imagen, aforo, horario)
+VALUES (2, 'Sala de Conferencias', 'individual', 'conferencias.jpg', 50, '09:00 AM - 05:00 PM');
+
+-- Insertar un registro con tipo de reserva colectivo
+INSERT INTO UCM_AW_RIU_INS_Instalaciones (Id, nombre, tipoReserva, imagen, aforo, horario)
+VALUES (3, 'Gimnasio', 'individual', 'gimnasio.jpg', 100, '09:00 AM - 08:00 PM');
+
+-- Insertar un registro con tipo de reserva individual
+INSERT INTO UCM_AW_RIU_INS_Instalaciones (Id, nombre, tipoReserva, imagen, aforo, horario)
+VALUES (4, 'Pista de Tenis', 'individual', 'tenis.jpg', 50, '09:00 AM - 05:00 PM');
+
 

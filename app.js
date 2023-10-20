@@ -21,9 +21,9 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 // Ruta para mostrar todos los destinos
-app.get('/', (req, res) => {
-    res.render('home');
-});
+// app.get('/', (req, res) => {
+//     res.render('home');
+// });
 
 // Rutas para otras páginas
 app.get('/servicios', (req, res) => {
@@ -126,7 +126,7 @@ app.post('/InicioSesion', (req, res) => {
   });
 });
 
-app.get('/home', (req, res) => {
+app.get('/', (req, res) => {
   //console.log('Username almacenado en la sesión:', req.session.username);
   // Realiza una consulta a la base de datos para obtener todos los destinos
   dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones', (err, results) => {
