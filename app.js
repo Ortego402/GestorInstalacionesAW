@@ -21,9 +21,9 @@ app.set('view engine', 'ejs');
 app.use(express.static('public'));
 
 // Ruta para mostrar todos los destinos
-// app.get('/', (req, res) => {
-//     res.render('home');
-// });
+app.get('/', (req, res) => {
+     res.render('login');
+});
 
 // Rutas para otras páginas
 app.get('/servicios', (req, res) => {
@@ -42,12 +42,18 @@ app.get('/reserva', (req, res) => {
   res.render('reserva');
 });
 
+app.get('/instalacion', (req, res) => {
+  res.render('instalacion', {session: req.session});
+});
+
 app.get('/login', (req, res) => {
-  res.render('login');
+  let mensaje = "";
+  res.render('login', { session: req.session, mensaje: mensaje });
 });
 
 app.get('/registro', (req, res) => {
-  res.render('registro');
+  let mensaje = "";
+  res.render('registro', { session: req.session, mensaje: mensaje });
 });
 
 app.post('/registro', (req, res) => {
@@ -88,12 +94,12 @@ app.post('/registro', (req, res) => {
 
     return res.status(200).json({ message: 'Registro exitoso.' });
   });
-  
+
 });
 
 app.post('/InicioSesion', (req, res) => {
   const { email, password } = req.body;
-  
+
   const checkUsernameQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
   dbConnection.query(checkUsernameQuery, [email], (checkUsernameErr, checkUsernameResult) => {
     if (checkUsernameErr) {
@@ -106,27 +112,27 @@ app.post('/InicioSesion', (req, res) => {
       return res.render('login', { mensaje: mensaje });
     } else {
       // Verificar la contraseña utilizando bcrypt
-      const storedPasswordHash = checkUsernameResult[0].password; // asumiendo que el campo en la base de datos se llama "password"
-      bcrypt.compare(password, storedPasswordHash, (compareErr, compareResult) => {
-        if (compareErr) {
-          return res.status(500).json({ error: 'Error interno del servidor' });
-        }
+      // const storedPasswordHash = checkUsernameResult[0].password;
+      // bcrypt.compare(password, storedPasswordHash, (compareErr, compareResult) => {
+      //   if (compareErr) {
+      //     return res.status(500).json({ error: 'Error interno del servidor' });
+      //   }
 
-        if (!compareResult) {
-          // Contraseña incorrecta, asignar un mensaje de error
-          mensaje = 'Contraseña incorrecta';
-          return res.render('login', { mensaje: mensaje });
-        }
+      //   if (!compareResult) {
+      //     // Contraseña incorrecta, asignar un mensaje de error
+      //     mensaje = 'Contraseña incorrecta';
+      //     return res.render('login', { mensaje: mensaje });
+      //   }
 
         // Las credenciales son válidas, almacenar información del usuario en la sesión
-        req.session.username = username;
+        req.session.email = email;
+        req.session.rol = checkUsernameResult[0].rol;
         return res.redirect('/home');
-      });
-    }
+      }
   });
 });
 
-app.get('/', (req, res) => {
+app.get('/home', (req, res) => {
   //console.log('Username almacenado en la sesión:', req.session.username);
   // Realiza una consulta a la base de datos para obtener todos los destinos
   dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones', (err, results) => {
@@ -135,7 +141,25 @@ app.get('/', (req, res) => {
       return;
     }
     // Renderiza la vista "home.ejs" con los resultados obtenidos de la base de datos
+    console.log(req.session);
     res.render('home', { results: results, session: req.session });
+  });
+});
+
+// Ruta para manejar la reserva de un destino específico
+app.post('/nueva_instalacion', upload.single('imagen'), (req, res) => {
+  const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
+  const imagen = req.file.filename; // Obtiene el nombre del archivo de la propiedad 'filename' del objeto 'req.file'
+
+  // Inserta los datos de la instalación en la base de datos
+  dbConnection.query('INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horarioInicio, horarioFin) VALUES (?, ?, ?, ?, ?, ?)', [nombre, tipoReserva, imagen, aforo, horaInicio, horaFin], (err, result) => {
+    if (err) {
+      // Maneja los errores de la base de datos aquí
+      console.error(err);
+      return res.redirect(`/home`); // Redirige a la página de inicio en caso de error
+    }
+    // Redirige a la página del destino con confirmación de la instalación añadida
+    res.redirect(`/home?`);
   });
 });
 

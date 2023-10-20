@@ -21,7 +21,8 @@ CREATE TABLE UCM_AW_RIU_INS_Instalaciones (
     tipoReserva VARCHAR(255),
     imagen VARCHAR(255),
     aforo INT,
-    horario VARCHAR(255)
+    horaInicio VARCHAR(255)
+    horaFin VARCHAR(255)
 );
 
 -- Crear tabla de Reservas
