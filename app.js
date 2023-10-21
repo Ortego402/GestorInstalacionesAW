@@ -30,9 +30,16 @@ app.get('/servicios', (req, res) => {
   res.render('servicios');
 });
 
-app.get('/nosotros', (req, res) => {
-  res.render('nosotros');
-});
+app.get('/usuarios', (req, res) => {
+  // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_USU_Usuarios', (err, results) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de la base de datos' });
+    }
+    
+    res.render('listarUsuarios', { results: results, session: req.session});
+
+});});
 
 app.get('/populares', (req, res) => {
   res.render('populares');
@@ -185,6 +192,37 @@ app.post('/nueva_instalacion', /*upload.single('imagen'), */(req, res) => {
     res.redirect(`/home`);
   });
 });
+
+app.get('/cambiarRol/:id', (req, res) => {
+  const id = req.params.id;
+
+  // Realiza una consulta para obtener el rol actual del usuario
+  dbConnection.query('SELECT rol FROM UCM_AW_RIU_USU_Usuarios WHERE Id = ?', [id], (err, results) => {
+    if (err) {
+      // Maneja los errores de la base de datos aquí
+      console.error(err);
+      return res.status(500).json({ error: 'Error de la base de datos' });
+    }
+
+    // Obtiene el rol actual del resultado de la consulta
+    const rolActual = results[0].rol;
+    // Cambia el rol de '1' a '0' o de '0' a '1' según el valor actual
+    const nuevoRol = rolActual === '1' ? '0' : '1';
+    // Realiza una consulta de actualización para cambiar el rol
+    dbConnection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET rol = ? WHERE Id = ?', [nuevoRol, id], (err, result) => {
+      if (err) {
+        // Maneja los errores de la base de datos aquí
+        console.error(err);
+        return res.status(500).json({ error: 'Error de la base de datos al actualizar el rol' });
+      }
+      
+      // Redirige a la página de lista de usuarios después de cambiar el rol
+      res.redirect('/usuarios');
+    });
+  });
+});
+
+
 
 // Ruta para manejar la reserva de una instalación específica
 app.post('/realizar_reserva', (req, res) => {
