@@ -157,7 +157,24 @@ app.post('/InicioSesion', (req, res) => {
         req.session.email = email;
         req.session.Id = checkUsernameResult[0].Id;
         req.session.rol = checkUsernameResult[0].rol;
-        return res.redirect('/home');
+
+        // Realizar una consulta para obtener los datos de la organización
+        dbConnection.query('SELECT * FROM UCM_AW_RIU_ORG_Organizacion', (orgErr, orgResult) => {
+          if (orgErr) {
+            // Manejar errores de la base de datos si es necesario
+            return res.status(500).json({ error: 'Error de la base de datos' });
+          }
+
+          if (orgResult.length > 0) {
+            // Si hay resultados de la consulta, almacenarlos en la sesión
+            req.session.orgNombre = orgResult[0].nombre;
+            req.session.orgIcono = orgResult[0].imagen;
+            req.session.orgDireccion = orgResult[0].direccion;
+          }
+          
+          // Redirigir a la página de inicio o cualquier otra página según tu lógica de la aplicación
+          return res.redirect('/home');
+        });
       }
   });
 });
@@ -222,7 +239,20 @@ app.get('/cambiarRol/:id', (req, res) => {
   });
 });
 
+app.get('/perfil', (req, res) => {
+  const id = req.session.Id;
 
+  // Realiza una consulta para obtener el rol actual del usuario
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE Id = ?', [id], (err, usuario) => {
+    if (err) {
+      // Maneja los errores de la base de datos aquí
+      console.error(err);
+      return res.status(500).json({ error: 'Error de la base de datos' });
+    }
+    console.log(usuario)
+    res.render('perfil', { usuario: usuario[0], session: req.session });
+    });
+});
 
 // Ruta para manejar la reserva de una instalación específica
 app.post('/realizar_reserva', (req, res) => {
@@ -252,6 +282,37 @@ app.get('/buscar', (req, res) => {
     }
     // Renderiza la vista "home.ejs" con los resultados de la búsqueda
     res.render('home', { results: results, session: req.session});
+  });
+});
+
+app.get('/logout', (req, res) => {
+  // Destruye la sesión y redirige al usuario a la página de login
+  req.session.destroy((err) => {
+    if (err) {
+      console.error('Error al cerrar sesión:', err);
+    }
+    // Redirige a la página de login después de cerrar sesión
+    res.redirect('/login');
+  });
+});
+
+// Ruta para manejar la edición de datos del usuario
+app.post('/editar/:id', (req, res) => {
+  const userId = req.params.id;
+  const { nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
+
+  // Realiza la actualización de los datos del usuario en la base de datos
+  dbConnection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET nombre = ?, apellido1 = ?, apellido2 = ?, facultad = ?, curso = ?, grupo = ? WHERE Id = ?', 
+  [nombre, apellido1, apellido2, facultad, curso, grupo, userId], 
+  (err, result) => {
+      if (err) {
+          // Maneja los errores de la base de datos aquí
+          console.error(err);
+          return res.status(500).json({ error: 'Error de la base de datos al actualizar los datos del usuario' });
+      }
+      
+      // Redirige a la página de perfil del usuario después de actualizar los datos
+      res.redirect('/perfil');
   });
 });
 

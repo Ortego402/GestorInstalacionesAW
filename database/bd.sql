@@ -36,6 +36,15 @@ CREATE TABLE UCM_AW_RIU_RES_Reservas (
     FOREIGN KEY (instId) REFERENCES UCM_AW_RIU_INS_Instalaciones(Id)
 );
 
+CREATE TABLE UCM_AW_RIU_ORG_Organizacion (
+    nombre VARCHAR(255) PRIMARY KEY,
+    direccion VARCHAR(255),
+    imagen VARCHAR(255)
+);
+
+INSERT INTO UCM_AW_RIU_ORG_Organizacion (nombre, direccion, imagen)
+VALUES ('Universidad Complutense Madrid', 'Dirección de la Organización', 'https://www.ucm.es/data/cont/docs/3-2016-07-21-EscudoUCMTransparenteBig.png');
+
 
 INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horaInicio, horaFin) VALUES ('Piscina', 'Colectivo', 'piscina.jpg', 100, '09:00 AM', '06:00 PM');
 INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horaInicio, horaFin) VALUES ('Cancha de Tenis', 'Individual', 'tenis.jpg', 2, '08:00 AM', '10:00 PM');
