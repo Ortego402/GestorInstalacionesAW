@@ -17,46 +17,66 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
-    <%- include('nav.ejs') %>
 
-    <main class="container mt-5">
-        <!-- Información de las instalaciones -->
-        <div class="row mb-4">
-            <div class="col">
-                <h2>Información de Instalaciones</h2>
-                <!-- Aquí puedes iterar sobre las instalaciones y mostrar su información -->
-                <!-- Ejemplo de cómo mostrar una instalación -->
-                <div class="card mb-3">
-                    <div class="card-body">
-                        <h5 class="card-title">Nombre de la Instalación</h5>
-                        <p class="card-text">Descripción o detalles de la instalación.</p>
-                        <p class="card-text">Aforo: XX personas</p>
-                        <p class="card-text">Horario: XX:XX AM - XX:XX PM</p>
+    <main class="container mt-4">
+        <h2 class="text-center mb-4">Reservar Instalación</h2>
+        <!-- Información de las instalaciones y formulario de reserva en la misma fila -->
+        <div class="row">
+            <!-- Información de la instalación (primera columna) -->
+            <div class="col-md-6">
+                <div class="card mb-3 mt-3">
+                    <div class="row g-0">
+                        <!-- Columna para la imagen (arriba) -->
+                        <div class="col-md-12">
+                            <img src="<%= result.imagen %>" class="card-img-top w-100 object-fit-cover" alt="<%= result.nombre %>">
+                        </div>
+                        <!-- Columna para el contenido de la tarjeta (debajo de la imagen) -->
+                        <div class="col-md-12">
+                            <div class="card-body">
+                                <h5 class="card-title"><%= result.nombre %></h5>
+                                <p class="card-text">Tipo de reserva: <%= result.tipoReserva %></p>
+                                <p class="card-text">Aforo: <%= result.aforo %> personas</p>
+                                <p class="card-text">Horario: <%= result.horaInicio %> - <%= result.horaFin %></p>
+                            </div>
+                        </div>
                     </div>
                 </div>
-            </div>
-        </div>
-
-        <!-- Formulario de reserva -->
-        <div class="row">
-            <div class="col">
-                <h2>Reservar Instalación</h2>
-                <form action="/realizar_reserva" method="POST" class="mb-5">
-                    <div class="mb-3">
-                        <label for="dia" class="form-label">Día de la Reserva</label>
+            </div>        
+            <!-- Formulario de reserva (segunda columna) -->
+            <div class="col-md-6 my-auto">
+                <form onsubmit="return validarFormulario()" action="/realizar_reserva" method="POST">
+                    <div class="mb-5">
+                        <label for="dia" class="form-label text-start">Día de la Reserva</label>
                         <input type="date" class="form-control" id="dia" name="dia" required>
                     </div>
-                    <div class="mb-3">
-                        <label for="hora" class="form-label">Hora de la Reserva</label>
-                        <input type="time" class="form-control" id="hora" name="hora" required>
+                    <div class="mb-5">
+                        <label for="hora" class="form-label text-start">Hora de la Reserva</label>
+                        <input type="time" class="form-control" id="hora" name="hora" required step="1800">
+                    </div>            
+                    <input type="hidden" id="instalacionId" name="instalacionId" value="<%= result.Id %>">
+                    <div class="d-grid gap-2">
+                        <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
                     </div>
-                    <button type="submit" class="btn btn-primary">Reservar</button>
+                            
                 </form>
             </div>
         </div>
+        
     </main>
 
     <!-- Inclusión del pie de página -->
     <%- include('footer.ejs') %>
+    <script>
+        function validarFormulario() {
+            var fechaReserva = new Date(document.getElementById('dia').value);
+            var fechaActual = new Date();
+            // Compara las fechas
+            if (fechaReserva < fechaActual) {
+                alert('La fecha de reserva debe ser posterior a la fecha actual.');
+                return false; // Evita que el formulario se envíe
+            }
+            return true; // Permite que el formulario se envíe
+        }
+    </script>
 </body>
 </html>

@@ -17,7 +17,9 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
-    <%- include('nav.ejs') %>
+    <% if (session.rol == '1') { %>
+        <%- include('nav.ejs') %>
+    <% } %>            
 
     <!-- Contenido principal -->
     <main class="p-3">
@@ -28,9 +30,9 @@
             <!-- Iteración sobre los resultados para mostrar destinos -->
             <% results.forEach(function(instalacion, index) { %>
                 <!-- Enlace a la página del destino -->
-                <a href="/reserva/<%= instalacion.id %>" class="decoration">
+                <a href="/reserva/<%= instalacion.Id %>" class="decoration">
                     <!-- Tarjeta de destino -->
-                    <div class="card card-destino">
+                    <div class="card card-instalaciones">
                         <!-- Imagen del destino -->
                         <img src="<%= instalacion.imagen %>" class="card-img-top" alt="<%= instalacion.nombre %>">
                         <!-- Cuerpo de la tarjeta -->
@@ -46,15 +48,18 @@
             <% }); %>
             <!-- Mostrar tarjeta adicional si el rol es igual a 1 -->
             <% if (session.rol == '1') { %>
-                <a href="/instalacion" class="decoration">
-                    <div class="card text-center card-small bg-light mx-auto">
-                        <div class="card-body">
-                            <i class="bi bi-plus-circle text-black"></i>
-                        </div>
+                <div class="row justify-content-center align-items-center">
+                    <div class="col-md-6">
+                        <a href="/instalacion" class="decoration">
+                            <div class="card text-center card-small bg-light">
+                                <div class="card-body">
+                                    <i class="bi bi-plus-circle text-black"></i>
+                                </div>
+                            </div>
+                        </a>
                     </div>
-                </a>
-            <% } %>
-            
+                </div>
+            <% } %>            
         </div>
     </main>
 

@@ -38,9 +38,31 @@ app.get('/populares', (req, res) => {
   res.render('populares');
 });
 
-app.get('/reserva', (req, res) => {
-  res.render('reserva');
-});
+app.get('/reserva/:id', (req, res) => {
+  const id = req.params.id;
+  const reservaConfirmada = req.query.reserva === 'confirmada';
+
+  // Mensaje que se mostrará en función de la confirmación de reserva o comentario
+  let mensaje = '';
+  if (reservaConfirmada) {
+    mensaje = '¡Reserva completada! Gracias por realizar la reserva.';
+  } else {
+    mensaje = '¡Ups! Ha ocurrido un error al realizar la acción.';
+  }
+
+  // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones WHERE id = ?', [id], (err, result) => {
+    if (err) {
+      return res.status(500).json({ error: 'Error de la base de datos' });
+    }
+
+    if (result.length === 0) {
+      return res.status(404).send('Destino no encontrado');
+    }
+    
+    res.render('reserva', { result: result[0], session: req.session});
+
+  });});
 
 app.get('/instalacion', (req, res) => {
   res.render('instalacion', {session: req.session});
@@ -126,6 +148,7 @@ app.post('/InicioSesion', (req, res) => {
 
         // Las credenciales son válidas, almacenar información del usuario en la sesión
         req.session.email = email;
+        req.session.Id = checkUsernameResult[0].Id;
         req.session.rol = checkUsernameResult[0].rol;
         return res.redirect('/home');
       }
@@ -141,13 +164,13 @@ app.get('/home', (req, res) => {
       return;
     }
     // Renderiza la vista "home.ejs" con los resultados obtenidos de la base de datos
-    console.log(req.session);
+    console.log(results);
     res.render('home', { results: results, session: req.session });
   });
 });
 
 // Ruta para manejar la reserva de un destino específico
-app.post('/nueva_instalacion', upload.single('imagen'), (req, res) => {
+app.post('/nueva_instalacion', /*upload.single('imagen'), */(req, res) => {
   const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
   const imagen = req.file.filename; // Obtiene el nombre del archivo de la propiedad 'filename' del objeto 'req.file'
 
@@ -159,7 +182,38 @@ app.post('/nueva_instalacion', upload.single('imagen'), (req, res) => {
       return res.redirect(`/home`); // Redirige a la página de inicio en caso de error
     }
     // Redirige a la página del destino con confirmación de la instalación añadida
-    res.redirect(`/home?`);
+    res.redirect(`/home`);
+  });
+});
+
+// Ruta para manejar la reserva de una instalación específica
+app.post('/realizar_reserva', (req, res) => {
+  const { dia, hora } = req.body;
+  const usuId = req.session.Id; // Suponiendo que el ID del usuario actual está disponible en req.usuarioId
+  const instId = req.body.instalacionId; // Suponiendo que el ID de la instalación está presente en el cuerpo de la solicitud
+
+  // Inserta los datos de la reserva en la tabla UCM_AW_RIU_RES_Reservas
+  dbConnection.query('INSERT INTO UCM_AW_RIU_RES_Reservas (dia, hora, usuId, instId) VALUES (?, ?, ?, ?)', [dia, hora, usuId, instId], (err, result) => {
+    if (err) {
+      // Maneja los errores de la base de datos aquí
+      return res.redirect('/reserva/:id');
+    }
+    // Redirige a la página de confirmación de reserva exitosa
+    res.redirect('/home');
+  });
+});
+
+// Ruta para buscar destinos por nombre o descripción
+app.get('/buscar', (req, res) => {
+  const searchTerm = req.query.nombreBuscar; // Obtiene el término de búsqueda del parámetro de consulta
+  // Realiza una consulta a la base de datos para buscar destinos por nombre o descripción
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones WHERE nombre LIKE ?', [`%${searchTerm}%`], (err, results) => {
+    if (err) {
+      res.status(500).json({ error: 'Error de la base de datos' });
+      return;
+    }
+    // Renderiza la vista "home.ejs" con los resultados de la búsqueda
+    res.render('home', { results: results, session: req.session});
   });
 });
 

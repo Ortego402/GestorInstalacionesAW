@@ -15,8 +15,12 @@ header {
     text-transform: uppercase;
 }
 
-/* Estilos para las tarjetas */
 .card {
+    height: 800px; /* Ajusta la altura de la tarjeta según tu preferencia */
+}
+
+/* Estilos para las tarjetas */
+.card-instalaciones {
     width: 100%;
     cursor: pointer;
     border: 1px solid #ddd;
@@ -25,7 +29,7 @@ header {
 }
 
 /* Efecto de escala al pasar el mouse sobre las tarjetas */
-.card-destino:hover {
+.card-instalaciones:hover {
     transform: scale(1.05);
 }
 
@@ -61,9 +65,6 @@ header {
     width: 100px; /* o el tamaño que desees */
     height: 100px; /* o el tamaño que desees */
     background-color: #f0f0f0; /* o cualquier otro color de fondo que desees */
-    display: flex;
-    justify-content: center;
-    align-items: center;
     font-size: 2em;
 }
 
