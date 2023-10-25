@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">Registrarse</h5>
-                        <form action="/registrar" method="POST">
+                        <form action="/registrar" method="POST" class="general">
                             <div class="row">
                                 <div class="col mb-2">
                                     <label for="name" class="form-label">Nombre</label>
@@ -45,6 +45,14 @@
                             <div class="row">
                                 <div class="col mb-2">
                                     <div class="mb-2">
+                                        <label for="facultad" class="form-label">Facultad</label>
+                                        <input type="text" class="form-control" id="facultad" name="facultad" required>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col mb-2">
+                                    <div class="mb-2">
                                         <label for="curso" class="form-label">Curso</label>
                                         <input type="text" class="form-control" id="curso" name="curso" required>
                                     </div>
@@ -58,18 +66,26 @@
                             </div>
                             <div class="row">
                                 <div class="col mb-2">
-                                    <div class="mb-2">
-                                        <label for="password" class="form-label">Contraseña</label>
+                                    <div class="mb-2 form-group">
+                                        <label for="password">Contraseña</label>
                                         <input type="password" class="form-control" id="password" name="password" required>
                                     </div>
                                 </div>
                                 <div class="col mb-2">
-                                    <div class="mb-2">
-                                        <label for="confirmPassword" class="form-label">Confirmar Contraseña</label>
-                                        <input type="confirmPassword" class="form-control" id="confirmPassword" name="password" required>
+                                    <div class="mb-2 form-group">
+                                        <label for="confirmPassword">Confirmar Contraseña</label>
+                                        <input type="password" class="form-control" id="confirmPassword" name="password" required>
                                     </div>
                                 </div>
                             </div>
+                            <!-- <div class="row">
+                                <div class="col mb-2">
+                                    <div class="mb-2">
+                                        <label for="img-perfil" class="form-label">Imagen de Perfil</label>
+                                        <input type="file" class="form-control" id="img-perfil" name="img-perfil" required>
+                                    </div>
+                                </div>
+                            </div> -->
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Registrarse</button>
                             </div>

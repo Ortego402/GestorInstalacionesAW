@@ -85,44 +85,71 @@ app.get('/registro', (req, res) => {
   res.render('registro', { session: req.session, mensaje: mensaje });
 });
 
-app.post('/registro', (req, res) => {
-  const { nombre, apellido1, apellido2, correo, username, password } = req.body;
-
-  const checkUsernameQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
-  db.query(checkUsernameQuery, [username], (checkUsernameErr, checkUsernameResult) => {
-    if (checkUsernameErr) {
+app.post('/registrar', (req, res) => {
+  const { nombre, apellido1, apellido2, correo, facultad, curso, grupo, password, confirmPassword} = req.body;
+  let mensaje = null;
+  console.log(password);
+  const checkEmailQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
+  dbConnection.query(checkEmailQuery, [correo], (checkEmailErr, checkEmailResult) => {
+    if (checkEmailErr) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
 
-    if (checkUsernameResult.length > 0) {
-      return res.status(400).json({ error: 'El nombre de usuario ya está en uso, elije' });
+    // Comprobar el email según sus requisitos
+    if (checkEmailResult.length > 0) {
+      mensaje = 'El email ya esta registrado en la base de datos.';
+    }
+    // Comprobar la contraseña según sus requisitos
+    else if (!mensaje && password.length < 8) {
+      mensaje = 'La contraseña debe tener al menos 8 caracteres.';
+    } else if (!mensaje && !/[A-Z]/.test(password)) {
+      mensaje = 'La contraseña debe tener una letra mayúscula.';
+    } else if (!mensaje && !/\d/.test(password)) {
+      mensaje = 'La contraseña debe tener al menos un número.';
+    } else if (!mensaje && !/\W/.test(password)) {
+      mensaje = 'La contraseña debe contener al menos un carácter especial.';
+    } else if (!mensaje && password !== confirmPassword) {
+      mensaje = 'Las contraseñas deben coincidir.';
     }
   });
 
-  if(/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(correo)){
-    return res.status(400).json({ error: 'El correo no es valido' });
+  if (mensaje) {
+    return res.render('registro', { mensaje: mensaje , nombre: nombre, apellido1: apellido1, apellido2: apellido2, correo: correo, facultad: facultad, curso: curso, grupo: grupo});
   }
+  else{
+    // Insertar datos en la base de datos haseo la contraseña para que no se sepa cual es
 
-  // Comprobar la contraseña según tus requisitos
-  if (/[A-Z]/.test(password)) {
-    return res.status(400).json({ error: 'La contraseña no es valida' });
-  }
-  if (/\d/.test(password)) {
-    return res.status(400).json({ error: 'La contraseña debete tener almenos un numero' });
-  }
-  if (password.length >= 10) {
-    return res.status(400).json({ error: 'La contraseña debe tener almenos 10 caracteres' });
-  }
+    console.log(password);
+    const plaintextPassword = req.body.password; 
+    console.log(plaintextPassword);
+    const encrip = bcrypt.hash(plaintextPassword, 10); 
+    console.log(encrip);
+    bcrypt.hash(plaintextPassword, 10, (err, hash) => {
+      if (err) {
+        console.error('Error al generar el hash de la contraseña:', err);
+        return res.status(500).json({ error: 'Error al hashear la contraseña' });
+      }
 
-  // Insertar datos en la base de datos
-  const query = 'INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellidos, correo, username, password) VALUES (?, ?, ?, ?, ?)';
-  db.query(query, [username, bcrypt.hash(password, 10)], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error interno del servidor' });
-    }
+      dbConnection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, cruso, grupo, contraseña, contraseña_visible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, correo, curso, grupo, hash, password], (err, result) => {
+        if (err) {
+          console.error(err);
+          return res.status(500).json({ error: 'Error interno del servidor' });
+        }
 
-    return res.status(200).json({ message: 'Registro exitoso.' });
-  });
+        // Las credenciales son válidas, almacenar información del usuario en la sesión
+        req.session.nombre = nombre;
+        req.session.apellido1 = apellido1;
+        req.session.apellido2 = apellido2;
+        req.session.email = correo;
+        req.session.facultad = facultad;
+        req.session.curso = curso;
+        req.session.grupo = grupo;
+        // Puedes almacenar más información en la sesión según tus necesidades
+
+        return res.redirect('/');
+      });
+    });
+  }
 
 });
 

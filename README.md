@@ -1,4 +1,7 @@
 Funcionalidades del Administrador
+
+//da error el hash por que guarda la contraseña en una cadena, creo que es por los div
+
 1. Configuración del Sistema:
 a. Personalizar la apariencia del sistema con nombre, dirección e icono de la
 organización.
