@@ -20,8 +20,8 @@
                         <form action="/registrar" method="POST" class="general">
                             <div class="row">
                                 <div class="col mb-2">
-                                    <label for="name" class="form-label">Nombre</label>
-                                    <input type="text" class="form-control" id="name" name="name" required>
+                                    <label for="nombre" class="form-label">Nombre</label>
+                                    <input type="text" class="form-control" id="nombre" name="nombre" required>
                                 </div>
                                 <div class="col mb-2">
                                     <label for="apellido1" class="form-label">Primer Apellido</label>
@@ -38,7 +38,8 @@
                                 <div class="col mb-2">
                                     <div class="mb-2">
                                         <label for="email" class="form-label">Correo Electrónico</label>
-                                        <input type="email" class="form-control" id="email" name="email" required>
+                                        <input type="email" class="form-control" id="email" name="email" required oninput="validateEmail(this)">
+                                        <div id="emailError" style="color: red;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -54,13 +55,14 @@
                                 <div class="col mb-2">
                                     <div class="mb-2">
                                         <label for="curso" class="form-label">Curso</label>
-                                        <input type="text" class="form-control" id="curso" name="curso" required>
+                                        <input type="number" class="form-control" id="curso" name="curso" required>
                                     </div>
                                 </div>
                                 <div class="col mb-2">
                                     <div class="mb-2">
                                         <label for="grupo" class="form-label">Grupo</label>
-                                        <input type="text" class="form-control" id="grupo" name="grupo" required>
+                                        <input type="text" class="form-control" id="grupo" name="grupo" required oninput="validateGroup(this)">
+                                        <div id="groupError" style="color: red;"></div>
                                     </div>
                                 </div>
                             </div>
@@ -74,7 +76,7 @@
                                 <div class="col mb-2">
                                     <div class="mb-2 form-group">
                                         <label for="confirmPassword">Confirmar Contraseña</label>
-                                        <input type="password" class="form-control" id="confirmPassword" name="password" required>
+                                        <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required>
                                     </div>
                                 </div>
                             </div>
@@ -98,6 +100,32 @@
                 </div>
             </div>
     </div>
+    <script>
+        function validateGroup(input) {
+            var regex = /^[A-Z]+$/;
+            var errorMessage = document.getElementById('groupError');
+            if (!regex.test(input.value)) {
+                errorMessage.textContent = 'Debe ser una única letra mayúscula.';
+                input.setCustomValidity('Debe ser una única letra mayúscula.'); // Invalida el campo para que no se envíe el formulario
+            } else {
+                errorMessage.textContent = ''; // Borra el mensaje de error
+                input.setCustomValidity(''); // Restablece la validez del campo
+            }
+        }
 
+        function validateEmail(input) {
+            var regex = /^[A-Za-z0-9._%+-]+@ucm\.es$/;
+            var errorMessage = document.getElementById('emailError');
+            
+            if (!regex.test(input.value)) {
+                errorMessage.textContent = 'El email debe pertenecer a la UCM.';
+                input.setCustomValidity('Invalid');
+            } else {
+                errorMessage.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+
+        </script>
 </body>
 </html>

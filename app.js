@@ -86,11 +86,10 @@ app.get('/registro', (req, res) => {
 });
 
 app.post('/registrar', (req, res) => {
-  const { nombre, apellido1, apellido2, correo, facultad, curso, grupo, password, confirmPassword} = req.body;
+  const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword} = req.body;
   let mensaje = null;
-  console.log(password);
   const checkEmailQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
-  dbConnection.query(checkEmailQuery, [correo], (checkEmailErr, checkEmailResult) => {
+  dbConnection.query(checkEmailQuery, [email], (checkEmailErr, checkEmailResult) => {
     if (checkEmailErr) {
       return res.status(500).json({ error: 'Error interno del servidor' });
     }
@@ -119,18 +118,15 @@ app.post('/registrar', (req, res) => {
   else{
     // Insertar datos en la base de datos haseo la contraseña para que no se sepa cual es
 
-    console.log(password);
     const plaintextPassword = req.body.password; 
-    console.log(plaintextPassword);
     const encrip = bcrypt.hash(plaintextPassword, 10); 
-    console.log(encrip);
     bcrypt.hash(plaintextPassword, 10, (err, hash) => {
       if (err) {
         console.error('Error al generar el hash de la contraseña:', err);
         return res.status(500).json({ error: 'Error al hashear la contraseña' });
       }
 
-      dbConnection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, cruso, grupo, contraseña, contraseña_visible) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, correo, curso, grupo, hash, password], (err, result) => {
+      dbConnection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, password, 'NULL', '0'], (err, result) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ error: 'Error interno del servidor' });
@@ -140,14 +136,29 @@ app.post('/registrar', (req, res) => {
         req.session.nombre = nombre;
         req.session.apellido1 = apellido1;
         req.session.apellido2 = apellido2;
-        req.session.email = correo;
+        req.session.email = email;
         req.session.facultad = facultad;
         req.session.curso = curso;
         req.session.grupo = grupo;
         // Puedes almacenar más información en la sesión según tus necesidades
 
-        return res.redirect('/');
-      });
+        dbConnection.query('SELECT * FROM UCM_AW_RIU_ORG_Organizacion', (orgErr, orgResult) => {
+          if (orgErr) {
+            // Manejar errores de la base de datos si es necesario
+            return res.status(500).json({ error: 'Error de la base de datos' });
+          }
+
+          if (orgResult.length > 0) {
+            // Si hay resultados de la consulta, almacenarlos en la sesión
+            req.session.orgNombre = orgResult[0].nombre;
+            req.session.orgIcono = orgResult[0].imagen;
+            req.session.orgDireccion = orgResult[0].direccion;
+          }
+          
+          // Redirigir a la página de inicio o cualquier otra página según tu lógica de la aplicación
+          return res.redirect('/home');
+        });
+        });
     });
   }
 
@@ -267,10 +278,10 @@ app.get('/cambiarRol/:id', (req, res) => {
 });
 
 app.get('/perfil', (req, res) => {
-  const id = req.session.Id;
+  const email = req.session.email;
 
   // Realiza una consulta para obtener el rol actual del usuario
-  dbConnection.query('SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE Id = ?', [id], (err, usuario) => {
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?', [email], (err, usuario) => {
     if (err) {
       // Maneja los errores de la base de datos aquí
       console.error(err);
