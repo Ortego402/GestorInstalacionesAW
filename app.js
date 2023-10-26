@@ -16,6 +16,8 @@ const port = 3000; // Puerto en el que se ejecutará el servidor
 // Configura Express para usar bodyParser y EJS como motor de plantillas
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
+//para coger las imagenes
+app.use('/public', express.static('public'));
 
 // Configura Express para servir archivos estáticos desde el directorio 'public'
 app.use(express.static('public'));

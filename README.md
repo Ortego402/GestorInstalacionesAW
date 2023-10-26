@@ -1,6 +1,7 @@
 Funcionalidades del Administrador
 
-//da error el hash por que guarda la contraseña en una cadena, creo que es por los div
+0. He cambiado en el nav populares por Validacion asi cada vez que se meta un usuario en la app 
+al admin le llegara una solicitud ahi para acpetar o declinar, si la acpeta le enviamos un correo a su correo normal
 
 1. Configuración del Sistema:
 a. Personalizar la apariencia del sistema con nombre, dirección e icono de la
