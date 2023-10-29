@@ -17,7 +17,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">Registrarse</h5>
-                        <form action="/registrar" method="POST" class="general">
+                        <form action="/registrar" method="POST" class="general" enctype="multipart/form-data">
                             <div class="row">
                                 <div class="col mb-2">
                                     <label for="nombre" class="form-label">Nombre</label>
@@ -80,14 +80,14 @@
                                     </div>
                                 </div>
                             </div>
-                            <!-- <div class="row">
+                            <div class="row">
                                 <div class="col mb-2">
                                     <div class="mb-2">
-                                        <label for="img-perfil" class="form-label">Imagen de Perfil</label>
-                                        <input type="file" class="form-control" id="img-perfil" name="img-perfil" required>
+                                        <label for="img" class="form-label" >Imagen de Perfil</label>
+                                        <input type="file" class="form-control" id="img" name="img" required>
                                     </div>
                                 </div>
-                            </div> -->
+                            </div>
                             <div class="d-grid">
                                 <button type="submit" class="btn btn-primary">Registrarse</button>
                             </div>

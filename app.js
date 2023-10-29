@@ -5,12 +5,16 @@ const dbConnection = require('./js/dbConfig'); // Importa la configuración de l
 // Crea una instancia de Express
 const app = express();
 const bcrypt = require('bcrypt'); //guarda la contraseña en forma de hash instalar => npm install bcrypt
+const fs = require('fs'); //para pasar la imagen a binario
+const path = require('path');
+const fileUpload = require('express-fileupload'); //para usar file correctamente es necesario instalarse =>npm install express express-fileupload
 const session = require('express-session'); //para manejar los incios de seseion es necesario instalarse =>npm install express express-session
 app.use(session({
   secret: 'Epicscape',
   resave: false,
   saveUninitialized: true
 }));
+app.use(fileUpload());
 const port = 3000; // Puerto en el que se ejecutará el servidor
 
 // Configura Express para usar bodyParser y EJS como motor de plantillas
@@ -43,8 +47,8 @@ app.get('/usuarios', (req, res) => {
 
 });});
 
-app.get('/populares', (req, res) => {
-  res.render('populares');
+app.get('/validacion', (req, res) => {
+  res.render('validacion');
 });
 
 app.get('/reserva/:id', (req, res) => {
@@ -89,6 +93,7 @@ app.get('/registro', (req, res) => {
 
 app.post('/registrar', (req, res) => {
   const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword} = req.body;
+  const img = req.files.img;  // Se coge del req por que las files estan aqui
   let mensaje = null;
   const checkEmailQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
   dbConnection.query(checkEmailQuery, [email], (checkEmailErr, checkEmailResult) => {
@@ -112,6 +117,10 @@ app.post('/registrar', (req, res) => {
     } else if (!mensaje && password !== confirmPassword) {
       mensaje = 'Las contraseñas deben coincidir.';
     }
+    //comprobar que ya hay una imagen subida
+    else if (!img || img.length === 0) {
+    mensaje = 'Por favor, selecciona una imagen.';
+    }
   });
 
   if (mensaje) {
@@ -128,7 +137,9 @@ app.post('/registrar', (req, res) => {
         return res.status(500).json({ error: 'Error al hashear la contraseña' });
       }
 
-      dbConnection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, password, 'NULL', '0'], (err, result) => {
+      const imgData  = img.data;
+
+      dbConnection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, password, imgData, '0'], (err, result) => {
         if (err) {
           console.error(err);
           return res.status(500).json({ error: 'Error interno del servidor' });
@@ -294,6 +305,18 @@ app.get('/perfil', (req, res) => {
     });
 });
 
+app.get('/organizacion', (req, res) => {
+  // Realiza una consulta para obtener el rol actual del usuario
+  dbConnection.query('SELECT * FROM UCM_AW_RIU_ORG_organizacion', (err, org) => {
+    if (err) {
+      // Maneja los errores de la base de datos aquí
+      console.error(err);
+      return res.status(500).json({ error: 'Error de la base de datos' });
+    }
+    res.render('organizacion', { organizacion: org[0], session: req.session });
+    });
+});
+
 // Ruta para manejar la reserva de una instalación específica
 app.post('/realizar_reserva', (req, res) => {
   const { dia, hora } = req.body;
@@ -360,3 +383,6 @@ app.post('/editar/:id', (req, res) => {
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
+
+
+// main.js

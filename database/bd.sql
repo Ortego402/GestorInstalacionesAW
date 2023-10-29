@@ -9,9 +9,10 @@ CREATE TABLE UCM_AW_RIU_USU_Usuarios (
     curso INT NOT NULL,
     grupo VARCHAR(10) NOT NULL,
     contraseña VARCHAR(255) NOT NULL,
-    contraseña_visible BOOLEAN NOT NULL,
+    contraseña_visible VARCHAR(255) NOT NULL,
     imagen_perfil VARCHAR(255),
-    rol VARCHAR(50) NOT NULL
+    rol VARCHAR(50) NOT NULL,
+    validado VARCHAR(50) NOT NULL
 );
 
 -- Crear tabla de Instalaciones

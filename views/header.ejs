@@ -31,6 +31,9 @@
         <!-- Menú desplegable del perfil -->
         <ul class="dropdown-menu" aria-labelledby="perfilDropdown">
             <li><a class="dropdown-item" href="/perfil">Perfil</a></li>
+            <% if (session.rol == '1') { %>
+                <li><a class="dropdown-item" href="/organizacion">Organizacion</a></li>
+            <% } %>
             <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
         </ul>
         <!-- Botón del correo -->
