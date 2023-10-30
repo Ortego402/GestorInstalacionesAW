@@ -1,4 +1,7 @@
+"use strict";
+
 const DAOUsuarios = require('../dao/DAOUsuarios');
+const bcrypt = require('bcrypt');
 
 class UsuariosSA {
 
@@ -20,7 +23,7 @@ class UsuariosSA {
 
             const imgData  = imagen_perfil.data;
 
-            this.DAOUser.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, (err, result) => {
+            this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, (err, result) => {
                 return callback(err, result);
             });
         });
@@ -29,11 +32,11 @@ class UsuariosSA {
     iniciarSesion(req, res, callback) {
         const { email, password } = req.body;
 
-        this.DAOUser.getUserByEmail(email, (err, user) => {
+        this.DAOUsuarios.getUserByEmail(email, (err, user) => {
             if (err) {
                 return callback(err);
             } else {
-                bcrypt.compare(password, user.password, (bcryptErr, result) => {
+                bcrypt.compare(password, user.contraseña, (bcryptErr, result) => {
                     if (bcryptErr) {
                         return callback('Error al comparar contraseñas.');
                     } else if (result) {
@@ -71,3 +74,6 @@ class UsuariosSA {
     }
 
 }
+
+
+module.exports = UsuariosSA;

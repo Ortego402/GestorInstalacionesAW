@@ -1,9 +1,11 @@
+"use strict";
+
 const DAOAdmin = require('../dao/DAOAdmin');
 
 class AdminsSA {
 
     constructor(pool) {
-        this.DAOUsuarios = new DAOUsuarios(pool);
+        this.DAOAdmin = new DAOAdmin(pool);
     }
 
 
@@ -29,6 +31,8 @@ class AdminsSA {
         });
     }
 
-
-
 }
+
+
+
+module.exports = AdminsSA;

@@ -58,3 +58,6 @@ class DAOAdmin{
     }
 
 }
+
+
+module.exports = DAOAdmin;

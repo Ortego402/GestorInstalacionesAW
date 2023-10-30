@@ -2,35 +2,23 @@ const express = require('express');
 const router = express.Router();
 const mysql = require("mysql");
 const bcrypt = require('bcrypt');
-const fs = require('fs');
-const path = require('path');
-const fileUpload = require('express-fileupload'); //para usar file correctamente es necesario instalarse =>npm install express express-fileupload
-const session = require('express-session'); //para manejar los incios de seseion es necesario instalarse =>npm install express express-session
 const config = require("../../config/dbConfig");
 const UsuariosSA = require("../controller/UsuariosSA");
 const InstalacionesSA = require("../controller/InstalacionesSA");
-const AdminsSA = require("../controller/AdminsSA");
+const AdminsSA = require("../controller/AdminSA");
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
-const UsuariosSA = new UsuariosSA(pool);
-const InstalacionesSA = new InstalacionesSA(pool);
-const AdminsSA = new AdminsSA(pool)
-
-// Configura Express para usar bodyParser y EJS como motor de plantillas
-router.use(express.urlencoded({ extended: true }));
-router.set('view engine', 'ejs');
-//para coger las imagenes
-router.use('/public', express.static('public'));
-
-router.use(fileUpload());
+const usuariosSA = new UsuariosSA(pool);
+const instalacionesSA = new InstalacionesSA(pool);
+const adminsSA = new AdminsSA(pool)
 
 router.get('/', (req, res) => {
     return res.render("login", { session: req.session});
 });
 
 router.get('/home', (req, res) => {
-    InstalacionesSA.mostrarInstalaciones(req, res, (err, results) => {
+    instalacionesSA.mostrarInstalaciones(req, res, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -39,7 +27,7 @@ router.get('/home', (req, res) => {
 });
 
 router.post('/InicioSesion', (req, res) => {
-    UsuariosSA.iniciarSesion(req, res, (err) => {
+    usuariosSA.iniciarSesion(req, res, (err) => {
         if (err) {
             return res.render('login', { mensaje: err }); // Muestra el mensaje de error
         }
@@ -65,7 +53,7 @@ router.post('/registrar', (req, res) => {
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword} = req.body;
     const img = req.files.img;  // Se coge del req por que las files estan aqui
 
-    UsuariosSA.checkEmail(email, (err, result) => {
+    usuariosSA.checkEmail(email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
@@ -78,7 +66,7 @@ router.post('/registrar', (req, res) => {
             return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo });
         }
 
-        UsuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, img, (err, result) => {
+        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, img, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }
@@ -90,7 +78,17 @@ router.post('/registrar', (req, res) => {
             req.session.curso = curso;
             req.session.grupo = grupo;
             req.session.rol = "0";
-
+            adminsSA.organizacion(req, res, (err, results) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error de la base de datos' });
+                }
+        
+                req.session.orgNombre = results.nombre;
+                req.session.orgDir= results.direccion;
+                req.session.orgIcono = results.imagen;
+        
+                return res.render('organnizacion', { results: results, session: req.session });
+            });
             return res.redirect('/home');
         });
     });
@@ -98,7 +96,7 @@ router.post('/registrar', (req, res) => {
 
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    UsuariosSA.mostrarPerfil(req, res, (err, result) => {
+    usuariosSA.mostrarPerfil(req, res, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -107,13 +105,13 @@ router.get('/perfil', (req, res) => {
 });
 
 router.post('/actualizar_perfil', (req, res) => {
-    UsuariosSA.actualizarPerfil(req, res, (err) => {
+    usuariosSA.actualizarPerfil(req, res, (err) => {
         res.redirect('/perfil?mensaje=' + encodeURIComponent(err));
     });
 });
 
 router.get('/buscar', (req, res) => {
-    InstalacionesSA.buscarInstalaciones(req, res, (err, results) => {
+    instalacionesSA.buscarInstalaciones(req, res, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -122,7 +120,7 @@ router.get('/buscar', (req, res) => {
 });
 
 router.get('/organizacion', (req, res) => {
-    AdminsSA.organizacion(req, res, (err, results) => {
+    adminsSA.organizacion(req, res, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -134,7 +132,7 @@ router.get('/organizacion', (req, res) => {
 });
 
 router.post('/organizacion/editar', (req, res) => {
-    AdminsSA.organizacionEditar(req, res, (err, results) => {
+    adminsSA.organizacionEditar(req, res, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -149,7 +147,7 @@ router.get('/servicios', (req, res) => {
 
 router.get('/usuarios', (req, res) => {
     // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
-    AdminsSA.mostrarUsuarios(req, res, (err, results) => {
+    adminsSA.mostrarUsuarios(req, res, (err, results) => {
     if (err) {
     return res.status(500).json({ error: 'Error de la base de datos' });
     }
@@ -167,7 +165,7 @@ router.get('/validacion', (req, res) => {
 //no se como se hace lo que habia en app.js antes no lo entiendo
 router.get('/reserva/:id', (req, res) => {
 
-    InstalacionesSA.reservar(req, res, (err, result) =>{
+    instalacionesSA.reservar(req, res, (err, result) =>{
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -180,4 +178,4 @@ router.get('/instalacion', (req, res) => {
     return res.render('instalacion', {session: req.session});
 });
   
-  
+module.exports = router;

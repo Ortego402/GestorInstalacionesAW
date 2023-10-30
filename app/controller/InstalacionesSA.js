@@ -1,3 +1,5 @@
+"use strict";
+
 const DAOInstalaciones = require('../dao/DAOInstalaciones');
 
 class InstalacionesSA {
@@ -30,3 +32,6 @@ class InstalacionesSA {
 
 
 }
+
+
+module.exports = InstalacionesSA;

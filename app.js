@@ -9,6 +9,7 @@ const fs = require('fs'); //para pasar la imagen a binario
 const path = require('path');
 const fileUpload = require('express-fileupload'); //para usar file correctamente es necesario instalarse =>npm install express express-fileupload
 const session = require('express-session'); //para manejar los incios de seseion es necesario instalarse =>npm install express express-session
+const router = require('./app/router/router'); // Importa el enrutador principal
 app.use(session({
   secret: 'Epicscape',
   resave: false,

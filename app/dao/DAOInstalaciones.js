@@ -42,3 +42,6 @@ class DAOInstalaciones {
     }
 
 }
+
+
+module.exports = DAOInstalaciones;
