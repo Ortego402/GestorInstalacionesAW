@@ -17,18 +17,13 @@ app.use(session({
 app.use(fileUpload());
 const port = 3000; // Puerto en el que se ejecutará el servidor
 
-// Configura Express para usar bodyParser y EJS como motor de plantillas
 app.use(express.urlencoded({ extended: true }));
 app.set('view engine', 'ejs');
-//para coger las imagenes
-app.use('/public', express.static('public'));
-
-// Configura Express para servir archivos estáticos desde el directorio 'public'
+app.set("views", path.join(__dirname, "/app/views"));
 app.use(express.static('public'));
+app.use('/', router); // Usa el enrutador principal en la ruta raíz
 
-// Inicia el servidor y escucha en el puerto especificado
 app.listen(port, () => {
   console.log(`Servidor escuchando en el puerto ${port}`);
 });
 
-// main.js
