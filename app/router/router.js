@@ -6,6 +6,7 @@ const config = require("../../config/dbConfig");
 const UsuariosSA = require("../controller/UsuariosSA");
 const InstalacionesSA = require("../controller/InstalacionesSA");
 const AdminsSA = require("../controller/AdminSA");
+const session = require('express-session');
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -31,7 +32,19 @@ router.post('/InicioSesion', (req, res) => {
         if (err) {
             return res.render('login', { mensaje: err }); // Muestra el mensaje de error
         }
-        return res.redirect('/home'); // Redirige a la página principal si no hay errores
+
+        adminsSA.organizacion(req, res, (err, results) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error de la base de datos' });
+            }
+    
+            req.session.orgNombre = results.nombre;
+            req.session.orgDir= results.direccion;
+            req.session.orgIcono = results.imagen;
+
+            res.redirect('/home'); // Redirige a la página principal si no hay errores
+
+        });
     });
 });
 
@@ -87,7 +100,6 @@ router.post('/registrar', (req, res) => {
                 req.session.orgDir= results.direccion;
                 req.session.orgIcono = results.imagen;
         
-                return res.render('organnizacion', { results: results, session: req.session });
             });
             return res.redirect('/home');
         });
@@ -176,6 +188,18 @@ router.get('/reserva/:id', (req, res) => {
 
 router.get('/instalacion', (req, res) => {
     return res.render('instalacion', {session: req.session});
+});
+
+router.post('/nueva_instalacion', (req, res) => {
+    const { nombre, tipoReserva, aforo, horaInicio, horaFin} = req.body;
+    const imagen = req.files.imagen; 
+
+    adminsSA.anyadirInstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.redirect('/home');
+    });
 });
   
 module.exports = router;

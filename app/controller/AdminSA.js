@@ -31,6 +31,17 @@ class AdminsSA {
         });
     }
 
+    anyadirInstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, callback) {
+
+        const imgData  = imagen.data;
+
+        this.DAOAdmin.insertarInnstalacion(nombre, tipoReserva, imgData, aforo, horaInicio, horaFin, (err) => {
+            if(err){
+                return callback("¡Ups! Algo salió mal, vuelve a intentarlo más tarde.");
+            }
+            return callback(null);
+        });
+    }
 }
 
 

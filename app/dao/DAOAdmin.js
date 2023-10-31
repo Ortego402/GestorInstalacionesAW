@@ -57,6 +57,24 @@ class DAOAdmin{
         });
     }
 
+    insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, callback){
+
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback('Error de acceso a la base de datos', null);
+            }
+
+            connection.query('INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horaInicio, horaFin) VALUES (?, ?, ?, ?, ?, ?)', [nombre, tipoReserva, imagen, aforo, horaInicio, horaFin], (err, result) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al insertar instalacion en la base de datos', null);
+                }
+                return callback(null, result);
+            });
+        });
+
+    }
+
 }
 
 

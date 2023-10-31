@@ -34,7 +34,7 @@
                     <!-- Tarjeta de destino -->
                     <div class="card card-instalaciones">
                         <!-- Imagen del destino -->
-                        <img src="/public/images/<%= instalacion.imagen %>" class="card-img-top" alt="<%= instalacion.nombre %>">
+                        <img src="data:image/jpg;base64, <%= instalacion.imagen.toString('base64') %>" class="card-img-top" alt="<%= instalacion.nombre %>">
                         <!-- Cuerpo de la tarjeta -->
                         <div class="card-body">
                             <!-- Contenido superior de la tarjeta (nombre) -->
