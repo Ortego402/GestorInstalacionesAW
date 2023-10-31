@@ -22,12 +22,13 @@ class AdminsSA {
     }
 
 
-    organizacionEditar(req, res, callback) {
-        this.DAOAdmin.editarOrganizacion(nombre, direccion, imagen, (err) => {
+    organizacionEditar( nombre, direccion, imagen, nombre_original, callback) {
+        console.log(nombre_original+ "adminnnnnnnnnnSA");
+        this.DAOAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
             if(err){
                 return callback("¡Ups! Algo salió mal, vuelve a intentarlo más tarde.");
             }
-            return callback("Organizacion Editada");
+            return callback(null);
         });
     }
 

@@ -32,38 +32,38 @@
                     </div>
                     <div class="card-body">
                         <!-- Formulario para mostrar y editar los datos del usuario -->
-                        <form action="/editar/<%= usuario.Id %>" method="post">
+                        <form action="/editar/<%= session.Id %>" method="post">
                         <!-- Campo oculto para el ID del usuario -->
-                        <input type="hidden" name="userId" value="<%= usuario.Id %>">
+                        <input type="hidden" name="userId" value="<%= session.Id %>">
                         <!-- Campos para modificar datos del usuario -->
                         <div class="mb-3">
                             <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= usuario.nombre %>" required>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= session.nombre %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="apellido1">Primer Apellido</label>
-                            <input type="text" class="form-control" id="apellido1" name="apellido1" value="<%= usuario.apellido1 %>" required>
+                            <input type="text" class="form-control" id="apellido1" name="apellido1" value="<%= session.apellido1 %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="apellido2">Segundo Apellido</label>
-                            <input type="text" class="form-control" id="apellido2" name="apellido2" value="<%= usuario.apellido2 %>" required>
+                            <input type="text" class="form-control" id="apellido2" name="apellido2" value="<%= session.apellido2 %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="email">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<%= usuario.email %>"
+                            <input type="email" class="form-control" id="email" name="email" value="<%= session.email %>"
                                 readonly>
                         </div>
                         <div class="mb-3">
                             <label for="facultad">Facultad</label>
-                            <input type="text" class="form-control" id="facultad" name="facultad" value="<%= usuario.facultad %>" required>
+                            <input type="text" class="form-control" id="facultad" name="facultad" value="<%= session.facultad %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="curso">Curso</label>
-                            <input type="number" class="form-control" id="curso" name="curso" value="<%= usuario.curso %>" required>
+                            <input type="number" class="form-control" id="curso" name="curso" value="<%= session.curso %>" required>
                         </div>
                         <div class="mb-3">
                             <label for="grupo">Grupo</label>
-                            <input type="text" class="form-control" id="grupo" name="grupo" value="<%= usuario.grupo %>" required>
+                            <input type="text" class="form-control" id="grupo" name="grupo" value="<%= session.grupo %>" required>
                         </div>
                         <!-- Botón para guardar cambios -->
                         <button type="submit" class="btn btn-primary">Guardar Cambios</button>
@@ -72,9 +72,7 @@
                         <a href="/logout" class="btn btn-danger btn-lg" style="color: black; padding: 0.2em 0.5em;"><i class="bi bi-box-arrow-right"></i></a>
                         </form>
                     </div>
-                    <!--<h1>Imagen desde la base de datos</h1>
-                    <img src="data:image/png;base64, <%= usuario.imagen_perfil.toString('base64') %>" alt="Imagen desde la base de datos">
-                 --></body>
+                </body>
                 </div>
             </div>
         </div>

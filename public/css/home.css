@@ -177,3 +177,15 @@ nav a {
 .decoration {
     text-decoration: none;
 }
+
+.avatar-container {
+    text-align: center;
+}
+
+.avatar {
+    border-radius: 50%;
+    width: 120px; /* Ajusta el tamaño según sea necesario */
+    height: 120px; /* Ajusta el tamaño según sea necesario */
+    object-fit: cover;
+    margin-bottom: 15px;
+}

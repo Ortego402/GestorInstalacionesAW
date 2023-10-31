@@ -53,7 +53,7 @@ router.get('/logout', (req, res) => {
         if (err) {
             return res.status(500).send('Error interno del servidor');
         }
-        return res.redirect('/login');
+        return res.redirect('/');
     });
 });
 
@@ -111,8 +111,20 @@ router.get('/perfil', (req, res) => {
     usuariosSA.mostrarPerfil(req, res, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
+            
         }
-        return res.render('perfil', { result: result[0], session: req.session, mensaje: mensaje });
+
+        req.session.nombre = result[0].nombre;
+        req.session.apellido1 = result[0].apellido1;
+        req.session.apellido2 = result[0].apellido2;
+        req.session.email = result[0].email;
+        req.session.facultad = result[0].facultad;
+        req.session.curso = result[0].curso;
+        req.session.grupo = result[0].grupo;
+        req.session.rol = result[0].rol;
+        req.session.imagen = result[0].imagen;
+
+        res.render('perfil', { result: result[0], session: req.session, mensaje: mensaje });
     });
 });
 
@@ -136,19 +148,19 @@ router.get('/organizacion', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-
-        req.session.organizacionNombre = result.nombre;
-
-        return res.render('organnizacion', { results: results, session: req.session });
+        return res.render('organizacion', { results: results, session: req.session });
     });
 });
 
-router.post('/organizacion/editar', (req, res) => {
-    adminsSA.organizacionEditar(req, res, (err, results) => {
+router.post('/organizacion_editar', (req, res) => {
+    const { nombre, direccion, imagen} = req.body;
+    const nombre_original = req.session.orgNombre;
+
+    adminsSA.organizacionEditar(nombre, direccion, imagen, nombre_original, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('organnizacion', { results: results, session: req.session });
+        return res.render('organizacion', { results: results, session: req.session });
     });
 });
 
@@ -177,7 +189,9 @@ router.get('/validacion', (req, res) => {
 //no se como se hace lo que habia en app.js antes no lo entiendo
 router.get('/reserva/:id', (req, res) => {
 
-    instalacionesSA.reservar(req, res, (err, result) =>{
+    const id = req.params.id;
+
+    instalacionesSA.reservar(id, (err, results) =>{
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }

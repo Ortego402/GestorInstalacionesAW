@@ -40,17 +40,19 @@ class DAOAdmin{
         });
     }
 
-    editarOrganizacion(nombre, direccion, imagen, callback) {
+    editarOrganizacion(nombre, direccion, imagen, nombre_original, callback) {
+        console.log(nombre_original+ "adminnnnnnnnnnDAO");
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
             } else {
-                connection.query('UPDATE UCM_AW_RIU_ORG_organizacion SET NOMBRE = ?, DIRECCION = ? AND IMAGEN ? WHERE NOMBRE = ?',[nombre, direccion, imagen, req.session.organizacionNombre], function (err, org) {
+                connection.query('UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ? AND imagen ? WHERE NOMBRE = ?',[nombre, direccion, imagen, nombre_original], function (err) {
                     connection.release();
                     if (err) {
+                        console.log("errordao");
                         callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, org[0]);
+                        callback(null);
                     }
                 });
             }

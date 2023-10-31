@@ -1,9 +1,7 @@
 Funcionalidades del Administrador
 
 FALTAN=>
--reservar
--nueva instalacion
--organizacion en registrar aunq no entiendo muy bien para que vale
+-editar organizacion no funciona
 -cambiar rol
 -realizar reserva
 
@@ -31,23 +29,6 @@ app.get('/reserva/:id', (req, res) => {
     
     res.render('reserva', { result: result[0], session: req.session});
 
-  });
-});
-
-// Ruta para manejar la reserva de un destino específico
-app.post('/nueva_instalacion', /*upload.single('imagen'), */(req, res) => {
-  const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
-  const imagen = req.file.filename; // Obtiene el nombre del archivo de la propiedad 'filename' del objeto 'req.file'
-
-  // Inserta los datos de la instalación en la base de datos
-  dbConnection.query('INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horarioInicio, horarioFin) VALUES (?, ?, ?, ?, ?, ?)', [nombre, tipoReserva, imagen, aforo, horaInicio, horaFin], (err, result) => {
-    if (err) {
-      // Maneja los errores de la base de datos aquí
-      console.error(err);
-      return res.redirect(`/home`); // Redirige a la página de inicio en caso de error
-    }
-    // Redirige a la página del destino con confirmación de la instalación añadida
-    res.redirect(`/home`);
   });
 });
 
@@ -80,26 +61,15 @@ app.get('/cambiarRol/:id', (req, res) => {
   });
 });
 
-// Ruta para manejar la reserva de una instalación específica
-app.post('/realizar_reserva', (req, res) => {
-  const { dia, hora } = req.body;
-  const usuId = req.session.Id; // Suponiendo que el ID del usuario actual está disponible en req.usuarioId
-  const instId = req.body.instalacionId; // Suponiendo que el ID de la instalación está presente en el cuerpo de la solicitud
-
-  // Inserta los datos de la reserva en la tabla UCM_AW_RIU_RES_Reservas
-  dbConnection.query('INSERT INTO UCM_AW_RIU_RES_Reservas (dia, hora, usuId, instId) VALUES (?, ?, ?, ?)', [dia, hora, usuId, instId], (err, result) => {
-    if (err) {
-      // Maneja los errores de la base de datos aquí
-      return res.redirect('/reserva/:id');
-    }
-    // Redirige a la página de confirmación de reserva exitosa
-    res.redirect('/home');
-  });
-});
-
 0. He cambiado en el nav populares por Validacion asi cada vez que se meta un usuario en la app 
 al admin le llegara una solicitud ahi para acpetar o declinar, si la acpeta le enviamos un correo a su correo normal
 0.1 Funciona lo de la imagen ya se guarda en la bbdd, he cambiado perfil y he añadido organizacion
+
+mostrar imagen perfil 
+                        <!-- <div class="avatar-container"> -->
+                            <!-- Imagen de perfil en un círculo -->
+                            <!-- <img src="data:image/jpg;base64, <%= session.imagen.toString('base64') %>" alt="Imagen de perfil" class="avatar"> -->
+                        <!-- </div> -->
 
 1. Configuración del Sistema:
 a. Personalizar la apariencia del sistema con nombre, dirección e icono de la

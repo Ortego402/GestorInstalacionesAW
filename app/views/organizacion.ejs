@@ -30,19 +30,20 @@
                     </div>
                     <div class="card-body">
                         <!-- Formulario para mostrar y editar los datos del usuario -->
-                        <form action="/organizacion" method="post">
+                        <form action="/organizacion_editar" method="post">
                             <!-- Campos para modificar nombre, logo y dirección de la organización -->
                             <div class="mb-3">
                                 <label for="nombre">Nombre de la organización</label>
-                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= organizacion.nombre %>">
-                            </div>
-                            <div class="mb-3">
-                                <label for="logo">Icono</label>
-                                <input type="text" class="form-control" id="logo" name="logo" value="<%= organizacion.imagen %>">
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= results.nombre %>">
                             </div>
                             <div class="mb-3">
                                 <label for="direccion">Dirección de la organización</label>
-                                <input type="text" class="form-control" id="direccion" name="direccion" value="<%= organizacion.direccion %>">
+                                <input type="text" class="form-control" id="direccion" name="direccion" value="<%= results.direccion %>">
+                            </div>
+                            <div class="mb-3">
+                                <label for="imagen" class="form-label">Icono (solo JPG, tamaño máximo 2MB)</label>
+                                <input class="form-control" type="file" id="logo" name="logo" accept="image/jpeg" size="2000000">
+                            
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>
                         </form>

@@ -28,15 +28,15 @@
                     <div class="row g-0">
                         <!-- Columna para la imagen (arriba) -->
                         <div class="col-md-12">
-                            <img src="/public/images/<%= result.imagen %>" class="card-img-top w-100 object-fit-cover" alt="<%= result.nombre %>">
+                            <img src="data:image/jpg;base64, <%= results.imagen.toString('base64') %>" class="card-img-top w-100 object-fit-cover" alt="<%= results.nombre %>">
                         </div>
                         <!-- Columna para el contenido de la tarjeta (debajo de la imagen) -->
                         <div class="col-md-12">
                             <div class="card-body">
-                                <h5 class="card-title"><%= result.nombre %></h5>
-                                <p class="card-text">Tipo de reserva: <%= result.tipoReserva %></p>
-                                <p class="card-text">Aforo: <%= result.aforo %> personas</p>
-                                <p class="card-text">Horario: <%= result.horaInicio %> - <%= result.horaFin %></p>
+                                <h5 class="card-title"><%= results.nombre %></h5>
+                                <p class="card-text">Tipo de reserva: <%= results.tipoReserva %></p>
+                                <p class="card-text">Aforo: <%= results.aforo %> personas</p>
+                                <p class="card-text">Horario: <%= results.horaInicio %> - <%= results.horaFin %></p>
                             </div>
                         </div>
                     </div>
@@ -53,7 +53,7 @@
                         <label for="hora" class="form-label text-start">Hora de la Reserva</label>
                         <input type="time" class="form-control" id="hora" name="hora" required step="1800">
                     </div>            
-                    <input type="hidden" id="instalacionId" name="instalacionId" value="<%= result.Id %>">
+                    <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
                     <div class="d-grid gap-2">
                         <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
                     </div>

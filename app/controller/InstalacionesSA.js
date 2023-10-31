@@ -8,6 +8,16 @@ class InstalacionesSA {
         this.DAOInstalaciones = new DAOInstalaciones(pool);
     }
 
+    reservar(id, callback) {
+        this.DAOInstalaciones.getInstalacion(id, (err, results) => {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
     mostrarInstalaciones(req, res, callback) {
         this.DAOInstalaciones.getAllInstalaciones((err, results) => {
             if (err) {
