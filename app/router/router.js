@@ -91,7 +91,12 @@ router.get('/logout', (req, res) => {
 
 router.get('/registro', (req, res) => {
     let mensaje = "";
-    return res.render("registro", { session: req.session, mensaje: mensaje });
+    usuariosSA.mostrarFacultades(req, res, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render("registro", { session: req.session, mensaje: mensaje, results : results });
+    });
 });
 
 router.post('/registrar', (req, res) => {
@@ -104,11 +109,11 @@ router.post('/registrar', (req, res) => {
         }
 
         if (result.length > 0) {
-            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo });
+            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: req.body.facultades });
         }
 
         if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password) || !/\W/.test(password) || password !== confirmPassword) {
-            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo });
+            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: req.body.facultades });
         }
 
         usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, password, img, (err, result) => {

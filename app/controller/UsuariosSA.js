@@ -27,9 +27,20 @@ class UsuariosSA {
         });
     }
 
+    mostrarFacultades(req, res, callback) {
+
+        this.DAOUsuarios.getFacultades((err, results) => {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
     mostrarEmail(id, req, res, callback) {
         this.DAOUsuarios.getEmail(id, (err, results) => {
-            
+
             if (err) {
                 callback(err, null);
             } else {
@@ -54,6 +65,7 @@ class UsuariosSA {
     
 
     registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, callback) {
+        console.log(facultad)
         bcrypt.hash(contraseña, 10, (err, hash) => {
             if (err) {
                 return callback('Error al hashear la contraseña', null);

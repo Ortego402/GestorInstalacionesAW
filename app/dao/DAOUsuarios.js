@@ -31,6 +31,24 @@ class DAOUsuarios {
         });
     }
 
+    
+    getFacultades(callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query('SELECT * FROM ucm_aw_riu_facultades', (err, results) => {
+                    connection.release();
+                    if (err) {
+                        return callback("Error de acceso a la base de datos", null);
+                    }
+
+                    return callback(null, results);
+                });
+            };
+        });
+    }
+
     getEmail(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {

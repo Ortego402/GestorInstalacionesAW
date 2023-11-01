@@ -53,12 +53,15 @@
                                             </div>
                                         </div>
                                         <div class="row">
-                                            <div class="col mb-2">
-                                                <div class="mb-2">
-                                                    <label for="facultad" class="form-label">Facultad</label>
-                                                    <input type="text" class="form-control" id="facultad" name="facultad" required>
-                                                </div>
-                                            </div>
+                                            <div class="mb-2">
+                                                <label for="facultad" class="form-label">Facultad</label>
+                                                <select class="form-select" id="facultad" name="facultad" required>
+                                                    <option value="" selected>Selecciona una facultad</option>
+                                                    <% for (let i = 0; i < facultades.length; i++) { %>
+                                                        <option value="<%= facultades[i].nombre %>" <% if (facultades[i].nombre === facultad) { %>selected<% } %>><%= facultades[i].nombre %></option>
+                                                    <% } %>
+                                                </select>                                                
+                                            </div>                                                                                     
                                         </div>
                                         <div class="row">
                                             <div class="col mb-2">
