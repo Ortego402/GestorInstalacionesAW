@@ -19,7 +19,7 @@ class DAOUsuarios {
             if (err) {
                 return callback("Error de acceso a la base de datos", null);
             } else {
-                connection.query('SELECT * FROM ucm_aw_riu_emails WHERE correo_destino = ?', [email], (err, result) => {
+                connection.query('SELECT * FROM ucm_aw_riu_emails WHERE correo_destino = ? ORDER BY fecha desc', [email], (err, result) => {
                     connection.release();
                     if (err) {
                         return callback("Error de acceso a la base de datos", null);
@@ -31,6 +31,22 @@ class DAOUsuarios {
         });
     }
 
+    getEmail(id, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query('SELECT * FROM ucm_aw_riu_emails WHERE id = ?', [id], (err, result) => {
+                    connection.release();
+                    if (err) {
+                        return callback("Error de acceso a la base de datos", null);
+                    }
+
+                    return callback(null, result);
+                });
+            };
+        });
+    }
 
     insertEmail(correo_envia, correo_destino, asunto, mensaje, callback) {
         this.pool.getConnection(function (err, connection) {

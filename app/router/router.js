@@ -61,6 +61,16 @@ router.get('/email', (req, res) => {
     });
 });
 
+router.get('/email/:id', (req, res) => {
+    const id = req.params.id;
+    usuariosSA.mostrarEmail(id, req, res, (err, result) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render('email_individual', { result: result[0], session: req.session });
+    });
+});
+
 router.post('/email', (req, res) => {
     usuariosSA.mandarEmail(req, res, (err, mensaje) => {
         console.log(err)

@@ -15,11 +15,14 @@ body {
     min-height: 100vh; /* Establece el mínimo alto del cuerpo a 100% de la ventana visible */
 }
 
+main {
+    flex: 1; /* Esto hace que el contenedor principal (main) ocupe todo el espacio restante */
+}
+
 /* Estilos para los títulos de destino */
 .titulo-dest {
     font-size: 2em;
     font-weight: bold;
-    text-align: center;
     color: #333;
     text-transform: uppercase;
 }
@@ -133,10 +136,13 @@ footer {
     color: white;
     text-align: center;
     padding: 10px;
-    position: relative;
+    position:;
     bottom: 0;
+    left: 0;
+    right: 0;
     width: 100%;
 }
+
 
 /* Estilos para los botones de navegación */
 .botonnav {
@@ -240,4 +246,13 @@ nav a {
 
 .email-asunto.active .email-mensaje {
     display: block;
+}
+
+.mensaje {
+    font-size: 16px; /* Tamaño de fuente del mensaje */
+    color: #333; /* Color del texto del mensaje */
+    margin-top: 10px; /* Espaciado superior del mensaje */
+    border: 1px solid #ccc; /* Borde del mensaje */
+    border-radius: 5px; /* Borde redondeado del mensaje */
+    background-color: #f9f9f9; /* Color de fondo del mensaje */
 }

@@ -27,6 +27,17 @@ class UsuariosSA {
         });
     }
 
+    mostrarEmail(id, req, res, callback) {
+        this.DAOUsuarios.getEmail(id, (err, results) => {
+            
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
     mandarEmail(req, res, callback) {
         const { destinatario, asunto, mensaje } = req.body;
         const email_envio = req.session.email;
