@@ -15,10 +15,6 @@ body {
     min-height: 100vh; /* Establece el mínimo alto del cuerpo a 100% de la ventana visible */
 }
 
-main {
-    flex: 1; /* Esto hace que el contenedor principal (main) ocupe todo el espacio restante */
-}
-
 /* Estilos para los títulos de destino */
 .titulo-dest {
     font-size: 2em;
@@ -130,19 +126,20 @@ main {
     margin-left: 10px;
 }
 
+main {
+    flex: 1; /* Esto hace que el contenedor principal (main) ocupe todo el espacio restante */
+}
+
 /* Estilos para el pie de página */
 footer {
     background-color: #555555;
     color: white;
     text-align: center;
     padding: 10px;
-    position:;
+    position: relative;
     bottom: 0;
-    left: 0;
-    right: 0;
     width: 100%;
 }
-
 
 /* Estilos para los botones de navegación */
 .botonnav {

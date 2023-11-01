@@ -93,14 +93,9 @@ a. Se enviará una notificación al primer usuario de la lista cuando haya habid
 cancelación de reservas.
 
 Funcionalidades del Usuario
-1. Registro de Usuarios:
-a. Registrarse en la plataforma proporcionando información como nombre, apellidos,
-facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
-2. Reserva de Instalaciones:
-a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
-3. Correo Electrónico:
-a. Ver correos electrónicos recibidos.
-b. Enviar correos a otros usuarios de la misma organización.
+1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
+2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
+# 3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
 
 # Funcionalidades Comunes
 # 1. Inicio de Sesión: Iniciar sesión en la plataforma utilizando correo de la UCM y contraseña.
