@@ -1,6 +1,6 @@
 "use strict";
 
-class DAOAdmin{
+class DAOAdmin {
 
     constructor(pool) {
         this.pool = pool;
@@ -40,17 +40,28 @@ class DAOAdmin{
         });
     }
 
-    editarOrganizacion(nombre, direccion, imagen, nombre_original, callback) {
-        console.log(nombre_original+ "adminnnnnnnnnnDAO");
+    editarOrganizacion(nombre, direccion, imagenData, nombre_original, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                callback("Error de acceso a la base de datos");
             } else {
-                connection.query('UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ? AND imagen ? WHERE NOMBRE = ?',[nombre, direccion, imagen, nombre_original], function (err) {
+                let query = 'UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ?';
+                const params = [nombre, direccion];
+
+                // Si hay imagenData, agrega imagen a la consulta y parámetros
+                if (imagenData) {
+                    const imagenBinaria = Buffer.from(imagenData, 'base64');
+                    query += ', imagen = ?';
+                    params.push(imagenBinaria);
+                }
+
+                query += ' WHERE NOMBRE = ?';
+                params.push(nombre_original);
+
+                connection.query(query, params, function (err) {
                     connection.release();
                     if (err) {
-                        console.log("errordao");
-                        callback("Error de acceso a la base de datos", null);
+                        callback("Error de acceso a la base de datos");
                     } else {
                         callback(null);
                     }
@@ -59,7 +70,8 @@ class DAOAdmin{
         });
     }
 
-    insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, callback){
+
+    insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, callback) {
 
         this.pool.getConnection(function (err, connection) {
             if (err) {

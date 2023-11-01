@@ -102,11 +102,9 @@ a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
 a. Ver correos electrónicos recibidos.
 b. Enviar correos a otros usuarios de la misma organización.
 
-Funcionalidades Comunes
-1. Inicio de Sesión:
-a. Iniciar sesión en la plataforma utilizando correo de la UCM y contraseña.
-2. Cierre de Sesión:
-a. Cerrar sesión mediante un icono o opción en el menú desplegable.
+# Funcionalidades Comunes
+# 1. Inicio de Sesión: Iniciar sesión en la plataforma utilizando correo de la UCM y contraseña.
+# 2. Cierre de Sesión: Cerrar sesión mediante un icono o opción en el menú desplegable.
 
 Funcionalidades según la nota:
 5

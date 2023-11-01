@@ -49,6 +49,27 @@ router.post('/InicioSesion', (req, res) => {
     });
 });
 
+router.get('/email', (req, res) => {
+    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
+    console.log(mensaje)
+
+    usuariosSA.mostrarEmails(req, res, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render('email', { results: results, session: req.session, mensaje : mensaje });
+    });
+});
+
+router.post('/email', (req, res) => {
+    usuariosSA.mandarEmail(req, res, (err, mensaje) => {
+        console.log(err)
+        console.log(mensaje)
+
+        res.redirect('/email?mensaje=' + encodeURIComponent(mensaje)); // Utiliza el mensaje del callback
+    });
+});
+
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -143,23 +164,18 @@ router.get('/buscar', (req, res) => {
 });
 
 router.get('/organizacion', (req, res) => {
+    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
     adminsSA.organizacion(req, res, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('organizacion', { results: results, session: req.session });
+        return res.render('organizacion', { results: results, session: req.session, mensaje: mensaje  });
     });
 });
 
 router.post('/organizacion_editar', (req, res) => {
-    const { nombre, direccion, imagen} = req.body;
-    const nombre_original = req.session.orgNombre;
-
-    adminsSA.organizacionEditar(nombre, direccion, imagen, nombre_original, (err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error de la base de datos' });
-        }
-        return res.render('organizacion', { results: results, session: req.session });
+    adminsSA.organizacionEditar(req, res, (err) => {
+        return res.redirect('/organizacion?mensaje=' + encodeURIComponent(err));
     });
 });
 

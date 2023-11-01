@@ -12,6 +12,7 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
+    min-height: 100vh; /* Establece el mínimo alto del cuerpo a 100% de la ventana visible */
 }
 
 /* Estilos para los títulos de destino */
@@ -132,6 +133,9 @@ footer {
     color: white;
     text-align: center;
     padding: 10px;
+    position: relative;
+    bottom: 0;
+    width: 100%;
 }
 
 /* Estilos para los botones de navegación */
@@ -195,4 +199,35 @@ nav a {
     height: 120px; /* Ajusta el tamaño según sea necesario */
     object-fit: cover;
     margin-bottom: 15px;
+}
+
+.main-color{
+    padding: 20px;
+    background-color: #e2f5ff;
+}
+
+.main-fondo::before{
+    content: "";
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: url('../images/61f5f63a54672.jpg'); /* Reemplaza con la ruta de tu imagen */
+    background-size: cover; /* Ajusta el tamaño de la imagen para cubrir completamente el área sin distorsionarla */
+    background-position: center;
+    background-repeat: no-repeat; /* Evita que la imagen de fondo se repita */
+    opacity: 0.8; /* Ajusta este valor para cambiar la opacidad del fondo */
+    z-index: -1; /* Coloca el fondo detrás de otros elementos */
+}
+
+/* Estilos para la tabla */
+.table {
+    border-radius: 10px; /* Bordes redondeados para la tabla */
+}
+
+/* Estilos para las celdas de la tabla */
+.table th,
+.table td {
+    text-align: center; /* Centrar el texto en las celdas */
 }

@@ -59,7 +59,7 @@ INSERT INTO `ucm_aw_riu_ins_instalaciones` (`Id`, `nombre`, `tipoReserva`, `imag
 CREATE TABLE `ucm_aw_riu_org_organizacion` (
   `nombre` varchar(255) NOT NULL,
   `direccion` varchar(255) DEFAULT NULL,
-  `imagen` varchar(255) DEFAULT NULL
+  `imagen` blob DEFAULT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
 
 --

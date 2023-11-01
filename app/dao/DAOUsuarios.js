@@ -14,14 +14,49 @@ class DAOUsuarios {
         });
     }
 
-    insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, callback) {
+    getEmailsUser(email, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query('SELECT * FROM ucm_aw_riu_emails WHERE correo_destino = ?', [email], (err, result) => {
+                    connection.release();
+                    if (err) {
+                        return callback("Error de acceso a la base de datos", null);
+                    }
+
+                    return callback(null, result);
+                });
+            };
+        });
+    }
+
+
+    insertEmail(correo_envia, correo_destino, asunto, mensaje, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback('Error de acceso a la base de datos');
+            }
+            console.log(mensaje)
+            connection.query('INSERT INTO ucm_aw_riu_emails (correo_envia, correo_destino, asunto, mensaje) VALUES (?, ?, ?, ?)', [correo_envia, correo_destino, asunto, mensaje], (err) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al insertar el email en la base de datos');
+                }
+                return callback(null);
+            });
+        });
+    }
+    
+
+    insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, callback) {
 
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 return callback('Error de acceso a la base de datos', null);
             }
 
-            connection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, '0'], (err, result) => {
+            connection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, '0'], (err, result) => {
                 connection.release();
                 if (err) {
                     return callback('Error al insertar usuario en la base de datos', null);
@@ -63,7 +98,7 @@ class DAOUsuarios {
                     if (err) {
                         return callback('Error al actualizar usuario en la base de datos');
                     }
-                    else{
+                    else {
                         return callback(null);
                     }
                 });

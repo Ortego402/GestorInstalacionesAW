@@ -15,14 +15,41 @@ class UsuariosSA {
         });
     }
 
-    registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, callback) {
+    mostrarEmails(req, res, callback) {
+        const email = req.session.email;
+
+        this.DAOUsuarios.getEmailsUser(email, (err, results) => {
+            if (err) {
+                callback(err, null);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
+    mandarEmail(req, res, callback) {
+        const { destinatario, asunto, mensaje } = req.body;
+        const email_envio = req.session.email;
+
+        this.DAOUsuarios.insertEmail(email_envio, destinatario, asunto, mensaje, (err) => {
+            console.log(err)
+            if (err) {
+                callback(err); // Pasa el mensaje de error del DAO y SA al callback principal
+            } else {
+                callback(null, "Email enviado correctamente."); // Pasa un mensaje de éxito al callback principal
+            }
+        });
+    }
+    
+
+    registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, callback) {
         bcrypt.hash(contraseña, 10, (err, hash) => {
             if (err) {
                 return callback('Error al hashear la contraseña', null);
             } else {
                 const imgData = imagen_perfil.data;
         
-                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, (err, result) => {
+                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, (err, result) => {
                     if(err){
                         return callback(err, null);
                     }

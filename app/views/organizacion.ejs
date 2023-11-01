@@ -31,6 +31,15 @@
                     <div class="card-body">
                         <!-- Formulario para mostrar y editar los datos del usuario -->
                         <form action="/organizacion_editar" method="post">
+                            <% if (mensaje == '¡Ups! Algo salió mal, vuelve a intentarlo más tarde.') { %>
+                                <div class="alert alert-danger bg-danger bg-gradient text-black" role="alert">
+                                    El nombre de usuario ya existe.
+                                </div>
+                            <% } else if(mensaje) { %>
+                                <div class="alert alert-success bg-gradient text-dark" role="alert">
+                                    <%= mensaje %>
+                                </div>
+                            <% } %>
                             <!-- Campos para modificar nombre, logo y dirección de la organización -->
                             <div class="mb-3">
                                 <label for="nombre">Nombre de la organización</label>
