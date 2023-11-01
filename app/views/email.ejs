@@ -53,9 +53,12 @@
                                                         <td>
                                                             <%= email.correo_envia %>
                                                         </td>
-                                                        <td>
+                                                        <td class="email-asunto">
                                                             <%= email.asunto %>
-                                                        </td>
+                                                            <div class="email-mensaje">
+                                                                Mensaje: <%= email.mensaje %>
+                                                            </div>
+                                                        </td>                                                        
                                                         <td>
                                                             <%= email.fecha %>
                                                         </td>
@@ -79,7 +82,7 @@
                             <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                         </div>
                         <div class="modal-body">
-                            <form id="enviarEmailForm" action="/email" method="post" >
+                            <form id="enviarEmailForm" action="/email" method="post">
                                 <div class="mb-3">
                                     <label for="destinatario" class="form-label">Correo Electrónico del Destinatario</label>
                                     <input type="email" class="form-control" id="destinatario" name="destinatario" required>
@@ -109,6 +112,18 @@
                 <script src="ruta/a/popper.min.js"></script>
                 <!-- Bootstrap JS Bundle -->
                 <script src="ruta/a/bootstrap.bundle.min.js"></script>
+                <script>
+                    document.addEventListener('DOMContentLoaded', function () {
+                        const asuntos = document.querySelectorAll('.email-asunto');
+
+                        asuntos.forEach(function (asunto) {
+                            asunto.addEventListener('click', function () {
+                                // Toggle the 'active' class to show/hide the email message
+                                asunto.classList.toggle('active');
+                            });
+                        });
+                    });
+                </script>
 </body>
 
 </html>

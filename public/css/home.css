@@ -231,3 +231,13 @@ nav a {
 .table td {
     text-align: center; /* Centrar el texto en las celdas */
 }
+
+.email-mensaje {
+    display: none;
+    padding-top: 10px;
+    padding-left: 20px;
+}
+
+.email-asunto.active .email-mensaje {
+    display: block;
+}
