@@ -1,5 +1,6 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -10,34 +11,42 @@
     <title>UCM | Login</title>
     <link rel="icon" href="../images/icon.png" type="image/x-icon">
 </head>
+
 <body class="bg-light">
 
     <div class="container">
-            <div class="col-md-6 border border-1 border-dark rounded">
-                <div class="card">
-                    <div class="card-body">
-                        <h5 class="card-title text-center">Iniciar Sesión</h5>
-                        <form action="/InicioSesion" method="POST">
-                            <div class="mb-3">
-                                <label for="email" class="form-label">Correo Electrónico</label>
-                                <input type="text" class="form-control" id="email" name="email" required>
-                            </div>
-                            <div class="mb-3">
-                                <label for="password" class="form-label">Contraseña</label>
-                                <input type="password" class="form-control" id="password" name="password" required>
-                            </div>
-                            <div class="d-grid">
-                                <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
-                            </div>
-                            <br>
-                        </form>
-                        <div class="text-center">
-                            <p>¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
-                        </div>
+        <div class="col-md-6 border border-1 border-dark rounded">
+            <div class="card">
+                <div class="card-body">
+                    <h5 class="card-title text-center">Iniciar Sesión</h5>
+                    <form action="/InicioSesion" method="POST">
+                        <% if (mensaje==null) { %>
+                            <% } else if(mensaje) { %>
+                                <div class="alert alert-danger bg-gradient text-dark" role="alert">
+                                    <%= mensaje %>
+                                </div>
+                                <% } %>
+                                    <div class="mb-3">
+                                        <label for="email" class="form-label">Correo Electrónico</label>
+                                        <input type="text" class="form-control" id="email" name="email" required>
+                                    </div>
+                                    <div class="mb-3">
+                                        <label for="password" class="form-label">Contraseña</label>
+                                        <input type="password" class="form-control" id="password" name="password" required>
+                                    </div>
+                                    <div class="d-grid">
+                                        <button type="submit" class="btn btn-primary">Iniciar Sesión</button>
+                                    </div>
+                                    <br>
+                    </form>
+                    <div class="text-center">
+                        <p>¿No tienes cuenta? <a href="/registro">Regístrate</a></p>
                     </div>
                 </div>
             </div>
+        </div>
     </div>
 
 </body>
+
 </html>

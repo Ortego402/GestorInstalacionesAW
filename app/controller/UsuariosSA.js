@@ -15,18 +15,24 @@ class UsuariosSA {
         });
     }
 
-    registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil) {
+    registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, contraseña_visible, imagen_perfil, callback) {
         bcrypt.hash(contraseña, 10, (err, hash) => {
             if (err) {
                 return callback('Error al hashear la contraseña', null);
+            } else {
+                const imgData = imagen_perfil.data;
+        
+                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, (err, result) => {
+                    if(err){
+                        return callback(err, null);
+                    }
+                    else{
+                        return callback(null, result);
+                    }
+                });
             }
-
-            const imgData  = imagen_perfil.data;
-
-            this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, contraseña_visible, imgData, (err, result) => {
-                return callback(err, result);
-            });
         });
+        
     }
 
     iniciarSesion(req, res, callback) {

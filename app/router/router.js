@@ -15,7 +15,8 @@ const instalacionesSA = new InstalacionesSA(pool);
 const adminsSA = new AdminsSA(pool)
 
 router.get('/', (req, res) => {
-    return res.render("login", { session: req.session});
+    let mensaje = "";
+    return res.render("login", { session: req.session, mensaje : mensaje});
 });
 
 router.get('/home', (req, res) => {
@@ -79,7 +80,7 @@ router.post('/registrar', (req, res) => {
             return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo });
         }
 
-        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, img, (err, result) => {
+        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, password, img, (err, result) => {
             if (err) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }
@@ -95,13 +96,11 @@ router.post('/registrar', (req, res) => {
                 if (err) {
                     return res.status(500).json({ error: 'Error de la base de datos' });
                 }
-        
                 req.session.orgNombre = results.nombre;
                 req.session.orgDir= results.direccion;
                 req.session.orgIcono = results.imagen;
-        
+                return res.redirect('/home');
             });
-            return res.redirect('/home');
         });
     });
 });

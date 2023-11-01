@@ -134,15 +134,6 @@ footer {
     padding: 10px;
 }
 
-@media (min-width: 768px) {
-    /* Estilos para pantallas grandes (más de 768px de ancho) */
-    footer {
-        position: absolute;
-        width: 100%;
-        bottom: 0;
-    }
-}
-
 /* Estilos para los botones de navegación */
 .botonnav {
     background-color: #b4b4b4;
