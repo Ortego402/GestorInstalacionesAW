@@ -6,6 +6,14 @@ header {
     padding: 20px;
 }
 
+body {
+    display: flex;
+    flex-direction: column;
+    min-height: 100vh;
+    margin: 0;
+    padding: 0;
+}
+
 /* Estilos para los títulos de destino */
 .titulo-dest {
     font-size: 2em;
@@ -123,8 +131,16 @@ footer {
     background-color: #555555;
     color: white;
     text-align: center;
-    padding: 20px;
-    margin-top: auto;
+    padding: 10px;
+}
+
+@media (min-width: 768px) {
+    /* Estilos para pantallas grandes (más de 768px de ancho) */
+    footer {
+        position: absolute;
+        width: 100%;
+        bottom: 0;
+    }
 }
 
 /* Estilos para los botones de navegación */
