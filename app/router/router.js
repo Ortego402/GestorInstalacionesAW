@@ -90,30 +90,30 @@ router.get('/logout', (req, res) => {
 });
 
 router.get('/registro', (req, res) => {
-    let mensaje = "";
-    usuariosSA.mostrarFacultades(req, res, (err, results) => {
+    usuariosSA.mostrarFacultades(req, res, (err, facultades) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render("registro", { session: req.session, mensaje: mensaje, results : results });
+        let mensaje = "";
+        return res.render("registro", { session: req.session, mensaje: mensaje, facultades: facultades, facultad: req.query.facultad });
     });
 });
 
 router.post('/registrar', (req, res) => {
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword} = req.body;
     const img = req.files.img;  // Se coge del req por que las files estan aqui
-
+    const facultades = JSON.parse(req.body.facultades);
     usuariosSA.checkEmail(email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
 
         if (result.length > 0) {
-            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: req.body.facultades });
+            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
         }
 
         if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password) || !/\W/.test(password) || password !== confirmPassword) {
-            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: req.body.facultades });
+            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: facultades });
         }
 
         usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, password, img, (err, result) => {

@@ -58,11 +58,11 @@
                                                 <select class="form-select" id="facultad" name="facultad" required>
                                                     <option value="" selected>Selecciona una facultad</option>
                                                     <% for (let i = 0; i < facultades.length; i++) { %>
-                                                        <option value="<%= facultades[i].nombre %>" <% if (facultades[i].nombre === facultad) { %>selected<% } %>><%= facultades[i].nombre %></option>
+                                                        <option value="<%= facultades[i].facultad %>" <% if (facultades[i].facultad === facultad) { %>selected<% } %>><%= facultades[i].facultad %></option>
                                                     <% } %>
                                                 </select>                                                
                                             </div>                                                                                     
-                                        </div>
+                                        </div>                                        
                                         <div class="row">
                                             <div class="col mb-2">
                                                 <div class="mb-2">
@@ -104,6 +104,7 @@
                                             </div>
                                         </div>
                                         <div class="d-grid">
+                                            <input type="hidden" name="facultades" value="<%= JSON.stringify(facultades) %>">
                                             <button type="submit" class="btn btn-dark">Registrarse</button>
                                         </div>
                                         <br>
