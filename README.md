@@ -32,35 +32,6 @@ app.get('/reserva/:id', (req, res) => {
   });
 });
 
-app.get('/cambiarRol/:id', (req, res) => {
-  const id = req.params.id;
-
-  // Realiza una consulta para obtener el rol actual del usuario
-  dbConnection.query('SELECT rol FROM UCM_AW_RIU_USU_Usuarios WHERE Id = ?', [id], (err, results) => {
-    if (err) {
-      // Maneja los errores de la base de datos aquí
-      console.error(err);
-      return res.status(500).json({ error: 'Error de la base de datos' });
-    }
-
-    // Obtiene el rol actual del resultado de la consulta
-    const rolActual = results[0].rol;
-    // Cambia el rol de '1' a '0' o de '0' a '1' según el valor actual
-    const nuevoRol = rolActual === '1' ? '0' : '1';
-    // Realiza una consulta de actualización para cambiar el rol
-    dbConnection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET rol = ? WHERE Id = ?', [nuevoRol, id], (err, result) => {
-      if (err) {
-        // Maneja los errores de la base de datos aquí
-        console.error(err);
-        return res.status(500).json({ error: 'Error de la base de datos al actualizar el rol' });
-      }
-      
-      // Redirige a la página de lista de usuarios después de cambiar el rol
-      res.redirect('/usuarios');
-    });
-  });
-});
-
 0. He cambiado en el nav populares por Validacion asi cada vez que se meta un usuario en la app 
 al admin le llegara una solicitud ahi para acpetar o declinar, si la acpeta le enviamos un correo a su correo normal
 0.1 Funciona lo de la imagen ya se guarda en la bbdd, he cambiado perfil y he añadido organizacion
@@ -79,10 +50,9 @@ a. Crear nuevas instalaciones con nombre, disponibilidad horaria, tipo de reserv
 (individual o colectiva), y aforo (si aplica).
 b. Adjuntar fotografía/icono a la instalación.
 3. Validación de Usuarios:
-a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
+# a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
 b. Enviar correo de confirmación de registro a los usuarios validados.
-4. Asignación de Roles:
-a. Asignar roles de administrador a usuarios específicos.
+# 4. Asignación de Roles: a. Asignar roles de administrador a usuarios específicos.
 5. Estadísticas y Listados:
 a. Obtener estadísticas de reservas por usuario o por facultad.
 b. Generar listados de usuarios por facultad.

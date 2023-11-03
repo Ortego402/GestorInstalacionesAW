@@ -28,12 +28,18 @@ router.get('/home', (req, res) => {
     });
 });
 
+router.get('/validado', (req, res) => {
+    return res.render('validado', { session: req.session });
+});
+
 router.post('/InicioSesion', (req, res) => {
-    usuariosSA.iniciarSesion(req, res, (err) => {
+    usuariosSA.iniciarSesion(req, res, (err, user) => {
         if (err) {
             return res.render('login', { mensaje: err }); // Muestra el mensaje de error
         }
-
+        if(user.validado == '0'){
+            return res.redirect('/validado')
+        }
         adminsSA.organizacion(req, res, (err, results) => {
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
@@ -43,7 +49,7 @@ router.post('/InicioSesion', (req, res) => {
             req.session.orgDir= results.direccion;
             req.session.orgIcono = results.imagen;
 
-            res.redirect('/home'); // Redirige a la página principal si no hay errores
+            return res.redirect('/home'); // Redirige a la página principal si no hay errores
 
         });
     });
@@ -128,16 +134,22 @@ router.post('/registrar', (req, res) => {
             req.session.curso = curso;
             req.session.grupo = grupo;
             req.session.rol = "0";
-            adminsSA.organizacion(req, res, (err, results) => {
-                if (err) {
-                    return res.status(500).json({ error: 'Error de la base de datos' });
-                }
-                req.session.orgNombre = results.nombre;
-                req.session.orgDir= results.direccion;
-                req.session.orgIcono = results.imagen;
-                return res.redirect('/home');
-            });
+
+            return res.redirect('/validado') 
+
         });
+    });
+});
+
+router.get('/validaciones', (req, res) => {
+    console.log("hola")
+    adminsSA.obtenerValidaciones((err, validaciones) => {
+        if (err) {
+            // Manejar el error aquí, por ejemplo, renderizando una página de error
+            return res.status(500).send('Error interno del servidor');
+        }
+        console.log(validaciones)
+        return res.render('validacion', { validaciones: validaciones, session: req.session });
     });
 });
 
@@ -160,6 +172,42 @@ router.get('/perfil', (req, res) => {
         req.session.imagen = result[0].imagen;
 
         res.render('perfil', { result: result[0], session: req.session, mensaje: mensaje });
+    });
+});
+
+router.get('/cambiarRol/:id', (req, res) => {
+    const id = req.params.id;
+
+    adminsSA.cambiarRolUsuario(id, (err, result) => {
+      if (err) {
+        console.error(err);
+        return res.status(500).json({ error: 'Error al cambiar el rol del usuario' });
+      }
+      res.redirect('/usuarios');
+    });
+});
+
+router.get('/validar/:id', (req, res) => {
+    const emailId = req.params.id;
+    const userEmail = req.query.email;
+
+    adminsSA.validarYEliminarUsuario(emailId, userEmail, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error al validar el correo electrónico' });
+        }
+        return res.redirect('/validaciones');
+    });
+});
+
+// Ruta para no validar un correo electrónico y eliminar la solicitud de validación
+router.get('/novalidar/:id', (req, res) => {
+    const emailId = req.params.id;
+    const userEmail = req.query.email;
+    adminsSA.denegarYEliminarUsuario(emailId, userEmail, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error al validar el correo electrónico' });
+        }
+        return res.redirect('/validaciones');
     });
 });
 

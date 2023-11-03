@@ -31,7 +31,7 @@ class DAOUsuarios {
         });
     }
 
-    
+
     getFacultades(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -81,7 +81,7 @@ class DAOUsuarios {
             });
         });
     }
-    
+
 
     insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, callback) {
 
@@ -90,7 +90,7 @@ class DAOUsuarios {
                 return callback('Error de acceso a la base de datos', null);
             }
 
-            connection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, rol) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, '0'], (err, result) => {
+            connection.query('INSERT INTO UCM_AW_RIU_USU_Usuarios (nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, rol, validado) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)', [nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, '0', '0'], (err, result) => {
                 connection.release();
                 if (err) {
                     return callback('Error al insertar usuario en la base de datos', null);
@@ -139,6 +139,17 @@ class DAOUsuarios {
             });
         });
     }
+
+    insertValidacion(email, callback) {
+        const sql = "INSERT INTO UCM_AW_RIU_Validaciones (email) VALUES (?)";
+        this.pool.query(sql, [email], (err) => {
+            if (err) {
+                return callback('Error al insertar mensaje de validación en la base de datos.');
+            } else {
+                return callback(null);
+            }
+        });
+    }    
 
 }
 

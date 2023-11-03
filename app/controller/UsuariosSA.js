@@ -62,7 +62,6 @@ class UsuariosSA {
             }
         });
     }
-    
 
     registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, contraseña, imagen_perfil, callback) {
         console.log(facultad)
@@ -77,7 +76,13 @@ class UsuariosSA {
                         return callback(err);
                     }
                     else{
-                        return callback(null);
+                        this.DAOUsuarios.insertValidacion(email, (err) => {
+                            if (err) {
+                                return callback(err);
+                            } else {
+                                return callback(null);
+                            }
+                        });
                     }
                 });
             }
@@ -90,7 +95,7 @@ class UsuariosSA {
 
         this.DAOUsuarios.getUserByEmail(email, (err, user) => {
             if (err) {
-                return callback(err);
+                return callback(err, null);
             } else {
                 bcrypt.compare(password, user.contraseña, (bcryptErr, result) => {
                     if (bcryptErr) {
@@ -99,9 +104,9 @@ class UsuariosSA {
                         req.session.email = email;
                         req.session.Id = user.Id;
                         req.session.rol = user.rol;
-                        return callback(null); // Pasa null si no hay errores
+                        return callback(null, user); // Pasa null si no hay errores
                     } else {
-                        return callback('Contraseña incorrecta.');
+                        return callback('Contraseña incorrecta.', null);
                     }
                 });
             }
@@ -128,6 +133,7 @@ class UsuariosSA {
             }
         });
     }
+    
 
 }
 
