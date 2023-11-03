@@ -116,7 +116,7 @@ router.post('/registrar', (req, res) => {
             return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: facultades });
         }
 
-        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, password, img, (err, result) => {
+        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, img, (err) => {
             if (err) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }

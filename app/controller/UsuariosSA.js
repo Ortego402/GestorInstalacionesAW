@@ -68,16 +68,16 @@ class UsuariosSA {
         console.log(facultad)
         bcrypt.hash(contraseña, 10, (err, hash) => {
             if (err) {
-                return callback('Error al hashear la contraseña', null);
+                return callback('Error al hashear la contraseña');
             } else {
                 const imgData = imagen_perfil.data;
         
-                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, (err, result) => {
+                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imgData, (err) => {
                     if(err){
-                        return callback(err, null);
+                        return callback(err);
                     }
                     else{
-                        return callback(null, result);
+                        return callback(null);
                     }
                 });
             }
