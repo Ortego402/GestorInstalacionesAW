@@ -112,6 +112,41 @@ class AdminsSA {
             });
         });
     }
+
+    
+    buscarUsuariosPorCampo(campoBuscar, valorBuscar, callback) {
+        let campoBD;
+
+        // Mapea el campo de búsqueda a los campos correspondientes en la base de datos
+        switch (campoBuscar) {
+            case 'nombre':
+                campoBD = 'nombre';
+                break;
+            case 'apellido':
+                // Si el campo seleccionado es "apellido", busca por ambos apellidos
+                campoBD = ['apellido1', 'apellido2'];
+                break;
+            case 'email':
+                campoBD = 'email';
+                break;
+            case 'facultad':
+                campoBD = 'facultad';
+                break;
+            default:
+                // Si el campo seleccionado no es válido, llama al callback con un error
+                return callback('Campo de búsqueda no válido', null);
+        }
+
+        // Realiza la búsqueda en la base de datos según el campo seleccionado
+        this.DAOUsuarios.buscarUsuarios(campoBD, valorBuscar, (err, results) => {
+
+            if (err) {
+                return callback(err, null);
+            }
+            return callback(null, results);
+        });
+    }
+    
     
 }
 

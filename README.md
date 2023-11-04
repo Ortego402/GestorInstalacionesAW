@@ -95,11 +95,11 @@ Funcionalidades según la nota:
 8
 ● Todas las anteriores
 ● Administrador: Búsqueda avanzada. Desarrollar estructura de filtros para listados
-    ○ Nombre usuario
-    ○ Apellido usuario
+    # ○ Nombre usuario
+    # ○ Apellido usuario
     ○ Fecha inicio
     ○ Fecha fin
-    ○ Facultad
+    # ○ Facultad
     ○ Instalación
 ● Administrador: Generar listado de usuarios
 ● Administrador: Generar listado de reservas

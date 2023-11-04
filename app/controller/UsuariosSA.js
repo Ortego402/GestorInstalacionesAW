@@ -112,7 +112,7 @@ class UsuariosSA {
             }
         });
     }
-    
+
     mostrarPerfil(req, res, callback) {
         const email = req.session.email;
         this.DAOUsuarios.checkEmail(email, (err, result) => {

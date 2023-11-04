@@ -11,7 +11,7 @@ class DAOAdmin {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
             } else {
-                connection.query("SELECT * FROM UCM_AW_RIU_USU_Usuarios", function (err, users) {
+                connection.query("SELECT * FROM UCM_AW_RIU_USU_Usuarios ORDER BY nombre", function (err, users) {
                     connection.release();
                     if (err) {
                         callback("Error de acceso a la base de datos", null);
@@ -108,7 +108,6 @@ class DAOAdmin {
 
     obtenerValidaciones(callback) {
         const query = "SELECT * FROM UCM_AW_RIU_Validaciones ORDER BY fecha_creacion desc;";
-        console.log("hola")
         this.pool.query(query, (err, results) => {
             console.log(results)
 
@@ -164,6 +163,37 @@ class DAOAdmin {
         });
     }
     
+    buscarUsuarios(campo, valor, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                let sql;
+
+                // Construir la consulta SQL según el campo de búsqueda
+                if (Array.isArray(campo)) {
+                    // Si el campo es un array (caso de 'apellido' que busca en ambos apellidos)
+                    sql = "SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE ?? LIKE ? OR ?? LIKE ? ORDER BY nombre";
+                } else {
+                    // Para otros campos como 'nombre', 'email', 'facultad'
+                    sql = "SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE ?? LIKE ? ORDER BY nombre";
+                }
+
+                // Consulta SQL dinámica
+                const values = Array.isArray(campo) ? [campo[0], `%${valor}%`, campo[1], `%${valor}%`] : [campo, `%${valor}%`];
+
+                connection.query(sql, values, function (err, usuarios) {
+                    connection.release();
+                    if (err) {
+                        callback("Error de acceso a la base de datos", null);
+                    } else {
+                        callback(null, usuarios);
+                    }
+                });
+            }
+        });
+    }
+
 }
 
 

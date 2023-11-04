@@ -1,26 +1,15 @@
 <!-- Encabezado de la página -->
 <header class="container-fluid container-header">
     <!-- Columna 1 con el logo y el nombre del sitio -->
-    <div class="col col-4 d-flex align-items-center">
+    <div class="col col-6 d-flex align-items-center">
         <!-- Enlace al inicio con el nombre del sitio como botón -->
         <a href="/home" class="btn text-dark border-0 ms-4 d-flex justify-content-start align-items-center">
             <!-- Título del sitio -->
             <img src="data:image/jpeg;base64,<%= session.orgIcono%>" class="img w-25" alt="Imagen">
             <h5><strong><%= session.orgNombre %></strong></h5>
         </a>
-    </div>
-    <!-- Columna 2 con el formulario de búsqueda -->
-    <div class="col col-6">
-        <!-- Formulario de búsqueda -->
-        <form action="/buscar" method="get">
-            <!-- Contenedor para la caja de búsqueda y el botón de búsqueda -->
-            <div class="buscador">
-                <!-- Caja de búsqueda -->
-                <input id="busquedaGlobal" type="search" class="caja" placeholder="Buscar instalaciones..." name="nombreBuscar" required>
-                <!-- Botón de búsqueda -->
-                <button class="boton" type="submit"><i class="bi bi-search"></i></button>
-            </div>
-        </form>
+    </div><!-- Columna 2 con el formulario de búsqueda -->
+    <div class="col col-4">
     </div>
     <!-- Columna 3 con los botones de login y correo -->
     <div class="col col-2 d-flex justify-content-center align-items-center">

@@ -109,10 +109,8 @@ body {
 
 /* Estilos para el cuadro de búsqueda */
 .caja {
-    padding: 10px;
     border: 2px solid #000000;
     border-radius: 5px;
-    width: 600px;
 }
 
 /* Estilos para el botón de búsqueda */

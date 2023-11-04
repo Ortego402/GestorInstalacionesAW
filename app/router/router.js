@@ -217,12 +217,14 @@ router.post('/actualizar_perfil', (req, res) => {
     });
 });
 
-router.get('/buscar', (req, res) => {
-    instalacionesSA.buscarInstalaciones(req, res, (err, results) => {
+router.get('/buscarUsuarios', (req, res) => {
+    const { campoBuscar, nombreBuscar } = req.query;
+    adminsSA.buscarUsuariosPorCampo(campoBuscar, nombreBuscar, (err, results) => {
+
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('home', { results: results, session: req.session });
+        res.render('listarUsuarios', { results: results, session: req.session });
     });
 });
 
