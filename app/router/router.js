@@ -16,7 +16,7 @@ const adminsSA = new AdminsSA(pool)
 
 router.get('/', (req, res) => {
     let mensaje = "";
-    return res.render("login", { session: req.session, mensaje : mensaje});
+    return res.render("login", { session: req.session, mensaje: mensaje });
 });
 
 router.get('/home', (req, res) => {
@@ -37,16 +37,16 @@ router.post('/InicioSesion', (req, res) => {
         if (err) {
             return res.render('login', { mensaje: err }); // Muestra el mensaje de error
         }
-        if(user.validado == '0'){
+        if (user.validado == '0') {
             return res.redirect('/validado')
         }
         adminsSA.organizacion(req, res, (err, results) => {
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
             }
-    
+
             req.session.orgNombre = results.nombre;
-            req.session.orgDir= results.direccion;
+            req.session.orgDir = results.direccion;
             req.session.orgIcono = results.imagen;
 
             return res.redirect('/home'); // Redirige a la página principal si no hay errores
@@ -63,7 +63,7 @@ router.get('/email', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('email', { results: results, session: req.session, mensaje : mensaje });
+        return res.render('email', { results: results, session: req.session, mensaje: mensaje });
     });
 });
 
@@ -106,7 +106,7 @@ router.get('/registro', (req, res) => {
 });
 
 router.post('/registrar', (req, res) => {
-    const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword} = req.body;
+    const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
     const img = req.files.img;  // Se coge del req por que las files estan aqui
     const facultades = JSON.parse(req.body.facultades);
     usuariosSA.checkEmail(email, (err, result) => {
@@ -119,7 +119,7 @@ router.post('/registrar', (req, res) => {
         }
 
         if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password) || !/\W/.test(password) || password !== confirmPassword) {
-            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo,  facultades: facultades });
+            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
         }
 
         usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, img, (err) => {
@@ -135,7 +135,7 @@ router.post('/registrar', (req, res) => {
             req.session.grupo = grupo;
             req.session.rol = "0";
 
-            return res.redirect('/validado') 
+            return res.redirect('/validado')
 
         });
     });
@@ -158,7 +158,7 @@ router.get('/perfil', (req, res) => {
     usuariosSA.mostrarPerfil(req, res, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
-            
+
         }
 
         req.session.nombre = result[0].nombre;
@@ -179,11 +179,11 @@ router.get('/cambiarRol/:id', (req, res) => {
     const id = req.params.id;
 
     adminsSA.cambiarRolUsuario(id, (err, result) => {
-      if (err) {
-        console.error(err);
-        return res.status(500).json({ error: 'Error al cambiar el rol del usuario' });
-      }
-      res.redirect('/usuarios');
+        if (err) {
+            console.error(err);
+            return res.status(500).json({ error: 'Error al cambiar el rol del usuario' });
+        }
+        res.redirect('/usuarios');
     });
 });
 
@@ -232,7 +232,7 @@ router.get('/organizacion', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('organizacion', { results: results, session: req.session, mensaje: mensaje  });
+        return res.render('organizacion', { results: results, session: req.session, mensaje: mensaje });
     });
 });
 
@@ -250,17 +250,17 @@ router.get('/servicios', (req, res) => {
 router.get('/usuarios', (req, res) => {
     // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
     adminsSA.mostrarUsuarios(req, res, (err, results) => {
-    if (err) {
-    return res.status(500).json({ error: 'Error de la base de datos' });
-    }
-    
-    res.render('listarUsuarios', { results: results, session: req.session});
-  
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+
+        res.render('listarUsuarios', { results: results, session: req.session });
+
     });
 });
 
 //sin hacer
-router.get('/validacion', (req, res) => { 
+router.get('/validacion', (req, res) => {
     return res.render('validacion', { session: req.session });
 });
 
@@ -269,22 +269,27 @@ router.get('/reserva/:id', (req, res) => {
 
     const id = req.params.id;
 
-    instalacionesSA.reservar(id, (err, results) =>{
+    instalacionesSA.reservar(id, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('reserva', { results: results[0], session: req.session });
-    }); 
+        instalacionesSA.obtenerReservasPorInstalacion(id, (err, reservas) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error de la base de datos' });
+            }
+            return res.render('reserva', { results: results[0], session: req.session, reservas: reservas });
+        });
+    });
 
 });
 
 router.get('/instalacion', (req, res) => {
-    return res.render('instalacion', {session: req.session});
+    return res.render('instalacion', { session: req.session });
 });
 
 router.post('/nueva_instalacion', (req, res) => {
-    const { nombre, tipoReserva, aforo, horaInicio, horaFin} = req.body;
-    const imagen = req.files.imagen; 
+    const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
+    const imagen = req.files.imagen;
 
     adminsSA.anyadirInstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, (err, results) => {
         if (err) {
@@ -293,5 +298,5 @@ router.post('/nueva_instalacion', (req, res) => {
         return res.redirect('/home');
     });
 });
-  
+
 module.exports = router;

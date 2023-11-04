@@ -253,3 +253,8 @@ nav a {
     border-radius: 5px; /* Borde redondeado del mensaje */
     background-color: #f9f9f9; /* Color de fondo del mensaje */
 }
+
+.reserva-container {
+    max-height: 360px;
+    overflow-y: auto;
+}

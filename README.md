@@ -78,11 +78,11 @@ Funcionalidades según la nota:
 ● Administrador: Creación de instalación
 ● Usuario: Registro de usuario
 ● Administrador: Validación de usuario
-● Administrador y Usuario: Inicio de sesión
-● Administrador y Usuario: Cierre de sesión
+# ● Administrador y Usuario: Inicio de sesión
+# ● Administrador y Usuario: Cierre de sesión
 ● Usuario: Reserva de instalaciones
-● Administrador: Historial de reservas de un
-usuario o de una instalación.
+● Administrador: Historial de reservas de un usuario.
+# ● Administrador: Historial de reservas de una instalación.
 ● Ventanas modales
 
 6

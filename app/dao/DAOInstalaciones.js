@@ -58,6 +58,23 @@ class DAOInstalaciones {
         });
     }
 
+    obtenerReservasPorInstalacion(instalacionId, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query("SELECT * FROM ucm_aw_riu_res_reservas WHERE instId = ? ORDER BY dia DESC, hora DESC", [instalacionId], function (err, results) {
+                    connection.release();
+                    if (err) {
+                        callback("Error de acceso a la base de datos", null);
+                    } else {
+                        callback(null, results);
+                    }
+                });
+            }
+        });
+      }
+
 }
 
 

@@ -40,6 +40,14 @@ class InstalacionesSA {
         });
     }
 
+    obtenerReservasPorInstalacion(instalacionId, callback) {
+        this.DAOInstalaciones.obtenerReservasPorInstalacion(instalacionId, (err, results) => {
+          if (err) {
+            return callback(err, null);
+          }
+          return callback(null, results);
+        });
+      }
 
 }
 
