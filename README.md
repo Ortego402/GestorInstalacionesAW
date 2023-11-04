@@ -73,24 +73,24 @@ Funcionalidades del Usuario
 
 Funcionalidades según la nota:
 5
-● Aplicación: Responsive
-● Administrador: Configuración del sistema
-● Administrador: Creación de instalación
-● Usuario: Registro de usuario
+● Aplicación: Responsive (Se revisa casi al final)
+● Administrador: Configuración del sistema (Falta imagen)
+● Administrador: Creación de instalación (Falta imagen)
+● Usuario: Registro de usuario (Falta imagen)
 # ● Administrador: Validación de usuario
 # ● Administrador y Usuario: Inicio de sesión
 # ● Administrador y Usuario: Cierre de sesión
-● Usuario: Reserva de instalaciones
-● Administrador: Historial de reservas de un usuario.
-# ● Administrador: Historial de reservas de una instalación.
+● Usuario: Reserva de instalaciones (Falta formato para reserva)
+● Administrador: Historial de reservas de un usuario. (En pentaña usuarios)
+● Administrador: Historial de reservas de una instalación. (Crear pestaña reservas)
 ● Ventanas modales
 
 6
 ● Todas las anteriores
-● Administrador: Envío de correo de validación de usuario
-● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Organización
-● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Facultad.
-● Usuario: Envío de correo tanto al administrador como a cualquier otro usuario de la Organización.
+● Administrador: Envío de correo de validación de usuario (Falta mandar el correo)
+# ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Organización
+# ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Facultad.
+# ● Usuario: Envío de correo tanto al administrador como a cualquier otro usuario de la Organización.
 
 8
 ● Todas las anteriores
