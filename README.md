@@ -100,7 +100,7 @@ Funcionalidades según la nota:
     ○ Fecha inicio
     ○ Fecha fin
     # ○ Facultad
-    ○ Instalación
+    # ○ Instalación
 ● Administrador: Generar listado de usuarios
 ● Administrador: Generar listado de reservas
 
