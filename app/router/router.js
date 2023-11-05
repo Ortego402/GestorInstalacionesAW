@@ -12,7 +12,9 @@ const session = require('express-session');
 const pool = mysql.createPool(config.mysqlConfig);
 const usuariosSA = new UsuariosSA(pool);
 const instalacionesSA = new InstalacionesSA(pool);
-const adminsSA = new AdminsSA(pool)
+const adminsSA = new AdminsSA(pool);
+const multer = require("multer");
+const multerFactory = multer({ storage: multer.memoryStorage()});
 
 router.get('/', (req, res) => {
     let mensaje = "";
@@ -24,7 +26,7 @@ router.get('/home', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('home', { results: results, session: req.session });
+        return res.render('home', { results: results, session: req.session});
     });
 });
 
@@ -32,28 +34,42 @@ router.get('/validado', (req, res) => {
     return res.render('validado', { session: req.session });
 });
 
-router.post('/InicioSesion', (req, res) => {
-    usuariosSA.iniciarSesion(req, res, (err, user) => {
-        if (err) {
-            return res.render('login', { mensaje: err }); // Muestra el mensaje de error
-        }
-        if (user.validado == '0') {
-            return res.redirect('/validado')
-        }
-        adminsSA.organizacion((err, results) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error de la base de datos' });
-            }
-
-            req.session.orgNombre = results.nombre;
-            req.session.orgDir = results.direccion;
-            req.session.orgIcono = results.imagen;
-
-            return res.redirect('/home'); // Redirige a la página principal si no hay errores
-
+router.post('/InicioSesion', async (req, res) => {
+    try {
+        const user = await new Promise((resolve, reject) => {
+            usuariosSA.iniciarSesion(req, res, (err, user) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(user);
+                }
+            });
         });
-    });
+
+        if (user.validado === '0') {
+            return res.redirect('/validado');
+        }
+
+        const results = await new Promise((resolve, reject) => {
+            adminsSA.organizacion((err, results) => {
+                if (err) {
+                    reject(err);
+                } else {
+                    resolve(results);
+                }
+            });
+        });
+
+        req.session.orgNombre = results.nombre;
+        req.session.orgDir = results.direccion;
+        req.session.orgIcono = results.imagen;
+
+        return res.redirect('/home');
+    } catch (error) {
+        return res.render('login', { mensaje: error });
+    }
 });
+
 
 router.get('/email', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
@@ -250,7 +266,16 @@ router.get('/organizacion', (req, res) => {
 });
 
 router.post('/organizacion_editar', (req, res) => {
-    adminsSA.organizacionEditar(req, res, (err) => {
+    const {nombre, direccion} = req.body;
+    const imagen= "";
+    if (req.files && req.files.imagen) {
+        // Accede a la propiedad 'logo'
+        imagen = req.files.imagen;
+        // Continúa con el resto del código
+    }   
+    const nombre_original = req.session.orgNombre;
+
+    adminsSA.organizacionEditar(nombre, direccion, imagen, nombre_original, req, res, (err) => {
         return res.redirect('/organizacion?mensaje=' + encodeURIComponent(err));
     });
 });

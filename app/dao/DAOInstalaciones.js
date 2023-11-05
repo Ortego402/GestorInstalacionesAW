@@ -51,7 +51,7 @@ class DAOInstalaciones {
                     if (err) {
                         callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, instalacion);
+                        callback(null, instalacion[0]);
                     }
                 });
             }

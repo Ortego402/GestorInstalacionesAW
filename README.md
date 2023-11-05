@@ -1,36 +1,8 @@
 Funcionalidades del Administrador
 
-FALTAN=>
--editar organizacion no funciona
--cambiar rol
--realizar reserva
-
-app.get('/reserva/:id', (req, res) => {
-  const id = req.params.id;
-  const reservaConfirmada = req.query.reserva === 'confirmada';
-
-  // Mensaje que se mostrará en función de la confirmación de reserva o comentario
-  let mensaje = '';
-  if (reservaConfirmada) {
-    mensaje = '¡Reserva completada! Gracias por realizar la reserva.';
-  } else {
-    mensaje = '¡Ups! Ha ocurrido un error al realizar la acción.';
-  }
-
-  // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
-  dbConnection.query('SELECT * FROM UCM_AW_RIU_INS_Instalaciones WHERE id = ?', [id], (err, result) => {
-    if (err) {
-      return res.status(500).json({ error: 'Error de la base de datos' });
-    }
-
-    if (result.length === 0) {
-      return res.status(404).send('Destino no encontrado');
-    }
-    
-    res.render('reserva', { result: result[0], session: req.session});
-
-  });
-});
+-no va la img al editar la organnizacion y o se por que
+-he leido el pdf del profe de las imagees y o se por que algunas no se muestran
+-lo de las cokisy sesion no hace falta lo hacemos indirectamente
 
 0. He cambiado en el nav populares por Validacion asi cada vez que se meta un usuario en la app 
 al admin le llegara una solicitud ahi para acpetar o declinar, si la acpeta le enviamos un correo a su correo normal

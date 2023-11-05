@@ -33,9 +33,7 @@ class AdminsSA {
     }
 
 
-    organizacionEditar(req, res, callback) {
-        const { nombre, direccion, imagen } = req.body;
-        const nombre_original = req.session.orgNombre;
+    organizacionEditar(nombre, direccion, imagen, nombre_original, callback) {
 
         this.DAOAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
             if (err) {
