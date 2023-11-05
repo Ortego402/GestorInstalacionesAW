@@ -24,7 +24,7 @@ class AdminsSA {
             }
             return callback(null, results);
         });
-    }    
+    }
 
     organizacion(callback) {
         this.DAOAdmin.mostrarOrganizacion((err, result) => {
@@ -108,7 +108,7 @@ class AdminsSA {
             if (err) {
                 return callback(err);
             }
-    
+
             // Calcula el nuevo rol alternando entre 0 y 1.
             const nuevoRol = user.rol === '1' ? '0' : '1';
             console.log(nuevoRol)
@@ -124,7 +124,7 @@ class AdminsSA {
         });
     }
 
-    
+
     buscarUsuariosPorCampo(campoBuscar, valorBuscar, callback) {
         let campoBD;
 
@@ -149,7 +149,7 @@ class AdminsSA {
         }
 
 
-        
+
         // Realiza la búsqueda en la base de datos según el campo seleccionado
         this.DAOUsuarios.buscarUsuarios(campoBD, valorBuscar, (err, results) => {
 
@@ -159,7 +159,7 @@ class AdminsSA {
             return callback(null, results);
         });
     }
-    
+
     buscarReservasPorCampo(campoBuscar, valorBuscar, callback) {
         let campoBD;
 
@@ -174,19 +174,19 @@ class AdminsSA {
             case 'fecha_fin':
                 campoBD = 'fechaFin';
                 break;
+            case 'id':
+                campoBD = 'Id';
+                break;
+            case 'email':
+                campoBD = 'usuEmail';
+                break;
             default:
                 // Si el campo seleccionado no es válido, llama al callback con un error
                 return callback('Campo de búsqueda no válido', null);
         }
 
-        console.log(campoBD)
-        console.log(campoBuscar)
-        console.log(valorBuscar)
-
-        
         // Realiza la búsqueda en la base de datos según el campo seleccionado
         this.DAOAdmin.buscarReservas(campoBD, valorBuscar, (err, results) => {
-            console.log(results)
 
             if (err) {
                 return callback(err, null);
@@ -194,7 +194,7 @@ class AdminsSA {
             return callback(null, results);
         });
     }
-    
+
 }
 
 

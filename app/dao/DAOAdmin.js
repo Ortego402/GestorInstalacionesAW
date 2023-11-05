@@ -216,7 +216,7 @@ class DAOAdmin {
                   "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id ";
         
         const values = [];
-
+    
         if (campo === 'instId') {
             sql += "WHERE i.nombre LIKE ?";
             values.push(`%${valor}%`);
@@ -226,8 +226,17 @@ class DAOAdmin {
         } else if (campo === 'fechaFin') {
             sql += "WHERE r.dia <= ?";
             values.push(`%${valor}%`);
+        } else if (campo === 'Id') {
+            sql += "WHERE r.Id LIKE ?";
+            values.push(`%${valor}%`);
+        } else if (campo === 'usuEmail') {
+            sql += "WHERE r.usuEmail LIKE ?";
+            values.push(`%${valor}%`);
+        } else {
+            // Si el campo seleccionado no es válido, llama al callback con un error
+            return callback('Campo de búsqueda no válido', null);
         }
-
+    
         sql += " ORDER BY r.dia DESC, r.hora DESC";
     
         this.pool.getConnection(function (err, connection) {
@@ -244,7 +253,8 @@ class DAOAdmin {
                 });
             }
         });
-    }    
+    }
+    
 
 }
 
