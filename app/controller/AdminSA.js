@@ -1,21 +1,32 @@
 "use strict";
 
 const DAOAdmin = require('../dao/DAOAdmin');
+const DAOInstalaciones = require('../dao/DAOInstalaciones');
 
 class AdminsSA {
 
     constructor(pool) {
         this.DAOAdmin = new DAOAdmin(pool);
+        this.DAOInstalaciones = new DAOInstalaciones(pool);
     }
 
 
-    mostrarUsuarios(req, res, callback) {
-        this.DAOAdmin.mostraTodos((err, result) => {
+    mostrarUsuarios(callback) {
+        this.DAOAdmin.mostraUsuarios((err, result) => {
             return callback(err, result);
         });
     }
 
-    organizacion(req, res, callback) {
+    mostrarReservas(callback) {
+        this.DAOInstalaciones.obtenerReservasConNombreInstalacion((err, results) => {
+            if (err) {
+                return callback(err, null);
+            }
+            return callback(null, results);
+        });
+    }    
+
+    organizacion(callback) {
         this.DAOAdmin.mostrarOrganizacion((err, result) => {
             return callback(err, result);
         });
@@ -137,6 +148,8 @@ class AdminsSA {
                 return callback('Campo de búsqueda no válido', null);
         }
 
+
+        
         // Realiza la búsqueda en la base de datos según el campo seleccionado
         this.DAOUsuarios.buscarUsuarios(campoBD, valorBuscar, (err, results) => {
 
@@ -147,6 +160,40 @@ class AdminsSA {
         });
     }
     
+    buscarReservasPorCampo(campoBuscar, valorBuscar, callback) {
+        let campoBD;
+
+        // Mapea el campo de búsqueda a los campos correspondientes en la base de datos
+        switch (campoBuscar) {
+            case 'instalacion':
+                campoBD = 'instId';
+                break;
+            case 'fecha_inicio':
+                campoBD = 'fechaInicio';
+                break;
+            case 'fecha_fin':
+                campoBD = 'fechaFin';
+                break;
+            default:
+                // Si el campo seleccionado no es válido, llama al callback con un error
+                return callback('Campo de búsqueda no válido', null);
+        }
+
+        console.log(campoBD)
+        console.log(campoBuscar)
+        console.log(valorBuscar)
+
+        
+        // Realiza la búsqueda en la base de datos según el campo seleccionado
+        this.DAOAdmin.buscarReservas(campoBD, valorBuscar, (err, results) => {
+            console.log(results)
+
+            if (err) {
+                return callback(err, null);
+            }
+            return callback(null, results);
+        });
+    }
     
 }
 

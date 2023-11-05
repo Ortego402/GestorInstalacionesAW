@@ -6,12 +6,29 @@ class DAOAdmin {
         this.pool = pool;
     }
 
-    mostraTodos(callback) {
+    mostraUsuarios(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM UCM_AW_RIU_USU_Usuarios ORDER BY nombre", function (err, users) {
+                    connection.release();
+                    if (err) {
+                        callback("Error de acceso a la base de datos", null);
+                    } else {
+                        callback(null, users);
+                    }
+                });
+            }
+        });
+    }
+
+    mostrarReservas(callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query("SELECT * FROM ucm_aw_riu_res_reservas ORDER BY dia DESC, hora DESC", function (err, users) {
                     connection.release();
                     if (err) {
                         callback("Error de acceso a la base de datos", null);
@@ -193,6 +210,41 @@ class DAOAdmin {
             }
         });
     }
+
+    buscarReservas(campo, valor, callback) {
+        let sql = "SELECT r.*, i.nombre AS nombre_instalacion FROM ucm_aw_riu_res_reservas r " +
+                  "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id ";
+        
+        const values = [];
+
+        if (campo === 'instId') {
+            sql += "WHERE i.nombre LIKE ?";
+            values.push(`%${valor}%`);
+        } else if (campo === 'fechaInicio') {
+            sql += "WHERE r.dia >= ?";
+            values.push(`%${valor}%`);
+        } else if (campo === 'fechaFin') {
+            sql += "WHERE r.dia <= ?";
+            values.push(`%${valor}%`);
+        }
+
+        sql += " ORDER BY r.dia DESC, r.hora DESC";
+    
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query(sql, values, function (err, reservas) {
+                    connection.release();
+                    if (err) {
+                        callback("Error de acceso a la base de datos", null);
+                    } else {
+                        callback(null, reservas);
+                    }
+                });
+            }
+        });
+    }    
 
 }
 

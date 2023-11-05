@@ -40,7 +40,7 @@ router.post('/InicioSesion', (req, res) => {
         if (user.validado == '0') {
             return res.redirect('/validado')
         }
-        adminsSA.organizacion(req, res, (err, results) => {
+        adminsSA.organizacion((err, results) => {
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
             }
@@ -228,9 +228,20 @@ router.get('/buscarUsuarios', (req, res) => {
     });
 });
 
+router.get('/buscarReservas', (req, res) => {
+    const { campoBuscar, nombreBuscar } = req.query;
+    adminsSA.buscarReservasPorCampo(campoBuscar, nombreBuscar, (err, results) => {
+
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        res.render('listarReservas', { results: results, session: req.session });
+    });
+});
+
 router.get('/organizacion', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    adminsSA.organizacion(req, res, (err, results) => {
+    adminsSA.organizacion((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -251,7 +262,7 @@ router.get('/servicios', (req, res) => {
 
 router.get('/usuarios', (req, res) => {
     // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
-    adminsSA.mostrarUsuarios(req, res, (err, results) => {
+    adminsSA.mostrarUsuarios((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -261,9 +272,15 @@ router.get('/usuarios', (req, res) => {
     });
 });
 
-//sin hacer
-router.get('/validacion', (req, res) => {
-    return res.render('validacion', { session: req.session });
+router.get('/reservas', (req, res) => {
+
+    adminsSA.mostrarReservas((err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        res.render('listarReservas', { results: results, session: req.session });
+
+    });
 });
 
 //no se como se hace lo que habia en app.js antes no lo entiendo
@@ -276,6 +293,7 @@ router.get('/reserva/:id', (req, res) => {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         instalacionesSA.obtenerReservasPorInstalacion(id, (err, reservas) => {
+            console.log(reservas)
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
             }

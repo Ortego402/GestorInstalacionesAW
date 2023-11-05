@@ -2,8 +2,12 @@
 <nav class="navbar">
     <!-- Enlace a la página "Nosotros" con estilo de botón de navegación -->
     <a href="/usuarios" class="botonnav border-end border-1">Usuarios</a>
+    <% if (session.rol === '1') { %>
+        <a href="/reservas" class="botonnav border-end border-1">Reservas</a>
+    <% } else { %>
     <!-- Enlace a la página "Servicios" con estilo de botón de navegación -->
-    <a href="/home" class="botonnav border-end border-1">Instalaciones</a>
+        <a href="/home" class="botonnav border-end border-1">Instalaciones</a>
+    <% } %>  
     <!-- Enlace a la página Gestion de Usuarios nuevos por administrador -->
     <a href="/validaciones" class="botonnav">Validacion</a>
 </nav>
