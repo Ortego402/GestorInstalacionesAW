@@ -30,7 +30,7 @@
                     </div>
                     <div class="card-body">
                         <!-- Formulario para mostrar y editar los datos del usuario -->
-                        <form action="/organizacion_editar" method="post">
+                        <form action="/organizacion_editar" method="post" enctype="multipart/form-data">
                             <% if (mensaje == '¡Ups! Algo salió mal, vuelve a intentarlo más tarde.') { %>
                                 <div class="alert alert-danger bg-danger bg-gradient text-black" role="alert">
                                     El nombre de usuario ya existe.
@@ -51,7 +51,7 @@
                             </div>
                             <div class="mb-3">
                                 <label for="imagen" class="form-label">Icono (solo PNG, tamaño máximo 2MB)</label>
-                                <input class="form-control" type="file" id="imagen" name="imagen" accept="image/png" size="2000000">
+                                <input class="form-control" type="file" id="imagen" name="imagen" accept="image/png" maxlength="2000000">
                             
                             </div>
                             <button type="submit" class="btn btn-primary">Guardar Cambios</button>

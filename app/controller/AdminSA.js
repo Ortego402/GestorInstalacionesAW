@@ -39,7 +39,7 @@ class AdminsSA {
             if (err) {
                 return callback("¡Ups! Algo salió mal, vuelve a intentarlo más tarde.");
             }
-            return callback("Sistema actualizado.");
+            return callback(null);
         });
     }
 

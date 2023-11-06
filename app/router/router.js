@@ -277,15 +277,15 @@ router.get('/organizacion', (req, res) => {
 
 router.post('/organizacion_editar', (req, res) => {
     const {nombre, direccion} = req.body;
-    const imagen= "";
+    let img = "";
     if (req.files && req.files.imagen) {
         // Accede a la propiedad 'logo'
-        imagen = req.files.imagen;
+        img = req.files.imagen;
         // Continúa con el resto del código
     }   
     const nombre_original = req.session.orgNombre;
 
-    adminsSA.organizacionEditar(nombre, direccion, imagen, nombre_original, req, res, (err) => {
+    adminsSA.organizacionEditar(nombre, direccion, img, nombre_original, req, res, (err) => {
         return res.redirect('/organizacion?mensaje=' + encodeURIComponent(err));
     });
 });
