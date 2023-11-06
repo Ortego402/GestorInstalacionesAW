@@ -94,8 +94,8 @@ class DAOInstalaciones {
                         if (err) {
                             callback("Error de acceso a la base de datos", null);
                         } else {
-                            const horasDeReservas = results.map(reserva => reserva.hora);
-                            callback(null, horasDeReservas);
+                            
+                            callback(null, results);
                         }
                     }
                 );

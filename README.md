@@ -15,12 +15,10 @@ mostrar imagen perfil
                         <!-- </div> -->
 
 1. Configuración del Sistema:
-a. Personalizar la apariencia del sistema con nombre, dirección e icono de la
-organización.
+a. Personalizar la apariencia del sistema con nombre, dirección e icono de la organización.
 2. Gestión de Instalaciones:
-a. Crear nuevas instalaciones con nombre, disponibilidad horaria, tipo de reserva
-(individual o colectiva), y aforo (si aplica).
-b. Adjuntar fotografía/icono a la instalación.
+# a. Crear nuevas instalaciones con nombre, disponibilidad horaria, tipo de reserva (individual o colectiva), y aforo (si aplica).
+b. Adjuntar fotografía/icono a la instalación. //funciona solo con algunas
 3. Validación de Usuarios:
 # a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
 b. Enviar correo de confirmación de registro a los usuarios validados.
@@ -35,8 +33,9 @@ a. Se enviará una notificación al primer usuario de la lista cuando haya habid
 cancelación de reservas.
 
 Funcionalidades del Usuario
-1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
-2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
+# 1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e 
+imagen de perfil.
+# 2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
 # 3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
 
 # Funcionalidades Comunes
@@ -52,7 +51,7 @@ Funcionalidades según la nota:
 # ● Administrador: Validación de usuario
 # ● Administrador y Usuario: Inicio de sesión
 # ● Administrador y Usuario: Cierre de sesión
-● Usuario: Reserva de instalaciones (Falta formato para reserva)
+# ● Usuario: Reserva de instalaciones (Falta formato para reserva) FALTARIA HACER QUE LAS HORAS DEL DIA QUE ESTEN OCUPADAS NO SE PUEDAN ESCOGER (//const horasDeReservas = results.map(reserva => reserva.hora);)
 ● Administrador: Historial de reservas de un usuario. (En pentaña usuarios)
 ● Administrador: Historial de reservas de una instalación. (Crear pestaña reservas)
 ● Ventanas modales

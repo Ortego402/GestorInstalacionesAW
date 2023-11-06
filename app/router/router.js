@@ -7,6 +7,14 @@ const UsuariosSA = require("../controller/UsuariosSA");
 const InstalacionesSA = require("../controller/InstalacionesSA");
 const AdminsSA = require("../controller/AdminSA");
 const session = require('express-session');
+const nodemailer = require('nodemailer');
+const transporter = nodemailer.createTransport({
+    service: 'gmail',
+    auth: {
+      user: 'webaplicaciones12@gmail.com',
+      pass: 'Hola123456/'
+    }
+});
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -211,6 +219,7 @@ router.get('/validar/:id', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error al validar el correo electrónico' });
         }
+        enviarCorreoValidacion(userEmail);
         return res.redirect('/validaciones');
     });
 });
@@ -223,6 +232,7 @@ router.get('/novalidar/:id', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error al validar el correo electrónico' });
         }
+        enviarCorreoNoValidacion(userEmail);
         return res.redirect('/validaciones');
     });
 });
@@ -323,7 +333,7 @@ router.get('/reserva/:id', (req, res) => {
             }
             const mensaje = req.session.mensaje || '';
             req.session.mensaje = '';
-            console.log(reservas);
+            console.log(reservas.id);
             return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
         });
     });
@@ -363,5 +373,46 @@ router.post('/nueva_instalacion', (req, res) => {
         return res.redirect('/home');
     });
 });
+
+
+function enviarCorreoValidacion(destinatario) {
+    const asunto = 'Correo de Validación';
+    const cuerpo = `Hola,\n\nYa estas validado por nuestro Administrador.\n\nPuedes acceder a la pagina./n/n¡Gracias!`;
+  
+    const opcionesCorreo = {
+      from: 'webaplicaciones12@gmail.com',
+      to: destinatario,
+      subject: asunto,
+      text: cuerpo
+    };
+  
+    transporter.sendMail(opcionesCorreo, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
+}
+
+function enviarCorreoNoValidacion(destinatario) {
+    const asunto = 'Correo de Validación';
+    const cuerpo = `Hola,\n\nNo has sido validado por nuestro Administrador./n/nLo sentimos.`;
+  
+    const opcionesCorreo = {
+      from: 'webaplicaciones12@gmail.com',
+      to: destinatario,
+      subject: asunto,
+      text: cuerpo
+    };
+  
+    transporter.sendMail(opcionesCorreo, (error, info) => {
+      if (error) {
+        console.error('Error al enviar el correo:', error);
+      } else {
+        console.log('Correo enviado:', info.response);
+      }
+    });
+}
 
 module.exports = router;
