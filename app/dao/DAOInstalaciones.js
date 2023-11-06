@@ -79,8 +79,46 @@ class DAOInstalaciones {
             }
         });
     }
+
+    obtenerReservasPorInstalacion(id, callback){
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query(
+                    "SELECT * FROM ucm_aw_riu_res_reservas r " +
+                    "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +
+                    "WHERE instId = ?",
+                    [id], function (err, results) {
+                        connection.release();
+                        if (err) {
+                            callback("Error de acceso a la base de datos", null);
+                        } else {
+                            const horasDeReservas = results.map(reserva => reserva.hora);
+                            callback(null, horasDeReservas);
+                        }
+                    }
+                );
+            }
+        });
+    }
     
-    
+    reservaInstalacion(id, dia, hora, email, callback){
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query("INSERT INTO `ucm_aw_riu_res_reservas` (`dia`, `hora`, `usuEmail`, `instId`)VALUES ( ?, ?, ?, ?);", [dia, hora, email, id], function (err) {
+                    connection.release();
+                    if (err) {
+                        callback("Error de acceso a la base de datos");
+                    } else {
+                        callback(null);
+                    }
+                });
+            }
+        });
+    }
 
 }
 

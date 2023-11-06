@@ -154,12 +154,14 @@ INSERT INTO `ucm_aw_riu_org_organizacion` (`nombre`, `direccion`, `imagen`) VALU
 --
 
 CREATE TABLE `ucm_aw_riu_res_reservas` (
-  `Id` int(11) NOT NULL,
+  `Id` int(11) NOT NULL AUTO_INCREMENT,
   `dia` varchar(255) DEFAULT NULL,
   `hora` varchar(255) DEFAULT NULL,
   `usuEmail` varchar(255) DEFAULT NULL,
-  `instId` int(11) DEFAULT NULL
+  `instId` int(11) DEFAULT NULL,
+  PRIMARY KEY (`Id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_spanish2_ci;
+
 
 --
 -- Volcado de datos para la tabla `ucm_aw_riu_res_reservas`

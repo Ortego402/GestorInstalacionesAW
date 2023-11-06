@@ -64,7 +64,7 @@
                                             <h5 class="card-title">Reserva <%= reserva.Id %></h5>
                                             <div class ="d-flex justify-content-between mt-3">
                                                 <p class="card-text">Email: <%= reserva.usuEmail %></p>
-                                                <p class="card-text me-3">Día: <%= reserva.dia %></p>
+                                                <p class="card-text me-3">Día: horaInicio= reserva.dia %></p>
                                                 <p class="card-text me-3">Hora: <%= reserva.hora %></p>
                                             </div>
                                         </div>
@@ -74,6 +74,12 @@
                         </div>
                     <% } else { %>
                         <!-- Formulario de reserva -->
+                        <% if (mensaje==null) { %>
+                            <% } else if(mensaje) { %>
+                                <div class="alert alert-success bg-gradient text-dark" role="alert">
+                                    <%= mensaje %>
+                                </div>
+                        <% } %>
                         <form onsubmit="return validarFormulario()" action="/realizar_reserva" method="POST">
                             <div class="mb-5">
                                 <label for="dia" class="form-label text-start">Día de la Reserva</label>
@@ -81,8 +87,15 @@
                             </div>
                             <div class="mb-5">
                                 <label for="hora" class="form-label text-start">Hora de la Reserva</label>
-                                <input type="time" class="form-control" id="hora" name="hora" required step="1800">
-                            </div>
+                                <select class="form-select" id="hora" name="hora" required>
+                                    <!-- Aquí se generan dinámicamente las opciones de horas cada media hora -->
+                                    <% for (var hora = new Date('1970-01-01T' + results.horaInicio + ':00'); hora <= new Date('1970-01-01T' + results.horaFin + ':00'); hora.setMinutes(hora.getMinutes() + 30)) { %>
+                                        <option value="<%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>">
+                                            <%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>
+                                        </option>
+                                    <% } %>
+                                </select>
+                            </div>                
                             <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
@@ -113,6 +126,7 @@
                 return true; // Permite que el formulario se envíe
             }
         </script>
+
     </body>
 
 </html>

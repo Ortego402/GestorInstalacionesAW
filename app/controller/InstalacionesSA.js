@@ -47,7 +47,16 @@ class InstalacionesSA {
           }
           return callback(null, results);
         });
-      }
+    }
+
+    hacerReserva(id, dia, hora, email, callback){
+        this.DAOInstalaciones.reservaInstalacion(id, dia, hora, email, (err, results) => {
+            if (err) {
+              return callback(err);
+            }
+            return callback(null);
+        });
+    }
 
 }
 

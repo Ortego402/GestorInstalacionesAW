@@ -2,7 +2,7 @@ Funcionalidades del Administrador
 
 -no va la img al editar la organnizacion y o se por que
 -he leido el pdf del profe de las imagees y o se por que algunas no se muestran
--lo de las cokisy sesion no hace falta lo hacemos indirectamente
+- reserva esta acabado pero quiero que las horas que salgan para ese dia solo puedan ser las que no estan cogidas
 
 0. He cambiado en el nav populares por Validacion asi cada vez que se meta un usuario en la app 
 al admin le llegara una solicitud ahi para acpetar o declinar, si la acpeta le enviamos un correo a su correo normal

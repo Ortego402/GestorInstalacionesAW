@@ -318,15 +318,35 @@ router.get('/reserva/:id', (req, res) => {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         instalacionesSA.obtenerReservasPorInstalacion(id, (err, reservas) => {
-            console.log(reservas)
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
             }
-            return res.render('reserva', { results: results[0], session: req.session, reservas: reservas });
+            const mensaje = req.session.mensaje || '';
+            req.session.mensaje = '';
+            console.log(reservas);
+            return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
         });
     });
 
 });
+
+router.post('/realizar_reserva', (req, res) => {
+
+    const {instalacionId, dia, hora} = req.body;
+    const email = req.session.email;
+    
+
+    instalacionesSA.hacerReserva(instalacionId, dia, hora, email, (err) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        req.session.mensaje = 'Reserva realizada';
+        return res.redirect('/reserva/'+ instalacionId);
+    });
+});
+
+
+
 
 router.get('/instalacion', (req, res) => {
     return res.render('instalacion', { session: req.session });
