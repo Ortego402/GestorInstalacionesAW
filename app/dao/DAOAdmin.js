@@ -79,19 +79,9 @@ class DAOAdmin {
             if (err) {
                 callback("Error de acceso a la base de datos");
             } else {
-                let query = 'UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ?';
-                const params = [nombre, direccion];
-
-                // Si hay imagenData, agrega imagen a la consulta y parámetros
-                if (imagenData) {
-                    const imagenBinaria = Buffer.from(imagenData, 'base64');
-                    query += ', imagen = ?';
-                    params.push(imagenBinaria);
-                }
-
-                query += ' WHERE NOMBRE = ?';
-                params.push(nombre_original);
-
+                let query = 'UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ?, imagen = ? WHERE NOMBRE = ?';
+                const params = [nombre, direccion, imagen, nombre_original];
+                
                 connection.query(query, params, function (err) {
                     connection.release();
                     if (err) {
