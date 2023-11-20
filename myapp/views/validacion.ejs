@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Configuración del documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enlaces a archivos de estilo externos -->
+    <link rel="stylesheet" type="text/css" href="../css/home.css">
+    <link rel="stylesheet" type="text/css" href="../css/nav.css">
+    <!-- Enlaces a bibliotecas de Bootstrap y Bootstrap Icons desde un CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- Título de la página y favicon -->
+    <title>UCM | Validaciones</title>
+    <link rel="icon" href="../images/logo.png" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Inclusión del encabezado y la barra de navegación -->
+    <%- include('header.ejs') %>
+        <%- include('nav.ejs') %>
+
+            <!-- Contenido principal -->
+            <!-- Contenido principal -->
+            <main class="p-3">
+                <div class="container">
+                    <div class="container d-flex justify-content-center align-items-center">
+                        <h2 class="p-3 titulo-dest mb-3">NUEVOS USUARIOS</h2>
+                    </div>
+                    <div class="table-responsive">
+                        <% if (validaciones && validaciones.length> 0) { %>
+                            <table class="table table-striped table-hover">
+                                <thead class="border border-1">
+                                    <tr>
+                                        <th>Usuario</th>
+                                        <th>Fecha</th>
+                                        <th>Validar</th>
+                                        <th>No Validar</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <% validaciones.forEach(function(email) { %>
+                                        <tr class="email-item" id="email_<%= email.id %>" data-href="/email/<%= email.id %>">
+                                            <td>
+                                                <%= email.email %>
+                                            </td>
+                                            <td>
+                                                <%= email.fecha_creacion %>
+                                            </td>
+                                            <td>
+                                                <a href="/validar/<%= email.id %>?email=<%= email.email %>" class="btn btn-success">Validar</a>
+                                            </td>
+                                            <td>
+                                                <a href="/novalidar/<%= email.id %>?email=<%= email.email %>" class="btn btn-danger">Denegar</a>
+                                            </td>                                            
+                                        </tr>
+                                        <% }); %>
+                                </tbody>
+                            </table>
+                            <% } else { %>
+                                <p class="text-center">No hay nuevos registros en este momento.</p>
+                                <% } %>
+                    </div>
+                </div>
+            </main>
+
+            <!-- Inclusión del pie de página -->
+            <%- include('footer.ejs') %>
+                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+                <script src="ruta/a/jquery.min.js"></script>
+                <!-- Popper.js -->
+                <script src="ruta/a/popper.min.js"></script>
+                <!-- Bootstrap JS Bundle -->
+                <script src="ruta/a/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

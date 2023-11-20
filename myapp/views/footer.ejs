@@ -1,0 +1,55 @@
+<!-- Sección del pie de página (footer) -->
+<footer class="mt-3">
+    <!-- Contenedor principal del pie de página -->
+    <div class="container">
+        <!-- Fila de la cuadrícula que contiene los elementos del pie de página -->
+        <div class="row justify-content-center align-items-center">
+            <!-- Columna que contiene la información de contacto -->
+            <div class="col-md-6">
+                <!-- Contenedor de información de contacto alineado en columna -->
+                <div class="d-flex flex-column align-items-center">
+                    <!-- Párrafo con la dirección de la agencia -->
+                    <p class="text-white"><%= session.orgDir %></p>
+                    <!-- Párrafo con el número de teléfono de la agencia -->
+                    <p class="text-white">Teléfono: 913 94 75 01</p>
+                    <!-- Párrafo con la dirección de correo electrónico de la agencia -->
+                    <p class="text-white">Email: filabor@fdi.ucm.es</p>
+                </div>
+            </div>
+            <!-- Columnas para los enlaces a redes sociales -->
+            <div class="col-md-2 mb-3">
+                <!-- Contenedor de enlaces de redes sociales alineados en columna -->
+                <div class="social-links d-flex flex-column">
+                    <!-- Enlace a la página de Facebook de la agencia -->
+                    <a href="https://www.facebook.com/UniComplutense/?locale=es_ES" target="_blank" rel="noopener noreferrer">
+                        <!-- Imagen del ícono de Facebook -->
+                        <img src="https://cdn-icons-png.flaticon.com/256/20/20673.png" alt="Facebook" class="w-25">
+                    </a>
+                </div>                
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="social-links d-flex flex-column">
+                    <!-- Enlace a la página de Twitter de la agencia -->
+                    <a href="https://twitter.com/informaticaucm">
+                        <!-- Imagen del ícono de Twitter -->
+                        <img src="https://cdn.icon-icons.com/icons2/4029/PNG/512/twitter_x_new_logo_square_x_icon_256075.png" alt="Twiter" class="w-50">
+                    </a>
+                </div>
+            </div>
+            <div class="col-md-2 mb-3">
+                <div class="social-links d-flex flex-column">
+                    <!-- Enlace a la página de Instagram de la agencia -->
+                    <a href="https://www.instagram.com/complunews/">
+                        <!-- Imagen del ícono de Instagram -->
+                        <img src="https://cdn-icons-png.flaticon.com/512/87/87390.png" alt="Instagram" class="w-25">
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- Contenedor secundario del pie de página que contiene el aviso de derechos de autor -->
+    <div class="container mt-3">
+        <!-- Párrafo con el aviso de derechos de autor -->
+        <p class="text-white">&copy; 2023 <%= session.orgNombre %>. Todos los derechos reservados.</p>
+    </div>
+</footer>

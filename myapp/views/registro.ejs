@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <link rel="stylesheet" type="text/css" href="../css/login.css">
+    <link rel="stylesheet" type="text/css" href="../css/home.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <title>UCM | Registro</title>
+    <link rel="icon" href="../images/icon.png" type="image/x-icon">
+</head>
+
+<body class="bg-light">
+    <main class=" main-fondo">
+        <div class="container">
+            <div class="col-md-6 border border-1 border-dark">
+                <div class="card">
+                    <div class="card-body">
+                        <h5 class="card-title text-center">Registrarse</h5>
+                        <form action="/registrar" method="POST" class="general" enctype="multipart/form-data">
+                            <% if (mensaje==null) { %>
+                                <% } else if(mensaje) { %>
+                                    <div class="alert alert-danger alert-sm py-1 bg-gradient text-dark" role="alert">
+                                        <%= mensaje %>
+                                    </div>
+                                    <% } %>
+                                        <div class="row">
+                                            <div class="col mb-2">
+                                                <label for="nombre" class="form-label">Nombre</label>
+                                                <input type="text" class="form-control" id="nombre" name="nombre" required>
+                                            </div>
+                                            <div class="col mb-2">
+                                                <label for="apellido1" class="form-label">Primer Apellido</label>
+                                                <input type="text" class="form-control" id="apellido1" name="apellido1" required>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col mb-2">
+                                                <div class="mb-2">
+                                                    <label for="apellido2" class="form-label">Segundo Apellido</label>
+                                                    <input type="text" class="form-control" id="apellido2" name="apellido2" required>
+                                                </div>
+                                            </div>
+                                            <div class="col mb-2">
+                                                <div class="mb-2">
+                                                    <label for="email" class="form-label">Correo Electrónico</label>
+                                                    <input type="email" class="form-control" id="email" name="email" required oninput="validateEmail(this)">
+                                                    <div id="emailError" style="color: red;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-2">
+                                                <label for="facultad" class="form-label">Facultad</label>
+                                                <select class="form-select" id="facultad" name="facultad" required>
+                                                    <option value="" selected>Selecciona una facultad</option>
+                                                    <% for (let i = 0; i < facultades.length; i++) { %>
+                                                        <option value="<%= facultades[i].facultad %>" <% if (facultades[i].facultad === facultad) { %>selected<% } %>><%= facultades[i].facultad %></option>
+                                                    <% } %>
+                                                </select>                                                
+                                            </div>                                                                                     
+                                        </div>                                        
+                                        <div class="row">
+                                            <div class="col mb-2">
+                                                <div class="mb-2">
+                                                    <label for="curso" class="form-label">Curso</label>
+                                                    <input type="number" class="form-control" id="curso" name="curso" required>
+                                                </div>
+                                            </div>
+                                            <div class="col mb-2">
+                                                <div class="mb-2">
+                                                    <label for="grupo" class="form-label">Grupo</label>
+                                                    <input type="text" class="form-control" id="grupo" name="grupo" required oninput="validateGroup(this)">
+                                                    <div id="groupError" style="color: red;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="mb-2 form-group">
+                                                <label for="password">Contraseña</label>
+                                                <div class="input-group">
+                                                    <input type="password" class="form-control" id="password" name="password" required>
+                                                    <button type="button" class="btn btn-outline-dark" id="showPasswordBtn" onclick="togglePassword('password', 'showPasswordBtn')">Mostrar</button>
+                                                </div>
+                                                <div id="passwordError" style="color: red;"></div>
+                                            </div>
+                                            <div class="col mb-2">
+                                                <div class="mb-2 form-group">
+                                                    <label for="confirmPassword">Confirmar Contraseña</label>
+                                                    <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword(this)">
+                                                    <div id="confirmPasswordError" style="color: red;"></div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col mb-2">
+                                                <div class="mb-3">
+                                                    <label for="imagen" class="form-label">Imagen Perfil (solo JPEG, tamaño máximo 2MB)</label>
+                                                    <input class="form-control" type="file" id="imagen" name="imagen" accept="image/jpeg" size="2000000" required>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="d-grid">
+                                            <input type="hidden" name="facultades" value="<%= JSON.stringify(facultades) %>">
+                                            <button type="submit" class="btn btn-dark">Registrarse</button>
+                                        </div>
+                                        <br>
+                        </form>
+                        <div class="text-center">
+                            <p>¿Ya tienes cuenta? <a href="/">Inicia sesión</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script>
+        function validateGroup(input) {
+            var regex = /^[A-Z]+$/;
+            var errorMessage = document.getElementById('groupError');
+            if (!regex.test(input.value)) {
+                errorMessage.textContent = 'Debe ser una única letra mayúscula.';
+                input.setCustomValidity('Debe ser una única letra mayúscula.'); // Invalida el campo para que no se envíe el formulario
+            } else {
+                errorMessage.textContent = ''; // Borra el mensaje de error
+                input.setCustomValidity(''); // Restablece la validez del campo
+            }
+        }
+
+        function validateEmail(input) {
+            var regex = /^[A-Za-z0-9._%+-]+@ucm\.es$/;
+            var errorMessage = document.getElementById('emailError');
+
+            if (!regex.test(input.value)) {
+                errorMessage.textContent = 'El email debe pertenecer a la UCM.';
+                input.setCustomValidity('Invalid');
+            } else {
+                errorMessage.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+
+        function validatePassword(input) {
+            var password = input.value;
+            var regex = /^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)(?=.*[\W_])[A-Za-z\d\W_]{8,}$/;
+            var errorMessage = document.getElementById('passwordError');
+
+            if (!regex.test(password)) {
+                errorMessage.textContent = 'La contraseña debe tener mínimo 8 caracteres, 1 mayúscula, 1 número y 1 carácter especial.';
+                input.setCustomValidity('Invalid');
+            } else {
+                errorMessage.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+        function validateConfirmPassword(input) {
+            var password = document.getElementById('password').value;
+            var confirmPassword = input.value;
+            var errorMessage = document.getElementById('confirmPasswordError');
+
+            if (password !== confirmPassword) {
+                errorMessage.textContent = 'Las contraseñas no coinciden.';
+                input.setCustomValidity('Invalid');
+            } else {
+                errorMessage.textContent = '';
+                input.setCustomValidity('');
+            }
+        }
+
+        var passwordInput = document.getElementById('password');
+        var showPasswordBtn = document.getElementById('showPasswordBtn');
+
+        // Agrega el event listener fuera de la función
+        showPasswordBtn.addEventListener('click', function () {
+            if (passwordInput.type === 'password') {
+                passwordInput.type = 'text';
+                showPasswordBtn.textContent = 'Ocultar';
+            } else {
+                passwordInput.type = 'password';
+                showPasswordBtn.textContent = 'Mostrar';
+            }
+        });
+
+    </script>
+</body>
+
+</html>

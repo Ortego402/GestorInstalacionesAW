@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- Configuración del documento -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <!-- Enlaces a archivos de estilo externos -->
+    <link rel="stylesheet" type="text/css" href="../css/nav.css">
+    <link rel="stylesheet" type="text/css" href="../css/home.css">
+    <!-- Enlaces a bibliotecas de Bootstrap y Bootstrap Icons desde un CDN -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-GLhlTQ8iRABdZLl6O3oVMWSktQOp6b7In1Zl3/Jr59b6EGGoI1aFkw7cmDA6j6gD" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
+    <!-- Título de la página y favicon -->
+    <title>UCM | Perfil</title>
+    <link rel="icon" href="../images/icon.png" type="image/x-icon">
+</head>
+
+<body>
+    <!-- Inclusión del encabezado y la barra de navegación -->
+    <%- include('header.ejs') %>
+    <% if (session.rol == '1') { %>
+    <%- include('nav.ejs') %>
+    <% } %>
+    <div class="container mt-5">
+        <div class="row justify-content-center">
+            <div class="col-md-8">
+                <div class="card">
+                    <div class="card-header">
+                        <h3 class="mb-0">Perfil de Usuario</h3>
+                    </div>
+                    <div class="card-body">
+                        <!-- Formulario para mostrar y editar los datos del usuario -->
+                        <form action="/editar/<%= session.Id %>" method="post">
+                        <!-- Campo oculto para el ID del usuario -->
+                        <input type="hidden" name="userId" value="<%= session.Id %>">
+                        <!-- Campos para modificar datos del usuario -->
+                        <div class="mb-3">
+                            <label for="nombre">Nombre</label>
+                            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= session.nombre %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido1">Primer Apellido</label>
+                            <input type="text" class="form-control" id="apellido1" name="apellido1" value="<%= session.apellido1 %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="apellido2">Segundo Apellido</label>
+                            <input type="text" class="form-control" id="apellido2" name="apellido2" value="<%= session.apellido2 %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="email">Correo Electrónico</label>
+                            <input type="email" class="form-control" id="email" name="email" value="<%= session.email %>"
+                                readonly>
+                        </div>
+                        <div class="mb-3">
+                            <label for="facultad">Facultad</label>
+                            <input type="text" class="form-control" id="facultad" name="facultad" value="<%= session.facultad %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="curso">Curso</label>
+                            <input type="number" class="form-control" id="curso" name="curso" value="<%= session.curso %>" required>
+                        </div>
+                        <div class="mb-3">
+                            <label for="grupo">Grupo</label>
+                            <input type="text" class="form-control" id="grupo" name="grupo" value="<%= session.grupo %>" required>
+                        </div>
+                        <!-- Botón para guardar cambios -->
+                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+
+                        <!-- Botón de Cerrar Sesión -->
+                        <a href="/logout" class="btn btn-danger btn-lg" style="color: black; padding: 0.2em 0.5em;"><i class="bi bi-box-arrow-right"></i></a>
+                        </form>
+                    </div>
+                </body>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br>
+    <br>
+
+    <!-- Inclusión del pie de página -->
+    <%- include('footer.ejs') %>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script src="ruta/a/jquery.min.js"></script>
+    <!-- Popper.js -->
+    <script src="ruta/a/popper.min.js"></script>
+    <!-- Bootstrap JS Bundle -->
+    <script src="ruta/a/bootstrap.bundle.min.js"></script>
+</body>
+
+</html>

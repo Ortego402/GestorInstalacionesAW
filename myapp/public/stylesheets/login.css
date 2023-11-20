@@ -1,0 +1,8 @@
+
+/* Estilos para el contenedor */
+.container {
+    height: 100vh; /* Establece la altura del contenedor al 100% de la altura de la ventana */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
