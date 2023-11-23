@@ -1,0 +1,64 @@
+"use strict";
+
+const DAOInstalaciones = require('../dao/DAOInstalaciones');
+
+class InstalacionesSA {
+
+    constructor(pool) {
+        this.DAOInstalaciones = new DAOInstalaciones(pool);
+    }
+
+    reservar(id, callback) {
+        this.DAOInstalaciones.getInstalacion(id, (err, results) => {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
+    mostrarInstalaciones(req, res, callback) {
+        this.DAOInstalaciones.getAllInstalaciones((err, results) => {
+            if (err) {
+                callback(err);
+            } else {
+                callback(null, results);
+            }
+        });
+    }
+
+    buscarInstalaciones(req, res, callback) {
+        const searchTerm = req.query.nombreBuscar;
+        console.log("SA instalaciones----------------------------------------------------------------------------------------------------------");
+        console.log(req.query.nombreBuscar);
+        this.DAOInstalaciones.searchInstalaciones(searchTerm, (err, instalaciones) => {
+            if (err) {
+                callback(err, null);
+            }
+            callback(null, instalaciones);
+        });
+    }
+
+    obtenerReservasPorInstalacion(instalacionId, callback) {
+        this.DAOInstalaciones.obtenerReservasPorInstalacion(instalacionId, (err, results) => {
+          if (err) {
+            return callback(err, null);
+          }
+          return callback(null, results);
+        });
+    }
+
+    hacerReserva(id, dia, hora, email, callback){
+        this.DAOInstalaciones.reservaInstalacion(id, dia, hora, email, (err, results) => {
+            if (err) {
+              return callback(err);
+            }
+            return callback(null);
+        });
+    }
+
+}
+
+
+module.exports = InstalacionesSA;

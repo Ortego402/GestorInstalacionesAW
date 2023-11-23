@@ -7,14 +7,6 @@ const UsuariosSA = require("../controller/UsuariosSA");
 const InstalacionesSA = require("../controller/InstalacionesSA");
 const AdminsSA = require("../controller/AdminSA");
 const session = require('express-session');
-const nodemailer = require('nodemailer');
-const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: 'webaplicaciones12@gmail.com',
-      pass: 'Hola123456/'
-    }
-});
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -33,45 +25,6 @@ router.get('/home', (req, res) => {
     });
 });
 
-router.get('/validado', (req, res) => {
-    return res.render('validado', { session: req.session });
-});
-
-router.post('/InicioSesion', async (req, res) => {
-    try {
-        const user = await new Promise((resolve, reject) => {
-            usuariosSA.iniciarSesion(req, res, (err, user) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(user);
-                }
-            });
-        });
-
-        if (user.validado === '0') {
-            return res.redirect('/validado');
-        }
-
-        const results = await new Promise((resolve, reject) => {
-            adminsSA.organizacion((err, results) => {
-                if (err) {
-                    reject(err);
-                } else {
-                    resolve(results);
-                }
-            });
-        });
-
-        req.session.orgNombre = results.nombre;
-        req.session.orgDir = results.direccion;
-        req.session.orgIcono = results.imagen;
-
-        return res.redirect('/home');
-    } catch (error) {
-        return res.render('login', { mensaje: error });
-    }
-});
 
 
 router.get('/email', (req, res) => {
@@ -114,51 +67,6 @@ router.get('/logout', (req, res) => {
     });
 });
 
-router.get('/registro', (req, res) => {
-    usuariosSA.mostrarFacultades(req, res, (err, facultades) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error de la base de datos' });
-        }
-        let mensaje = "";
-        return res.render("registro", { session: req.session, mensaje: mensaje, facultades: facultades, facultad: req.query.facultad });
-    });
-});
-
-router.post('/registrar', (req, res) => {
-    const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
-    const img = req.files.img;  // Se coge del req por que las files estan aqui
-    const facultades = JSON.parse(req.body.facultades);
-    usuariosSA.checkEmail(email, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error interno del servidor' });
-        }
-
-        if (result.length > 0) {
-            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
-        }
-
-        if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password) || !/\W/.test(password) || password !== confirmPassword) {
-            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
-        }
-
-        usuariosSA.registerUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, password, img, (err) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error interno del servidor' });
-            }
-            req.session.nombre = nombre;
-            req.session.apellido1 = apellido1;
-            req.session.apellido2 = apellido2;
-            req.session.email = email;
-            req.session.facultad = facultad;
-            req.session.curso = curso;
-            req.session.grupo = grupo;
-            req.session.rol = "0";
-
-            return res.redirect('/validado')
-
-        });
-    });
-});
 
 router.get('/validaciones', (req, res) => {
     console.log("hola")
@@ -172,27 +80,6 @@ router.get('/validaciones', (req, res) => {
     });
 });
 
-router.get('/perfil', (req, res) => {
-    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    usuariosSA.mostrarPerfil(req, res, (err, result) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error de la base de datos' });
-
-        }
-
-        req.session.nombre = result[0].nombre;
-        req.session.apellido1 = result[0].apellido1;
-        req.session.apellido2 = result[0].apellido2;
-        req.session.email = result[0].email;
-        req.session.facultad = result[0].facultad;
-        req.session.curso = result[0].curso;
-        req.session.grupo = result[0].grupo;
-        req.session.rol = result[0].rol;
-        req.session.imagen = result[0].imagen;
-
-        res.render('perfil', { result: result[0], session: req.session, mensaje: mensaje });
-    });
-});
 
 router.get('/cambiarRol/:id', (req, res) => {
     const id = req.params.id;
@@ -229,12 +116,6 @@ router.get('/novalidar/:id', (req, res) => {
         }
         enviarCorreoNoValidacion(userEmail);
         return res.redirect('/validaciones');
-    });
-});
-
-router.post('/actualizar_perfil', (req, res) => {
-    usuariosSA.actualizarPerfil(req, res, (err) => {
-        res.redirect('/perfil?mensaje=' + encodeURIComponent(err));
     });
 });
 
@@ -369,45 +250,5 @@ router.post('/nueva_instalacion', (req, res) => {
     });
 });
 
-
-function enviarCorreoValidacion(destinatario) {
-    const asunto = 'Correo de Validación';
-    const cuerpo = `Hola,\n\nYa estas validado por nuestro Administrador.\n\nPuedes acceder a la pagina./n/n¡Gracias!`;
-  
-    const opcionesCorreo = {
-      from: 'webaplicaciones12@gmail.com',
-      to: destinatario,
-      subject: asunto,
-      text: cuerpo
-    };
-  
-    transporter.sendMail(opcionesCorreo, (error, info) => {
-      if (error) {
-        console.error('Error al enviar el correo:', error);
-      } else {
-        console.log('Correo enviado:', info.response);
-      }
-    });
-}
-
-function enviarCorreoNoValidacion(destinatario) {
-    const asunto = 'Correo de Validación';
-    const cuerpo = `Hola,\n\nNo has sido validado por nuestro Administrador./n/nLo sentimos.`;
-  
-    const opcionesCorreo = {
-      from: 'webaplicaciones12@gmail.com',
-      to: destinatario,
-      subject: asunto,
-      text: cuerpo
-    };
-  
-    transporter.sendMail(opcionesCorreo, (error, info) => {
-      if (error) {
-        console.error('Error al enviar el correo:', error);
-      } else {
-        console.log('Correo enviado:', info.response);
-      }
-    });
-}
 
 module.exports = router;
