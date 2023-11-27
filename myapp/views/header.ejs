@@ -9,8 +9,18 @@
             <img src="data:image/png;base64,<%= orgIconoBuffer.toString('base64') %>" class="img w-25" alt="Imagen">
             <h5><strong><%= session.orgNombre %></strong></h5>
         </a>
-    </div><!-- Columna 2 con el formulario de búsqueda -->
-    <div class="col col-4">
+    </div>    
+    <!-- Columna 2 con el formulario de búsqueda -->
+    <div class="col-sm">
+        <!-- Formulario de búsqueda -->
+        <form action="/buscar" method="get">
+            <!-- Contenedor para la caja de búsqueda y el botón de búsqueda -->
+            <div class="buscador input-group">
+                <!-- Caja de búsqueda -->
+                <input id="busquedaGlobal" type="search" class="form-control" placeholder="Instalaciones disponibles" name="nombreBuscar" required>
+                <button class="boton img-fluid" type="submit"><i class="bi bi-search"></i></button>
+            </div>
+        </form>
     </div>
     <!-- Columna 3 con los botones de login y correo -->
     <div class="col col-2 d-flex justify-content-center align-items-center">

@@ -2,15 +2,22 @@ const express = require('express');
 const router = express.Router();
 const mysql = require("mysql");
 const config = require("../config/dbConfig");
-const DAOUser = require("../dao/DAOUsuario");
+const DAOUser = require("../dao/DAOUsuarios");
 const DAOAdmin = require("../dao/DAOAdmin");
 const bcrypt = require('bcrypt'); // Agrega esta línea para requerir bcrypt
+const DAOInstalaciones = require('../dao/DAOInstalaciones');
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
 
 daoUser = new DAOUser(pool);
 daoAdmin = new DAOAdmin(pool);
+daoinstalaciones = new DAOInstalaciones(pool);
+
+router.get('/', (req, res) => {
+    let mensaje = "";
+    return res.render("login", { session: req.session, mensaje: mensaje });
+});
 
 router.get('/validado', (req, res) => {
     return res.render('validado', { session: req.session });
@@ -23,7 +30,7 @@ router.post('/InicioSesion', async (req, res) => {
     const user = await new Promise((resolve, reject) => {
 
         const { email, password } = req.body;
-        daoUser.DAOUsuarios.getUserByEmail(email, (err, user) => {
+        daoUser.getUserByEmail(email, (err, user) => {
             if (err) {
                 return res.render('login.ejs', { mensaje: 'Usuario no encontrado.' });
             } else {
@@ -48,7 +55,7 @@ router.post('/InicioSesion', async (req, res) => {
 
     if(user.rol === 1){
         const results = await new Promise((resolve, reject) => {
-            DAOAdmin.mostrarOrganizacion((err, result) => {
+            daoAdmin.mostrarOrganizacion((err, result) => {
                 if(err){
                     return res.status(500).json({ error: 'Error interno del servidor' });
                 }
@@ -64,7 +71,7 @@ router.post('/InicioSesion', async (req, res) => {
 
 
 router.get('/registro', (req, res) => {
-    DAOUsuarios.getFacultades((err, facultades) => {
+    daoUser.getFacultades((err, facultades) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -77,7 +84,7 @@ router.post('/registrar', (req, res) => {
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
     const img = req.files.buffer;  // Se coge del req por que las files estan aqui
     const facultades = JSON.parse(req.body.facultades);
-    DAOUsuarios.checkEmail(email, (err, result) => {
+    daoUser.checkEmail(email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error interno del servidor' });
         }
@@ -95,12 +102,12 @@ router.post('/registrar', (req, res) => {
                 return callback('Error al hashear la contraseña');
             } else {
 
-                this.DAOUsuarios.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, img, (err) => {
+                daoUser.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, img, (err) => {
                     if(err){
                         return res.status(500).json({ error: 'Error interno del servidor' });
                     }
                     else{
-                        this.DAOUsuarios.insertValidacion(email, (err) => {
+                        daoUser.insertValidacion(email, (err) => {
                             if (err) {
                                 return res.status(500).json({ error: 'Error interno del servidor' });
                             } else {
@@ -117,7 +124,7 @@ router.post('/registrar', (req, res) => {
 
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    DAOUsuarios.checkEmail(req, res, (err, result) => {
+    daoUser.checkEmail(req, res, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -140,7 +147,7 @@ router.get('/perfil', (req, res) => {
 router.post('/actualizar_perfil', (req, res) => {
     const { correo, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
 
-    this.DAOUsuarios.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, (err) => {
+    daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -152,12 +159,121 @@ router.post('/actualizar_perfil', (req, res) => {
 });
 
 
+router.get('/logout', (req, res) => {
+    req.session.destroy((err) => {
+        if (err) {
+            return res.status(500).send('Error interno del servidor');
+        }
+        return res.redirect('/');
+    });
+});
 
 
+router.post('/realizar_reserva', (req, res) => {
+
+    const {instalacionId, dia, hora} = req.body;
+    const email = req.session.email;
+    
+    daoinstalaciones.reservaInstalacion(instalacionId, dia, hora, email, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        req.session.mensaje = 'Reserva realizada';
+        return res.redirect('/reserva/'+ instalacionId);
+    });
+});
 
 
+router.get('/email', (req, res) => {
+    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
+    
+    daoUser.getEmailsUser(email, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        } 
+        return res.render('email', { results: results, session: req.session, mensaje: mensaje });
+    });
+});
 
 
+router.get('/email/:id', (req, res) => {
+    const id = req.params.id;
 
+    daoUser.getEmail(id, (err, results) => {
+
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render('email_individual', { result: result[0], session: req.session });
+    });
+});
+
+
+router.post('/email', (req, res) => {
+    const { destinatario, asunto, mensaje } = req.body;
+    const email_envio = req.session.email;
+
+    daoUser.insertEmail(email_envio, destinatario, asunto, mensaje, (err) => {
+        console.log(err)
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        } 
+        res.redirect('/email?mensaje=' + encodeURIComponent("Email enviado correctamente."));
+    });
+});
+
+
+router.get('/home', (req, res) => {
+    daoinstalaciones.getAllInstalaciones(req, res, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render('home.ejs', { results: results, session: req.session});
+    });
+});
+
+
+router.get('/servicios', (req, res) => {
+    res.render('servicios', { session: req.session });
+});
+
+
+//no se como se hace lo que habia en app.js antes no lo entiendo
+router.get('/reserva/:id', (req, res) => {
+
+    const id = req.params.id;
+
+    daoinstalaciones.getInstalacion(id, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        daoinstalaciones.obtenerReservasPorInstalacion(id, (err, reservas) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error de la base de datos' });
+            }
+            const mensaje = req.session.mensaje || '';
+            req.session.mensaje = '';
+            return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
+        });
+    });
+
+});
+
+
+router.get('/instalacion', (req, res) => {
+    return res.render('instalacion', { session: req.session });
+});
+
+
+router.get('/buscar', (req, res) => {
+    const searchTerm = req.query.nombreBuscar;
+    daoinstalaciones.searchInstalaciones(searchTerm, (err, instalaciones) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+
+        return res.render('home.ejs', { results: results, session: req.session });  
+    });
+});
 
 module.exports = router;
