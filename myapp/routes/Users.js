@@ -39,31 +39,30 @@ router.post('/InicioSesion', async (req, res) => {
                     req.session.email = email;
                     req.session.Id = user.Id;
                     req.session.rol = user.rol;
+
+                    if (user.validado === '0') {
+                        return res.redirect('/validado');
+                    }
+
+                    if (user.rol === 1) {
+                        daoAdmin.mostrarOrganizacion((err, result) => {
+                            if (err) {
+                                return res.status(500).json({ error: 'Error interno del servidor' });
+                            }
+                            req.session.orgNombre = result.nombre;
+                            req.session.orgDir = result.direccion;
+                            req.session.orgIcono = result.imagen;
+                            return res.redirect('/home');
+                        });
+                    } else {
+                        return res.redirect('/home');
+                    }
                 } else {
                     return res.render('login.ejs', { mensaje: 'Contraseña incorrecta.' });
                 }
             });
         }
-
-        if (user.validado === '0') {
-            return res.redirect('/validado');
-        }
-
-        if(user.rol === 1){
-            
-            daoAdmin.mostrarOrganizacion((err, result) => {
-                if(err){
-                    return res.status(500).json({ error: 'Error interno del servidor' });
-                }
-            });
-            
-            req.session.orgNombre = results.nombre;
-            req.session.orgDir = results.direccion;
-            req.session.orgIcono = results.imagen;     
-        }
     });
-
-    return res.redirect('/home');
 });
 
 
@@ -121,30 +120,21 @@ router.post('/registrar', (req, res) => {
 
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    daoUser.checkEmail(req, res, (err, result) => {
+    daoUser.checkEmail(req.session.email, (err, result) => {
         if (err) {
+            console.log(err);
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-
-        req.session.nombre = result[0].nombre;
-        req.session.apellido1 = result[0].apellido1;
-        req.session.apellido2 = result[0].apellido2;
-        req.session.email = result[0].email;
-        req.session.facultad = result[0].facultad;
-        req.session.curso = result[0].curso;
-        req.session.grupo = result[0].grupo;
-        req.session.rol = result[0].rol;
-        req.session.imagen = result[0].imagen;
-
-        res.render('perfil', { result: result[0], session: req.session, mensaje: mensaje });
+        res.render('perfil.ejs', { result: result[0], session: req.session, mensaje: mensaje });
     });
 });
 
 
-router.post('/actualizar_perfil', (req, res) => {
-    const { correo, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
+router.post('/editar/:id', (req, res) => {
+    let mensaje = "";
+    const { email, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
 
-    daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, (err) => {
+    daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -221,6 +211,7 @@ router.post('/email', (req, res) => {
 
 
 router.get('/home', (req, res) => {
+    console.log(req.session);
     daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
