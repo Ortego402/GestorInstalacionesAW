@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">Registrarse</h5>
-                        <form action="/registrar" method="POST" class="general" enctype="multipart/form-data">
+                        <form action="/registrar" method="post" class="general">
                             <% if (mensaje==null) { %>
                                 <% } else if(mensaje) { %>
                                     <div class="alert alert-danger alert-sm py-1 bg-gradient text-dark" role="alert">
@@ -62,7 +62,7 @@
                                                     <% } %>
                                                 </select>                                                
                                             </div>                                                                                     
-                                        </div>                                        
+                                        </div>                                      
                                         <div class="row">
                                             <div class="col mb-2">
                                                 <div class="mb-2">

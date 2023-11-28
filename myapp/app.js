@@ -11,14 +11,14 @@ var MySQLStore = mysqlsession(session);
 var sessionStore = new MySQLStore(config.mysqlConfig);
 
 const UserRouter = require('./routes/Users');
-var AdminRouter = require('./routes/Admin');
+const AdminRouter = require('./routes/Admin')
 
-const app = express();
 const port = 3000;
 
-app.use(logger('dev'));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false })); // Parse application/x-www-form-urlencoded
+const app = express()
+
+app.use(express.urlencoded({extended: true})); //Esto es para formData
+app.use(express.json())
 app.use(cookieParser());
 
 app.use(session({
@@ -27,6 +27,7 @@ app.use(session({
   saveUninitialized: true,
   store: sessionStore
 }));
+app.use(logger('dev'));
 
 
 // Middleware para archivos estáticos (CSS, imágenes, etc.)
@@ -38,6 +39,7 @@ app.set("views", path.join(__dirname, 'views')); // Carpeta de vistas
 
 // Usa los enrutadores
 app.use('/', UserRouter); // Ruta raíz ahora manejada por el enrutador de admin
+app.use('/home', AdminRouter); // Ruta raíz ahora manejada por el enrutador de admin
 
 
 // Captura el error 404 y lo pasa al manejador de errores
@@ -53,7 +55,7 @@ app.use(function(err, req, res, next) {
 
   // Renderiza la página de error
   res.status(err.status || 500);
-  res.render('error');
+  res.render('error.ejs');
 });
 
 // Inicia el servidor en el puerto especificado

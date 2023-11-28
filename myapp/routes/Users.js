@@ -16,55 +16,52 @@ daoinstalaciones = new DAOInstalaciones(pool);
 
 router.get('/', (req, res) => {
     let mensaje = "";
-    return res.render("login", { session: req.session, mensaje: mensaje });
+    return res.render("login.ejs", { session: req.session, mensaje: mensaje });
 });
 
 router.get('/validado', (req, res) => {
-    return res.render('validado', { session: req.session });
+    return res.render('validado.ejs', { session: req.session });
 });
 
 router.post('/InicioSesion', async (req, res) => {
 
     let mensaje = "";
 
-    const user = await new Promise((resolve, reject) => {
+    const { email, password } = req.body;
+    daoUser.getUserByEmail(email, (err, user) => {
+        if (err) {
+            return res.render('login.ejs', { mensaje: 'Usuario no encontrado.' });
+        } else {
+            bcrypt.compare(password, user.contraseña, (bcryptErr, result) => {
+                if (bcryptErr) {
+                    return res.render('login.ejs', { mensaje: 'Error al comparar contraseñas.' });
+                } else if (result) {
+                    req.session.email = email;
+                    req.session.Id = user.Id;
+                    req.session.rol = user.rol;
+                } else {
+                    return res.render('login.ejs', { mensaje: 'Contraseña incorrecta.' });
+                }
+            });
+        }
 
-        const { email, password } = req.body;
-        daoUser.getUserByEmail(email, (err, user) => {
-            if (err) {
-                return res.render('login.ejs', { mensaje: 'Usuario no encontrado.' });
-            } else {
-                bcrypt.compare(password, user.contraseña, (bcryptErr, result) => {
-                    if (bcryptErr) {
-                        return res.render('login.ejs', { mensaje: 'Error al comparar contraseñas.' });
-                    } else if (result) {
-                        req.session.email = email;
-                        req.session.Id = user.Id;
-                        req.session.rol = user.rol;
-                    } else {
-                        return res.render('login.ejs', { mensaje: 'Contraseña incorrecta.' });
-                    }
-                });
-            }
-        });
-    });
+        if (user.validado === '0') {
+            return res.redirect('/validado');
+        }
 
-    if (user.validado === '0') {
-        return res.redirect('/validado');
-    }
-
-    if(user.rol === 1){
-        const results = await new Promise((resolve, reject) => {
+        if(user.rol === 1){
+            
             daoAdmin.mostrarOrganizacion((err, result) => {
                 if(err){
                     return res.status(500).json({ error: 'Error interno del servidor' });
                 }
             });
-        });   
-        req.session.orgNombre = results.nombre;
-        req.session.orgDir = results.direccion;
-        req.session.orgIcono = results.imagen;     
-    }
+            
+            req.session.orgNombre = results.nombre;
+            req.session.orgDir = results.direccion;
+            req.session.orgIcono = results.imagen;     
+        }
+    });
 
     return res.redirect('/home');
 });
@@ -81,8 +78,9 @@ router.get('/registro', (req, res) => {
 });
 
 router.post('/registrar', (req, res) => {
+    console.log(req.body);
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
-    const img = req.files.buffer;  // Se coge del req por que las files estan aqui
+    let imagen = req.file ? req.file.buffer : null; // Se coge del req por que las files estan aqui
     const facultades = JSON.parse(req.body.facultades);
     daoUser.checkEmail(email, (err, result) => {
         if (err) {
@@ -90,16 +88,15 @@ router.post('/registrar', (req, res) => {
         }
 
         if (result.length > 0) {
-            return res.render('registro', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
+            return res.render('registro.ejs', { mensaje: 'El correo ya existe.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
         }
 
         if (password.length < 8 || !/[A-Z]/.test(password) || !/\d/.test(password) || !/\W/.test(password) || password !== confirmPassword) {
-            return res.render('registro', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
+            return res.render('registro.ejs', { mensaje: 'Las credenciales no cumplen con los requisitos.', nombre, apellido1, apellido2, email, facultad, curso, grupo, facultades: facultades });
         }
-
         bcrypt.hash(password, 10, (err, hash) => {
             if (err) {
-                return callback('Error al hashear la contraseña');
+                return res.status(500).json({ error: 'Error al hashear la contraseña' });
             } else {
 
                 daoUser.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, img, (err) => {
