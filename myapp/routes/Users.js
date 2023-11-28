@@ -221,7 +221,7 @@ router.post('/email', (req, res) => {
 
 
 router.get('/home', (req, res) => {
-    daoinstalaciones.getAllInstalaciones(req, res, (err, results) => {
+    daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
