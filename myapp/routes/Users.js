@@ -77,7 +77,6 @@ router.get('/registro', (req, res) => {
 });
 
 router.post('/registrar', (req, res) => {
-    console.log(req.body);
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
     let imagen = req.file ? req.file.buffer : null; // Se coge del req por que las files estan aqui
     const facultades = JSON.parse(req.body.facultades);
@@ -98,7 +97,7 @@ router.post('/registrar', (req, res) => {
                 return res.status(500).json({ error: 'Error al hashear la contraseña' });
             } else {
 
-                daoUser.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, img, (err) => {
+                daoUser.insertUser(nombre, apellido1, apellido2, email, facultad, curso, grupo, hash, imagen, (err) => {
                     if(err){
                         return res.status(500).json({ error: 'Error interno del servidor' });
                     }
@@ -122,7 +121,6 @@ router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
     daoUser.checkEmail(req.session.email, (err, result) => {
         if (err) {
-            console.log(err);
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         res.render('perfil.ejs', { result: result[0], session: req.session, mensaje: mensaje });
@@ -131,7 +129,6 @@ router.get('/perfil', (req, res) => {
 
 
 router.post('/editar/:id', (req, res) => {
-    let mensaje = "";
     const { email, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
 
     daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, (err) => {
@@ -140,7 +137,7 @@ router.post('/editar/:id', (req, res) => {
         }
         else{
             req.session.email = email;
-            res.redirect('/perfil?mensaje=' + encodeURIComponent(err));
+            res.redirect('/perfil?mensaje=' + encodeURIComponent('El usuario se ha modificado con exito.'));
         }
     });
 });
@@ -173,8 +170,8 @@ router.post('/realizar_reserva', (req, res) => {
 
 router.get('/email', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    
-    daoUser.getEmailsUser(email, (err, results) => {
+    daoUser.getEmailsUser(req.session.email, (err, results) => {
+        console.log(err);
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         } 
@@ -191,7 +188,7 @@ router.get('/email/:id', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('email_individual', { result: result[0], session: req.session });
+        return res.render('email_individual', { result: results[0], session: req.session });
     });
 });
 
@@ -211,7 +208,6 @@ router.post('/email', (req, res) => {
 
 
 router.get('/home', (req, res) => {
-    console.log(req.session);
     daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -241,7 +237,7 @@ router.get('/reserva/:id', (req, res) => {
             }
             const mensaje = req.session.mensaje || '';
             req.session.mensaje = '';
-            return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
+            return res.render('reserva', { results: reservas, session: req.session, reservas, mensaje});
         });
     });
 
@@ -260,7 +256,42 @@ router.get('/buscar', (req, res) => {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
 
-        return res.render('home.ejs', { results: results, session: req.session });  
+        return res.render('home.ejs', { results: instalaciones, session: req.session });  
+    });
+});
+
+
+router.get('/reservas_usuario',(req, res) => {
+    const email = req.session.email;
+    daoUser.reservasUser(email, (err, reservas) => {
+        if (err) {
+            return res.status(500).send('Error en la base de datos 123');
+        }
+        // Verificar si reservas es null o undefined, y asignar un array vacío si es así
+        reservas = reservas || [];
+        const instalacionesIds = reservas.map(reserva => reserva.instID);
+        // Obtener nombres de destinos correspondientes a los IDs de reservas
+        daoUser.getNombresInstalaciones(instalacionesIds, (err, nombresInstalaciones) => {
+            if (err) {
+                return res.status(500).send(err);
+            }
+            // Combina la información de reserva y nombres de destinos
+            let reservasConNombresInst = [];            
+            reservas.forEach(reserva => {
+                const nombreInstalacion = nombresInstalaciones.find(instalacion => instalacion.id == reserva.instID);
+                const fechaReserva = new Date(reserva.dia);
+                const horaReserva = reserva.hora;
+                const fechaFormateada = fechaReserva.toLocaleDateString('en-US'); // 'en-US' representa el formato YYYY/MM/DD, ajusta según tu necesidad
+                reservasConNombresInst.push({
+                    id: reserva.id,
+                    instalacion_nombre: nombreInstalacion ? nombreInstalacion.nombre : 'Nombre de instalacion no encontrado',
+                    fecha_reserva: fechaFormateada,
+                    hora_reserva: horaReserva
+                });
+
+            });
+            return res.render('mostrarReservas.ejs', { session: req.session, results: reservasConNombresInst });
+        });
     });
 });
 

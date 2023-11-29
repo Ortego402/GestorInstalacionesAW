@@ -17,7 +17,9 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
-    <%- include('nav.ejs') %>
+    <% if (session.rol == '1') { %>
+        <%- include('nav.ejs') %>
+    <% } %>
 
     <main class="p-3">
         <div class="container">

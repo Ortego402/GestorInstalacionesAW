@@ -23,66 +23,80 @@
     <% if (session.rol == '1') { %>
     <%- include('nav.ejs') %>
     <% } %>
-    <div class="container mt-5">
-        <div class="row justify-content-center">
-            <div class="col-md-8">
-                <div class="card">
-                    <div class="card-header">
-                        <h3 class="mb-0">Perfil de Usuario</h3>
-                    </div>
-                    <div class="card-body">
-                        <!-- Formulario para mostrar y editar los datos del usuario -->
-                        <form action="/editar/<%= session.Id %>" method="post">
-                        <% if (mensaje==null) { %>
-                            <% } else if(mensaje) { %>
-                                <div class="alert alert-success bg-gradient text-dark" role="alert">
-                                    <%= mensaje %>
-                                </div>
-                        <% } %>
-                        <!-- Campo oculto para el ID del usuario -->
-                        <input type="hidden" name="userId" value="<%= session.Id %>">
-                        <!-- Campos para modificar datos del usuario -->
-                        <div class="mb-3">
-                            <label for="nombre">Nombre</label>
-                            <input type="text" class="form-control" id="nombre" name="nombre" value="<%= result.nombre %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="apellido1">Primer Apellido</label>
-                            <input type="text" class="form-control" id="apellido1" name="apellido1" value="<%= result.apellido1 %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="apellido2">Segundo Apellido</label>
-                            <input type="text" class="form-control" id="apellido2" name="apellido2" value="<%= result.apellido2 %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="email">Correo Electrónico</label>
-                            <input type="email" class="form-control" id="email" name="email" value="<%= result.email %>"
-                                readonly>
-                        </div>
-                        <div class="mb-3">
-                            <label for="facultad">Facultad</label>
-                            <input type="text" class="form-control" id="facultad" name="facultad" value="<%= result.facultad %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="curso">Curso</label>
-                            <input type="number" class="form-control" id="curso" name="curso" value="<%= result.curso %>" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="grupo">Grupo</label>
-                            <input type="text" class="form-control" id="grupo" name="grupo" value="<%= result.grupo %>" required>
-                        </div>
-                        <!-- Botón para guardar cambios -->
-                        <button type="submit" class="btn btn-primary">Guardar Cambios</button>
 
-                        <!-- Botón de Cerrar Sesión -->
-                        <a href="/logout" class="btn btn-danger btn-lg" style="color: black; padding: 0.2em 0.5em;"><i class="bi bi-box-arrow-right"></i></a>
-                        </form>
+    <!-- Barra de navegación de migas de pan -->
+    <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb" class="border border-1 border-top-0 border-dark breadcrumb-nav">
+        <ol class="breadcrumb align-items-center me-auto my-auto">
+            <!-- Elementos de las migas de pan -->
+            <li class="breadcrumb-item d-flex align-items-center">
+                <a href="/home" class="text-decoration-none">Home</a>
+            </li>
+            <li class="breadcrumb-item active" aria-current="page">Perfil</li>
+        </ol>
+    </nav>
+        
+    <main class=" main-fondo">
+        <div class="container mt-5">
+            <div class="row justify-content-center">
+                <div class="col-md-8">
+                    <div class="card">
+                        <div class="card-header">
+                            <h3 class="mb-0">Perfil de Usuario</h3>
+                        </div>
+                        <div class="card-body">
+                            <!-- Formulario para mostrar y editar los datos del usuario -->
+                            <form action="/editar/<%= session.Id %>" method="post">
+                            <% if (mensaje==null) { %>
+                                <% } else if(mensaje) { %>
+                                    <div class="alert alert-success bg-gradient text-dark" role="alert">
+                                        <%= mensaje %>
+                                    </div>
+                            <% } %>
+                            <!-- Campo oculto para el ID del usuario -->
+                            <input type="hidden" name="userId" value="<%= session.Id %>">
+                            <!-- Campos para modificar datos del usuario -->
+                            <div class="mb-3">
+                                <label for="nombre">Nombre</label>
+                                <input type="text" class="form-control" id="nombre" name="nombre" value="<%= result.nombre %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="apellido1">Primer Apellido</label>
+                                <input type="text" class="form-control" id="apellido1" name="apellido1" value="<%= result.apellido1 %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="apellido2">Segundo Apellido</label>
+                                <input type="text" class="form-control" id="apellido2" name="apellido2" value="<%= result.apellido2 %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="email">Correo Electrónico</label>
+                                <input type="email" class="form-control" id="email" name="email" value="<%= result.email %>"
+                                    readonly>
+                            </div>
+                            <div class="mb-3">
+                                <label for="facultad">Facultad</label>
+                                <input type="text" class="form-control" id="facultad" name="facultad" value="<%= result.facultad %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="curso">Curso</label>
+                                <input type="number" class="form-control" id="curso" name="curso" value="<%= result.curso %>" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="grupo">Grupo</label>
+                                <input type="text" class="form-control" id="grupo" name="grupo" value="<%= result.grupo %>" required>
+                            </div>
+                            <!-- Botón para guardar cambios -->
+                            <button type="submit" class="btn btn-primary">Guardar Cambios</button>
+
+                            <!-- Botón de Cerrar Sesión -->
+                            <a href="/logout" class="btn btn-danger btn-lg" style="color: black; padding: 0.2em 0.5em;"><i class="bi bi-box-arrow-right"></i></a>
+                            </form>
+                        </div>
+                    </body>
                     </div>
-                </body>
                 </div>
             </div>
         </div>
-    </div>
+    </main>
     <br>
     <br>
 

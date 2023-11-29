@@ -18,8 +18,22 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
+    <% if (session.rol == '1') { %>
         <%- include('nav.ejs') %>
-
+    <% } %>  
+        <!-- Barra de navegación de migas de pan -->
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb" class="border border-1 border-top-0 border-dark breadcrumb-nav">
+            <ol class="breadcrumb align-items-center me-auto my-auto">
+                <!-- Elementos de las migas de pan -->
+                <li class="breadcrumb-item d-flex align-items-center">
+                    <a href="/home" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item d-flex align-items-center">
+                    <a href="/email" class="text-decoration-none">Emails</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Email: <%= result.id %></li>
+            </ol>
+        </nav>
             <!-- Contenido principal -->
             <main class="p-5">
                 <div class="container">

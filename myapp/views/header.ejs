@@ -32,6 +32,8 @@
             <li><a class="dropdown-item" href="/perfil">Perfil</a></li>
             <% if (session.rol == '1') { %>
                 <li><a class="dropdown-item" href="/organizacion">Organizacion</a></li>
+            <% } else { %>
+                <li><a class="dropdown-item" href="/reservas_usuario">Reservas</a></li>
             <% } %>
             <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
         </ul>

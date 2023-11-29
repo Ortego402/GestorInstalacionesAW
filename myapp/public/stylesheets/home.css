@@ -256,3 +256,29 @@ nav a {
     max-height: 360px;
     overflow-y: auto;
 }
+
+/* Estilos para las migas de pan (breadcrumb) */
+.breadcrumb-item {
+    color: #3a3c3e;
+}
+
+/* Estilos para los enlaces dentro de las migas de pan */
+.breadcrumb-item a {
+    color: #000000;
+    text-decoration: none;
+}
+
+/* Estilos para el elemento activo en las migas de pan */
+.breadcrumb-item.active {
+    color: #000000;
+}
+
+/* Estilos para el contenedor de las migas de pan */
+.breadcrumb-nav {
+    background-color: #e2f5ff;
+}
+
+/* Estilos para las migas de pan en general */
+.breadcrumb {
+    margin-left: 20px;
+}

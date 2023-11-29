@@ -55,7 +55,6 @@ app.use(function(err, req, res, next) {
 
   // Renderiza la página de error
   res.status(err.status || 500);
-  console.log(err);
   res.render('error.ejs');
 });
 

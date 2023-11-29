@@ -130,7 +130,7 @@ class DAOUsuarios {
                 }
                 // Comprobar el user name según sus requisitos
                 if (checkEmailResult.length > 0 && email !== req.session.email) {
-                    return callback('El nombre de usuario ya existe.');
+                    return callback('El correo ya existe.');
                 }
                 // Actualizar datos en la base de datos
                 connection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET nombre = ?, apellido1 = ?, apellido2 = ?, facultad = ?, curso = ?, grupo = ? WHERE Id = ?', [nombre, apellido1, apellido2, facultad, curso, grupo, checkEmailResult[0].Id], (err, result) => {
@@ -155,6 +155,53 @@ class DAOUsuarios {
             }
         });
     }    
+
+    reservasUser(email, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos", null);
+            } else {
+                connection.query("SELECT * FROM ucm_aw_riu_res_reservas WHERE usuEmail = ? ORDER BY dia asc", [email], function (err, results) {
+                    connection.release();
+                    if (err) {
+                        return callback("Error de acceso a la base de datos", null);
+                    } else {
+                        return callback(null, results);
+                    }
+                });
+            }
+        });
+    }
+
+    // Método para obtener los nombres de los destinos asociados a un array de IDs
+    getNombresInstalaciones(id_instalaciones, callback) {
+        // Verificar si id_instalaciones es null o undefined, y asignar un array vacío si es así
+        id_instalaciones = id_instalaciones || [];
+
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error al conectarse a la base de datos", null);
+            } else {
+                // Verificar si id_instalaciones es un array no vacío
+                if (id_instalaciones.length > 0) {
+                    console.log(id_instalaciones[0]);
+                    connection.query("SELECT id, nombre FROM ucm_aw_riu_ins_instalaciones WHERE id IN (?)", [id_instalaciones], function (err, results) {
+                        connection.release();
+                        if (err) {
+                            return callback("Error de acceso a la base de datos dao", null);
+                        } else {
+                            console.log(results);
+                            return callback(null, results);
+                        }
+                    });
+                } else {
+                    // Si id_instalaciones es un array vacío, retorna un array vacío sin realizar la consulta
+                    connection.release();
+                    return callback(null, []);
+                }
+            }
+        });
+    }
 
 }
 
