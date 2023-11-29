@@ -226,7 +226,6 @@ router.get('/servicios', (req, res) => {
 router.get('/reserva/:id', (req, res) => {
 
     const id = req.params.id;
-
     daoinstalaciones.getInstalacion(id, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -237,7 +236,7 @@ router.get('/reserva/:id', (req, res) => {
             }
             const mensaje = req.session.mensaje || '';
             req.session.mensaje = '';
-            return res.render('reserva', { results: reservas, session: req.session, reservas, mensaje});
+            return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
         });
     });
 
@@ -269,21 +268,22 @@ router.get('/reservas_usuario',(req, res) => {
         }
         // Verificar si reservas es null o undefined, y asignar un array vacío si es así
         reservas = reservas || [];
-        const instalacionesIds = reservas.map(reserva => reserva.instID);
-        // Obtener nombres de destinos correspondientes a los IDs de reservas
+        const instalacionesIds = reservas.map(reserva => {
+            return reserva.instId;
+        });        // Obtener nombres de destinos correspondientes a los IDs de reservas
         daoUser.getNombresInstalaciones(instalacionesIds, (err, nombresInstalaciones) => {
             if (err) {
                 return res.status(500).send(err);
-            }
-            // Combina la información de reserva y nombres de destinos
-            let reservasConNombresInst = [];            
+            }            let reservasConNombresInst = [];            
             reservas.forEach(reserva => {
-                const nombreInstalacion = nombresInstalaciones.find(instalacion => instalacion.id == reserva.instID);
+                const nombreInstalacion = nombresInstalaciones.find(instalacion => {
+                    return instalacion.id == reserva.instId;
+                });
                 const fechaReserva = new Date(reserva.dia);
                 const horaReserva = reserva.hora;
                 const fechaFormateada = fechaReserva.toLocaleDateString('en-US'); // 'en-US' representa el formato YYYY/MM/DD, ajusta según tu necesidad
                 reservasConNombresInst.push({
-                    id: reserva.id,
+                    id: reserva.Id,
                     instalacion_nombre: nombreInstalacion ? nombreInstalacion.nombre : 'Nombre de instalacion no encontrado',
                     fecha_reserva: fechaFormateada,
                     hora_reserva: horaReserva
@@ -292,6 +292,20 @@ router.get('/reservas_usuario',(req, res) => {
             });
             return res.render('mostrarReservas.ejs', { session: req.session, results: reservasConNombresInst });
         });
+    });
+});
+
+
+// Eliminar reserva del usuario
+router.post('/reservas_usuario', (req, res) => {
+    const idReserva = req.body.reservaId;
+    console.log("holaaaaaaaaaaaaaaaaa")
+    console.log(req.body.reservaId);
+    daoUser.eliminarReserva(idReserva, (err) => {
+        if (err) {
+            return res.status(500).send('Error al eliminar la reserva');
+        }
+        return res.redirect('/reservas_usuario');
     });
 });
 

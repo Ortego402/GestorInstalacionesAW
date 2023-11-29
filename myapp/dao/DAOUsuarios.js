@@ -203,6 +203,19 @@ class DAOUsuarios {
         });
     }
 
+
+    // Método para eliminar una reserva por su ID
+    eliminarReserva(idReserva, callback) {
+        const query = 'DELETE FROM 	ucm_aw_riu_res_reservas WHERE id = ?';
+        this.pool.query(query, [idReserva], (err, result) => {
+            if (err) {
+                return callback('Error al eliminar la reserva', null);
+            }
+            return callback(null);
+        });
+    }
+
 }
+
 
 module.exports = DAOUsuarios;

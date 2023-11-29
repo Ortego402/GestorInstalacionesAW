@@ -86,6 +86,7 @@ class DAOInstalaciones {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
             } else {
+                console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 connection.query(
                     "SELECT * FROM ucm_aw_riu_res_reservas r " +
                     "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +
@@ -95,7 +96,7 @@ class DAOInstalaciones {
                         if (err) {
                             callback("Error de acceso a la base de datos", null);
                         } else {
-                            
+                            console.log(results);
                             callback(null, results);
                         }
                     }
