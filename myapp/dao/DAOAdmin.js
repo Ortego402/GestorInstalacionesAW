@@ -9,14 +9,14 @@ class DAOAdmin {
     mostrarUsuarios(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM UCM_AW_RIU_USU_Usuarios ORDER BY nombre", function (err, users) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, users);
+                        return callback(null, users);
                     }
                 });
             }
@@ -26,14 +26,14 @@ class DAOAdmin {
     mostrarReservas(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM ucm_aw_riu_res_reservas ORDER BY dia DESC, hora DESC", function (err, users) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, users);
+                        return callback(null, users);
                     }
                 });
             }
@@ -43,14 +43,14 @@ class DAOAdmin {
     mostraUsuario(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE id = ?", [id], function (err, users) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, users[0]);
+                        return callback(null, users[0]);
                     }
                 });
             }
@@ -60,14 +60,14 @@ class DAOAdmin {
     mostrarOrganizacion(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query('SELECT * FROM UCM_AW_RIU_ORG_organizacion', function (err, org) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, org[0]);
+                        return callback(null, org[0]);
                     }
                 });
             }
@@ -77,7 +77,7 @@ class DAOAdmin {
     editarOrganizacion(nombre, direccion, imagenData, nombre_original, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos");
+                return callback("Error de acceso a la base de datos");
             } else {
                 let query = 'UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ?, imagen = ? WHERE NOMBRE = ?';
                 const params = [nombre, direccion, imagenData, nombre_original];
@@ -86,9 +86,9 @@ class DAOAdmin {
                     connection.release();
                     console.log(err);
                     if (err) {
-                        callback("Error de acceso a la base de datos");
+                        return callback("Error de acceso a la base de datos");
                     } else {
-                        callback(null);
+                        return callback(null);
                     }
                 });
             }

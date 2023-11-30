@@ -17,7 +17,7 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
-    <% if (session.rol == '1') { %>
+    <% if (session.rol === '1') { %>
         <%- include('nav.ejs') %>
     <% } %>            
 
@@ -69,10 +69,6 @@
     <!-- Inclusión del pie de página -->
     <%- include('footer.ejs') %>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-    <script src="ruta/a/jquery.min.js"></script>
-    <!-- Popper.js -->
-    <script src="ruta/a/popper.min.js"></script>
-    <!-- Bootstrap JS Bundle -->
-    <script src="ruta/a/bootstrap.bundle.min.js"></script>
+
 </body>
 </html>

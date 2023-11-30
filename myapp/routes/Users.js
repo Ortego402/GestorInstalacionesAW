@@ -41,15 +41,16 @@ router.post('/InicioSesion', async (req, res) => {
                     req.session.Id = user.Id;
                     req.session.rol = user.rol;
 
-                    if (user.validado === '0') {
+                    if (user.validado == '0') {
                         return res.redirect('/validado');
                     }
 
-                    if (user.rol === '1') {
+                    if (user.rol == '1') {
                         daoAdmin.mostrarOrganizacion((err, result) => {
                             if (err) {
                                 return res.status(500).json({ error: 'Error interno del servidor' });
                             }
+                            console.log(result)
                             req.session.orgNombre = result.nombre;
                             req.session.orgDir = result.direccion;
                             req.session.orgIcono = result.imagen;
@@ -213,6 +214,7 @@ router.get('/home', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
+        console.log(req.session.orgIcono)
         return res.render('home.ejs', { results: results, session: req.session});
     });
 });

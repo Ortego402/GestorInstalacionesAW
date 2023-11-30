@@ -160,7 +160,7 @@ router.get('/buscarReservas', (req, res) => {
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
     daoAdmin.buscarReservas(campoBD, valorBuscar, (err, results) => {
-        if (err) {
+        if (err != null) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         res.render('listarReservas', { results: results, session: req.session });
@@ -173,7 +173,7 @@ router.get('/organizacion', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
 
     daoAdmin.mostrarOrganizacion((err, results) => {
-        if (err) {
+        if (err != null) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         return res.render('organizacion', { results: results, session: req.session, mensaje: mensaje });
@@ -189,20 +189,20 @@ router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) =
     const nombre_original = req.session.orgNombre;
     console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
-        if (err) {
+        if (err != null) {
             console.log(err);
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
-        daoAdmin.mostrarOrganizacion((err, result) => {
-            if (err) {
+        daoAdmin.mostrarOrganizacion((error, result) => {
+            if (error != null) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }
             console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             req.session.orgNombre = result.nombre;
             req.session.orgDir = result.direccion;
             req.session.orgIcono = result.imagen;
-            return res.redirect('/organizacion?mensaje=' + encodeURIComponent(err));
+            return res.redirect('/home/organizacion?mensaje=' + encodeURIComponent(err));
         });
     });
 });
