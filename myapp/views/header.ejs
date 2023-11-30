@@ -5,7 +5,7 @@
         <!-- Enlace al inicio con el nombre del sitio como botón -->
         <a href="/home" class="btn text-dark border-0 ms-4 d-flex justify-content-start align-items-center">
             <!-- Título del sitio -->
-            <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" alt="Imagen" loading="lazy">
+            <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" class="w-25" alt="Imagen" loading="lazy">
             <h5><strong><%= session.orgNombre %></strong></h5>
         </a>
     </div>    
