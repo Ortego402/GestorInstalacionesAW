@@ -38,7 +38,7 @@
                 </div>
                 <div class="mb-3">
                     <label for="imagen" class="form-label">Imagen (solo JPEG, tamaño máximo 2MB)</label>
-                    <input class="form-control" type="file" id="imagen" name="imagen" accept="image/jpeg" size="2000000" required>
+                    <input class="form-control" type="file" id="imagen" name="imagen" accept="image/jpeg" required>
                 </div>
                 <div class="mb-3">
                     <label for="aforo" class="form-label">Aforo</label>
@@ -48,10 +48,24 @@
                     <label for="horaInicio" class="form-label">Disponibilidad horaria</label>
                     <div class="row">
                         <div class="col">
-                            <input type="time" class="form-control" id="horaInicio" name="horaInicio" required>
+                            <select class="form-select" id="horaInicio" name="horaInicio" required>
+                                <!-- Aquí se generan dinámicamente las opciones de horas cada media hora -->
+                                <% for (var hora = new Date('1970-01-01T' + '00:00'); hora <= new Date('1970-01-01T' + '23:30'); hora.setMinutes(hora.getMinutes() + 30)) { %>
+                                    <option value="<%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>">
+                                        <%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>
+                                    </option>
+                                <% } %>
+                            </select>
                         </div>
                         <div class="col">
-                            <input type="time" class="form-control" id="horaFin" name="horaFin" required>
+                            <select class="form-select" id="horaFin" name="horaFin" required>
+                                <!-- Aquí se generan dinámicamente las opciones de horas cada media hora -->
+                                <% for (var hora = new Date('1970-01-01T' + '00:00'); hora <= new Date('1970-01-01T' + '23:30'); hora.setMinutes(hora.getMinutes() + 30)) { %>
+                                    <option value="<%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>">
+                                        <%= hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0') %>
+                                    </option>
+                                <% } %>
+                            </select>
                         </div>
                     </div>
                 </div>

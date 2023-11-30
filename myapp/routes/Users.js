@@ -53,7 +53,6 @@ router.post('/InicioSesion', async (req, res) => {
                             req.session.orgNombre = result.nombre;
                             req.session.orgDir = result.direccion;
                             req.session.orgIcono = result.imagen;
-                            console.log(session.orgNombre);
                             return res.redirect('/home');
                         });
                     } else {
