@@ -181,16 +181,12 @@ router.get('/organizacion', (req, res) => {
 });
 
 
-router.post('/organizacion_editar', (req, res) => {
+router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) => {
     const {nombre, direccion} = req.body;
-    let img = "";
-    if (req.files && req.files.imagen) {
-        // Accede a la propiedad 'logo'
-        img = req.files.imagen;
-        // Continúa con el resto del código
-    }   
+    let imagen = req.file.buffer; // Ajusta para usar null en lugar de una cadena vacía
+ 
     const nombre_original = req.session.orgNombre;
-
+    console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
     daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });

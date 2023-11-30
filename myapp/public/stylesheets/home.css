@@ -12,7 +12,6 @@ body {
     min-height: 100vh;
     margin: 0;
     padding: 0;
-    min-height: 100vh; /* Establece el mínimo alto del cuerpo a 100% de la ventana visible */
 }
 
 /* Estilos para los títulos de destino */
