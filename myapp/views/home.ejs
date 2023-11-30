@@ -35,7 +35,7 @@
                     <div class="card card-instalaciones">
                         <!-- Imagen del destino -->
                         <%if(instalacion.imagen === null){} else {%>
-                        <img src="data:image/jpg;base64, <%= instalacion.imagen.toString('base64') %>" class="card-img-top" alt="<%= instalacion.nombre %>">
+                        <img src="data:image/png;base64, <%= instalacion.imagen.toString('base64') %>" class="card-img-top" alt="<%= instalacion.nombre %>" loading="lazy">
                         <%}%>
                         <!-- Cuerpo de la tarjeta -->
                         <div class="card-body">

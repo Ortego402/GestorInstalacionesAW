@@ -6,6 +6,7 @@ const DAOUser = require("../dao/DAOUsuarios");
 const DAOAdmin = require("../dao/DAOAdmin");
 const bcrypt = require('bcrypt'); // Agrega esta línea para requerir bcrypt
 const DAOInstalaciones = require('../dao/DAOInstalaciones');
+const session = require('express-session');
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -44,7 +45,7 @@ router.post('/InicioSesion', async (req, res) => {
                         return res.redirect('/validado');
                     }
 
-                    if (user.rol === 1) {
+                    if (user.rol === '1') {
                         daoAdmin.mostrarOrganizacion((err, result) => {
                             if (err) {
                                 return res.status(500).json({ error: 'Error interno del servidor' });
@@ -52,6 +53,7 @@ router.post('/InicioSesion', async (req, res) => {
                             req.session.orgNombre = result.nombre;
                             req.session.orgDir = result.direccion;
                             req.session.orgIcono = result.imagen;
+                            console.log(session.orgNombre);
                             return res.redirect('/home');
                         });
                     } else {
