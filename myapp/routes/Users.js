@@ -243,11 +243,6 @@ router.get('/reserva/:id', (req, res) => {
 });
 
 
-router.get('/instalacion', (req, res) => {
-    return res.render('instalacion', { session: req.session });
-});
-
-
 router.get('/buscar', (req, res) => {
     const searchTerm = req.query.nombreBuscar;
     daoinstalaciones.searchInstalaciones(searchTerm, (err, instalaciones) => {

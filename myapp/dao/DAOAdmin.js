@@ -6,7 +6,7 @@ class DAOAdmin {
         this.pool = pool;
     }
 
-    mostraUsuarios(callback) {
+    mostrarUsuarios(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
@@ -105,6 +105,7 @@ class DAOAdmin {
             connection.query('INSERT INTO UCM_AW_RIU_INS_Instalaciones (nombre, tipoReserva, imagen, aforo, horaInicio, horaFin) VALUES (?, ?, ?, ?, ?, ?)', [nombre, tipoReserva, imagen, aforo, horaInicio, horaFin], (err, result) => {
                 connection.release();
                 if (err) {
+                    console.log(err);
                     return callback('Error al insertar instalacion en la base de datos', null);
                 }
                 return callback(null, result);

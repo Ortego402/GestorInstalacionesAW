@@ -34,8 +34,9 @@
                     <!-- Tarjeta de destino -->
                     <div class="card card-instalaciones">
                         <!-- Imagen del destino -->
-                        <% const imagenBuffer = Buffer.from(instalacion.imagen); %>
-                        <img src="data:image/jpeg;base64, <%= imagenBuffer.toString('base64') %>" class="card-img-top" alt="<%= instalacion.nombre %>">
+                        <%if(instalacion.imagen === null){} else {%>
+                        <img src="data:image/jpg;base64, <%= instalacion.imagen.toString('base64') %>" class="card-img-top" alt="<%= instalacion.nombre %>">
+                        <%}%>
                         <!-- Cuerpo de la tarjeta -->
                         <div class="card-body">
                             <!-- Contenido superior de la tarjeta (nombre) -->
@@ -51,7 +52,7 @@
             <% if (session.rol == '1') { %>
                 <div class="row justify-content-center align-items-center">
                     <div class="col-md-6">
-                        <a href="/instalacion" class="decoration">
+                        <a href="/home/instalacion" class="decoration">
                             <div class="card card-instalaciones text-center card-small bg-light">
                                 <div class="card-body">
                                     <i class="bi bi-plus-circle text-black"></i>

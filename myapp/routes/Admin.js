@@ -6,6 +6,8 @@ const DAOAdmin = require("../dao/DAOAdmin");
 const DAOInstalaciones = require('../dao/DAOInstalaciones');
 const DAOUsuarios = require('../dao/DAOUsuarios');
 
+const multer = require('multer');
+const multerFactory = multer({ storage: multer.memoryStorage()});
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -23,14 +25,13 @@ router.get('/validaciones', (req, res) => {
             // Manejar el error aquí, por ejemplo, renderizando una página de error
             return res.status(500).send('Error interno del servidor');
         }
-        return res.render('validacion', { validaciones: validaciones, session: req.session });
+        return res.render('validacion', { validaciones: results, session: req.session });
     });
 });
 
 
 router.get('/cambiarRol/:id', (req, res) => {
     const id = req.params.id;
-
     // Primero, obtén el rol actual del usuario.
     daoAdmin.mostraUsuario(id, (err, user) => {
         if (err) {
@@ -45,7 +46,7 @@ router.get('/cambiarRol/:id', (req, res) => {
                 return res.status(500).json({ error: 'Error al cambiar el rol del usuario' });
             }
             // Devuelve el nuevo rol al controlador.
-            res.redirect('/usuarios');
+            res.redirect('/home/usuarios');
         });
     });
 });
@@ -190,7 +191,7 @@ router.post('/organizacion_editar', (req, res) => {
     }   
     const nombre_original = req.session.orgNombre;
 
-    this.DAOAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
+    daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
@@ -224,9 +225,15 @@ router.get('/reservas', (req, res) => {
 });
 
 
-router.post('/nueva_instalacion', (req, res) => {
+router.get('/instalacion', (req, res) => {
+    return res.render('instalacion', { session: req.session });
+});
+
+
+router.post('/nueva_instalacion', multerFactory.single('imagen'), (req, res) => {
+    // Desestructura los datos del cuerpo de la solicitud y el archivo cargado
     const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
-    const imagen = req.files.imagen;
+    let imagen = req.file.buffer; // Ajusta para usar null en lugar de una cadena vacía
 
     daoAdmin.insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, (err, results) => {
         if (err) {

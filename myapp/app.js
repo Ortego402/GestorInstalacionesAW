@@ -52,7 +52,7 @@ app.use(function(err, req, res, next) {
   // Establece las variables locales, solo proporcionando el error en desarrollo
   res.locals.message = err.message;
   res.locals.error = req.app.get('env') === 'development' ? err : {};
-
+  console.log(err);
   // Renderiza la página de error
   res.status(err.status || 500);
   res.render('error.ejs');
