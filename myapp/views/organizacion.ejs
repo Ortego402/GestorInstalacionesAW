@@ -32,11 +32,11 @@
                         <!-- Formulario para mostrar y editar los datos del usuario -->
                         <form action="/home/organizacion_editar" method="post" enctype="multipart/form-data">
                             <%  if(mensaje == 'null') { %>
-                                    <div class="alert alert-success bg-gradient text-dark" role="alert">
-                                        Datos del sistema editados correctamente.
+                                    <div class="alert alert-danger bg-gradient text-dark" role="alert">
+                                        No se ha podido realizar el cambio.
                                     </div>
                             <% } else if (mensaje != 'null' && mensaje != "") { %>
-                                <div class="alert alert-danger bg-danger bg-gradient text-black" role="alert">
+                                <div class="alert alert-success bg-danger bg-gradient text-black" role="alert">
                                     <%= mensaje %>                                    
                                 </div>
                             <% } %>

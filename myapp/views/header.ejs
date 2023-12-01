@@ -8,8 +8,8 @@
             <% if (!Buffer.isBuffer(session.orgIcono)) {
                     session.orgIcono = Buffer.from(session.orgIcono, 'base64');
             } %>
-            <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" class="w-25" alt="Imagen">
-            <h5><strong><%= session.orgNombre %></strong></h5>
+            <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
+            <h5 style="font-family: 'Cambria', cursive; font-size: 33px;"><strong><%= session.orgNombre %></strong></h5>
         </a>
     </div>    
     <!-- Columna 2 con el formulario de búsqueda -->
