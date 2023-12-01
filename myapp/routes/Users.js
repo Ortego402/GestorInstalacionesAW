@@ -214,7 +214,6 @@ router.get('/home', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        console.log(req.session.orgIcono)
         return res.render('home.ejs', { results: results, session: req.session});
     });
 });

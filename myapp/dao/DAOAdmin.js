@@ -81,10 +81,8 @@ class DAOAdmin {
             } else {
                 let query = 'UPDATE UCM_AW_RIU_ORG_organizacion SET nombre = ?, direccion = ?, imagen = ? WHERE NOMBRE = ?';
                 const params = [nombre, direccion, imagenData, nombre_original];
-                console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
                 connection.query(query, params, function (err) {
                     connection.release();
-                    console.log(err);
                     if (err) {
                         return callback("Error de acceso a la base de datos");
                     } else {

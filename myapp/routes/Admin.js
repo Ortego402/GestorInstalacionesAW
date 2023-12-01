@@ -187,22 +187,19 @@ router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) =
     let imagen = req.file ? req.file.buffer : req.session.org; // Ajusta para usar null en lugar de una cadena vacía
  
     const nombre_original = req.session.orgNombre;
-    console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
     daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
         if (err != null) {
             console.log(err);
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
         daoAdmin.mostrarOrganizacion((error, result) => {
             if (error != null) {
                 return res.status(500).json({ error: 'Error interno del servidor' });
             }
-            console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
             req.session.orgNombre = result.nombre;
             req.session.orgDir = result.direccion;
             req.session.orgIcono = result.imagen;
-            return res.redirect('/home/organizacion?mensaje=' + encodeURIComponent(err));
+            return res.redirect('/home/organizacion?mensaje=' + encodeURIComponent('Organizacion modificada con exito'));
         });
     });
 });
