@@ -1,10 +1,10 @@
 Funcionalidades del Administrador
 # 1. Configuración del Sistema: a. Personalizar la apariencia del sistema con nombre, dirección e icono de la organización.
 # 2. Gestión de Instalaciones: a. Crear nuevas instalaciones con nombre, disponibilidad horaria, tipo de reserva (individual o colectiva), y aforo (si aplica). b. Adjuntar fotografía/icono a la instalación.
-3. Validación de Usuarios:
-a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
-b. Enviar correo de confirmación de registro a los usuarios validados.
-4. Asignación de Roles: a. Asignar roles de administrador a usuarios específicos.
+# 3. Validación de Usuarios:
+# a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
+# b. Enviar correo de confirmación de registro a los usuarios validados.
+# 4. Asignación de Roles: a. Asignar roles de administrador a usuarios específicos.
 5. Estadísticas y Listados:
 a. Obtener estadísticas de reservas por usuario o por facultad.
 b. Generar listados de usuarios por facultad.
@@ -29,7 +29,7 @@ Funcionalidades según la nota:
 # ● Administrador: Configuración del sistema
 # ● Administrador: Creación de instalación
 # ● Usuario: Registro de usuario
-● Administrador: Validación de usuario
+# ● Administrador: Validación de usuario
 # ● Administrador y Usuario: Inicio de sesión
 # ● Administrador y Usuario: Cierre de sesión
 ● Usuario: Reserva de instalaciones (Falta formato para reserva) FALTARIA HACER QUE LAS HORAS DEL DIA QUE ESTEN OCUPADAS NO SE PUEDAN ESCOGER (//const horasDeReservas = results.map(reserva => reserva.hora);)
@@ -39,7 +39,7 @@ Funcionalidades según la nota:
 
 6
 ● Todas las anteriores
-● Administrador: Envío de correo de validación de usuario (Falta mandar el correo)
+# ● Administrador: Envío de correo de validación de usuario
 ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Organización
 ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Facultad.
 ● Usuario: Envío de correo tanto al administrador como a cualquier otro usuario de la Organización.

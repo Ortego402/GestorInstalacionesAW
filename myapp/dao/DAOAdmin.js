@@ -129,9 +129,9 @@ class DAOAdmin {
         const query = 'UPDATE UCM_AW_RIU_USU_Usuarios SET validado = ? WHERE email = ?';
         this.pool.query(query, ['1', email], (err, results) => {
             if (err || results.length === 0) {
-                return callback('El usuario no existe.', null);
+                return callback('El usuario no existe.');
             } else {
-                return callback(null, results[0]);
+                return callback(null);
             }
         });
     }
@@ -140,10 +140,25 @@ class DAOAdmin {
         const query = 'DELETE FROM UCM_AW_RIU_Validaciones WHERE id = ?';
         this.pool.query(query, [id], (err, results) => {
             if (err) {
-                return callback('Error al eliminar la validación.', null);
+                return callback('Error al eliminar la validación.');
             } else {
-                return callback(null, 'Validación eliminada correctamente.');
+                return callback(null);
             }
+        });
+    }
+
+    enviarCorreoValidacion(correo_envia, correo_destino, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback('Error de acceso a la base de datos');
+            }
+            connection.query('INSERT INTO ucm_aw_riu_emails (correo_envia, correo_destino, asunto, mensaje) VALUES (?, ?, ?, ?)', [correo_envia, correo_destino, "¡Bienvenido!", "¡Muy buenas!, tu cuenta de usuario ha sido verificada con éxito. ¡Disfruta de todas las instalaciones de la Universidad Complutense de Madrid!"], (err) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al insertar el email en la base de datos');
+                }
+                return callback(null);
+            });
         });
     }
 

@@ -51,49 +51,47 @@ router.get('/cambiarRol/:id', (req, res) => {
     });
 });
 
-
 router.get('/validar/:id', (req, res) => {
     const emailId = req.params.id;
     const userEmail = req.query.email;
-
-    daoAdmin.validarUsuario(email, (err) => {
+    daoAdmin.validarUsuario(userEmail, (err) => {
         if (err) {
-            return res.status(500).json({ error: 'Error al validar el correo electrónico' });
+            return res.status(500).json({ error: 'Error al validar el usuario.' });
         }
-
         // Luego, elimina la fila de validación en la tabla
-        daoAdmin.eliminarValidacion(id, (err) => {
+        daoAdmin.eliminarValidacion(emailId, (err) => {
             if (err) {
                 return res.status(500).json({ error: 'Error en la bbdd' });
             }
-            daoAdmin.enviarCorreoValidacion(userEmail);
-            return res.redirect('/validaciones');
+            daoAdmin.enviarCorreoValidacion(req.session.email, userEmail, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error en la bbdd' });
+                }
+                return res.redirect('/home/validaciones');
+            });
         });
     });
 });
-
 
 // Ruta para no validar un correo electrónico y eliminar la solicitud de validación
 router.get('/novalidar/:id', (req, res) => {
     const emailId = req.params.id;
     const userEmail = req.query.email;
 
-    daoAdmin.eliminarUsuario(email, (err) => {
+    daoAdmin.eliminarUsuario(userEmail, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error al validar el correo electrónico' });
         }
 
         // Luego, elimina la fila de validación en la tabla
-        daoAdmin.eliminarValidacion(id, (err) => {
+        daoAdmin.eliminarValidacion(emailId, (err) => {
             if (err) {
                 return res.status(500).json({ error: 'Error en la bbdd' });
             }
-            daoAdmin.enviarCorreoNoValidacion(userEmail);
-            return res.redirect('/validaciones');
+            return res.redirect('/home/validaciones');
         });
     });
 });
-
 
 router.get('/buscarUsuarios', (req, res) => {
     const { campoBuscar, nombreBuscar } = req.query;
@@ -121,7 +119,7 @@ router.get('/buscarUsuarios', (req, res) => {
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
-    daoUsuarios.buscarUsuarios(campoBD, valorBuscar, (err, results) => {
+    daoUsuarios.buscarUsuarios(campoBD, nombreBuscar, (err, results) => {
 
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -159,7 +157,7 @@ router.get('/buscarReservas', (req, res) => {
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
-    daoAdmin.buscarReservas(campoBD, valorBuscar, (err, results) => {
+    daoAdmin.buscarReservas(campoBD, nombreBuscar, (err, results) => {
         if (err != null) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }

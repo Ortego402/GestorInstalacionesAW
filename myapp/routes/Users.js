@@ -31,15 +31,11 @@ router.get('/home', (req, res) => {
     });
 });
 
-
 router.get('/validado', (req, res) => {
     return res.render('validado.ejs', { session: req.session });
 });
 
 router.post('/InicioSesion', async (req, res) => {
-
-    let mensaje = "";
-
     const { email, password } = req.body;
     daoUser.getUserByEmail(email, (err, user) => {
         if (err) {
@@ -58,21 +54,16 @@ router.post('/InicioSesion', async (req, res) => {
                     if (user.validado == '0') {
                         return res.redirect('/validado');
                     }
-
-                    if (user.rol == '1') {
-                        daoAdmin.mostrarOrganizacion((err, result) => {
-                            if (err) {
-                                return res.status(500).json({ error: 'Error interno del servidor' });
-                            }
-                            req.session.orgNombre = result.nombre;
-                            req.session.orgDir = result.direccion;
-                            req.session.orgIcono = result.imagen;
-                            console.log(req.session)
-                            return res.redirect('/home');
-                        });
-                    } else {
+                    daoAdmin.mostrarOrganizacion((err, result) => {
+                        if (err) {
+                            return res.status(500).json({ error: 'Error interno del servidor' });
+                        }
+                        req.session.orgNombre = result.nombre;
+                        req.session.orgDir = result.direccion;
+                        req.session.orgIcono = result.imagen;
+                        console.log(req.session)
                         return res.redirect('/home');
-                    }
+                    });
                 } else {
                     return res.render('login.ejs', { mensaje: 'Contraseña incorrecta.' });
                 }
@@ -139,7 +130,13 @@ router.get('/perfil', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        res.render('perfil.ejs', { result: result[0], session: req.session, mensaje: mensaje });
+        daoUser.getFacultades((err, facultades) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error de la base de datos' });
+            }
+            res.render('perfil.ejs', { result: result[0], session: req.session, mensaje: mensaje, facultades: facultades });
+
+        });
     });
 });
 

@@ -5,7 +5,7 @@
         <!-- Enlace al inicio con el nombre del sitio como botón -->
         <a href="/home" class="btn text-dark border-0 ms-4 d-flex justify-content-start align-items-center">
             <!-- Título del sitio -->
-            <% if (!Buffer.isBuffer(session.orgIcono)) { session.orgIcono=Buffer.from(session.orgIcono, 'base64' ); } %>
+            <% if (session.orgIcono && !Buffer.isBuffer(session.orgIcono)) { session.orgIcono=Buffer.from(session.orgIcono, 'base64' ); } %>
                 <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
                 <h5 style="font-family: 'Cambria', cursive; font-size: 33px;"><strong>
                         <%= session.orgNombre %>
@@ -28,7 +28,7 @@
     <div class="col col-2 d-flex justify-content-center align-items-center">
         <!-- Botón del perfil con menú desplegable -->
         <button class="btn btn-dark dropdown-toggle p-2" type="button" id="perfilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <% if (!Buffer.isBuffer(session.imagen)) {
+            <% if (session.imagen && !Buffer.isBuffer(session.imagen)) {
                 session.imagen = Buffer.from(session.imagen, 'base64');
             %>
                 <img src="data:image/png;base64,<%= session.imagen.toString('base64') %>" alt="Imagen de perfil" style="width: 32px; height: 32px; border-radius: 50%;">
