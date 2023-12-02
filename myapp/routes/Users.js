@@ -20,6 +20,17 @@ router.get('/', (req, res) => {
     return res.render("login.ejs", { session: req.session, mensaje: mensaje });
 });
 
+router.get('/home', (req, res) => {
+    console.log(req.session)
+    daoinstalaciones.getAllInstalaciones((err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+        return res.render('home.ejs', { results: results, session: req.session});
+    });
+});
+
+
 router.get('/validado', (req, res) => {
     return res.render('validado.ejs', { session: req.session });
 });
@@ -50,10 +61,10 @@ router.post('/InicioSesion', async (req, res) => {
                             if (err) {
                                 return res.status(500).json({ error: 'Error interno del servidor' });
                             }
-                            console.log(result)
                             req.session.orgNombre = result.nombre;
                             req.session.orgDir = result.direccion;
                             req.session.orgIcono = result.imagen;
+                            console.log(req.session)
                             return res.redirect('/home');
                         });
                     } else {
@@ -205,16 +216,6 @@ router.post('/email', (req, res) => {
             return res.status(500).json({ error: 'Error de la base de datos' });
         } 
         res.redirect('/email?mensaje=' + encodeURIComponent("Email enviado correctamente."));
-    });
-});
-
-
-router.get('/home', (req, res) => {
-    daoinstalaciones.getAllInstalaciones((err, results) => {
-        if (err) {
-            return res.status(500).json({ error: 'Error de la base de datos' });
-        }
-        return res.render('home.ejs', { results: results, session: req.session});
     });
 });
 
