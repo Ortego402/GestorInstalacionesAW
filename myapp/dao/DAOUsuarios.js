@@ -116,7 +116,7 @@ class DAOUsuarios {
     }
     
 
-    updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, callback) {
+    updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, imagen, callback) {
         const checkEmailQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -133,7 +133,7 @@ class DAOUsuarios {
                     return callback('El correo ya existe.');
                 }
                 // Actualizar datos en la base de datos
-                connection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET nombre = ?, apellido1 = ?, apellido2 = ?, facultad = ?, curso = ?, grupo = ? WHERE Id = ?', [nombre, apellido1, apellido2, facultad, curso, grupo, checkEmailResult[0].Id], (err, result) => {
+                connection.query('UPDATE UCM_AW_RIU_USU_Usuarios SET nombre = ?, apellido1 = ?, apellido2 = ?, facultad = ?, curso = ?, grupo = ?, imagen_perfil = ? WHERE Id = ?', [nombre, apellido1, apellido2, facultad, curso, grupo, imagen, checkEmailResult[0].Id], (err, result) => {
                     if (err) {
                         return callback('Error al actualizar usuario en la base de datos');
                     }

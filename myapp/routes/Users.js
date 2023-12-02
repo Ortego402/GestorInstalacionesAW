@@ -144,16 +144,24 @@ router.get('/perfil', (req, res) => {
 });
 
 
-router.post('/editar/:id', (req, res) => {
+router.post('/editar/:id', multerFactory.single('imagen'), (req, res) => {
     const { email, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
-
-    daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, (err) => {
+    let imagen;
+    // Verifica si se ha subido una nueva imagen
+    if (req.file && req.file.buffer) {
+        // Si hay una nueva imagen, utiliza su buffer directamente
+        imagen = req.file.buffer;
+    } else if (req.session.orgIcono) {
+        // Decodifica los datos binarios de Base64 a buffer
+        imagen = Buffer.from(req.session.imagen, 'base64');
+    }
+    daoUser.updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, imagen, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         else{
-            req.session.email = email;
-            res.redirect('/perfil?mensaje=' + encodeURIComponent('El usuario se ha modificado con exito.'));
+            req.session.imagen = imagen;
+            res.redirect('/perfil?mensaje=' + encodeURIComponent(err));
         }
     });
 });

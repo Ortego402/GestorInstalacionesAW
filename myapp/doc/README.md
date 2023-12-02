@@ -14,7 +14,7 @@ a. Enviar mensajes a usuarios a través de un buzón de correo interno.
 a. Se enviará una notificación al primer usuario de la lista cuando haya habido alguna cancelación de reservas.
 
 Funcionalidades del Usuario
-1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
+# 1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
 # 2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
 3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
 
@@ -26,12 +26,12 @@ Funcionalidades Comunes
 Funcionalidades según la nota:
 5
 ● Aplicación: Responsive (Se revisa casi al final)
-● Administrador: Configuración del sistema (Falta imagen)
-● Administrador: Creación de instalación (Falta imagen)
-● Usuario: Registro de usuario (Falta imagen)
+# ● Administrador: Configuración del sistema
+# ● Administrador: Creación de instalación
+# ● Usuario: Registro de usuario
 ● Administrador: Validación de usuario
-● Administrador y Usuario: Inicio de sesión
-● Administrador y Usuario: Cierre de sesión
+# ● Administrador y Usuario: Inicio de sesión
+# ● Administrador y Usuario: Cierre de sesión
 ● Usuario: Reserva de instalaciones (Falta formato para reserva) FALTARIA HACER QUE LAS HORAS DEL DIA QUE ESTEN OCUPADAS NO SE PUEDAN ESCOGER (//const horasDeReservas = results.map(reserva => reserva.hora);)
 ● Administrador: Historial de reservas de un usuario. (En pentaña usuarios)
 ● Administrador: Historial de reservas de una instalación. (Crear pestaña reservas)
