@@ -7,7 +7,7 @@ const DAOInstalaciones = require('../dao/DAOInstalaciones');
 const DAOUsuarios = require('../dao/DAOUsuarios');
 
 const multer = require('multer');
-const multerFactory = multer({ storage: multer.memoryStorage()});
+const multerFactory = multer({ storage: multer.memoryStorage() });
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -55,7 +55,7 @@ router.get('/cambiarRol/:id', (req, res) => {
 router.get('/validar/:id', (req, res) => {
     const emailId = req.params.id;
     const userEmail = req.query.email;
-    
+
     daoAdmin.validarUsuario(email, (err) => {
         if (err) {
             return res.status(500).json({ error: 'Error al validar el correo electrónico' });
@@ -117,7 +117,7 @@ router.get('/buscarUsuarios', (req, res) => {
             break;
         default:
             // Si el campo seleccionado no es válido, llama al callback con un error
-            return es.status(500).json({error: 'Campo de búsqueda no válido'});
+            return es.status(500).json({ error: 'Campo de búsqueda no válido' });
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
@@ -155,7 +155,7 @@ router.get('/buscarReservas', (req, res) => {
             break;
         default:
             // Si el campo seleccionado no es válido, llama al callback con un error
-            return es.status(500).json({error: 'Campo de búsqueda no válido'});
+            return es.status(500).json({ error: 'Campo de búsqueda no válido' });
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
@@ -182,10 +182,16 @@ router.get('/organizacion', (req, res) => {
 
 
 router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) => {
-    const {nombre, direccion} = req.body;
-
-    let imagen = req.file ? req.file.buffer : req.session.org; // Ajusta para usar null en lugar de una cadena vacía
- 
+    const { nombre, direccion } = req.body;
+    let imagen;
+    // Verifica si se ha subido una nueva imagen
+    if (req.file && req.file.buffer) {
+        // Si hay una nueva imagen, utiliza su buffer directamente
+        imagen = req.file.buffer;
+    } else if (req.session.orgIcono) {
+        // Decodifica los datos binarios de Base64 a buffer
+        imagen = Buffer.from(req.session.orgIcono, 'base64');
+    }
     const nombre_original = req.session.orgNombre;
     daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
         if (err != null) {
@@ -199,7 +205,7 @@ router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) =
             req.session.orgNombre = result.nombre;
             req.session.orgDir = result.direccion;
             req.session.orgIcono = result.imagen;
-            return res.redirect('/home/organizacion?mensaje=' + encodeURIComponent('Organizacion modificada con exito'));
+            return res.redirect('/home/organizacion?mensaje=' + encodeURIComponent(err));
         });
     });
 });

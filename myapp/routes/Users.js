@@ -6,7 +6,8 @@ const DAOUser = require("../dao/DAOUsuarios");
 const DAOAdmin = require("../dao/DAOAdmin");
 const bcrypt = require('bcrypt'); // Agrega esta línea para requerir bcrypt
 const DAOInstalaciones = require('../dao/DAOInstalaciones');
-const session = require('express-session');
+const multer = require('multer');
+const multerFactory = multer({ storage: multer.memoryStorage() });
 
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
@@ -51,6 +52,8 @@ router.post('/InicioSesion', async (req, res) => {
                     req.session.email = email;
                     req.session.Id = user.Id;
                     req.session.rol = user.rol;
+                    console.log(user.imagen_perfil);
+                    req.session.imagen = user.imagen_perfil;
 
                     if (user.validado == '0') {
                         return res.redirect('/validado');
@@ -89,7 +92,7 @@ router.get('/registro', (req, res) => {
     });
 });
 
-router.post('/registrar', (req, res) => {
+router.post('/registrar', multerFactory.single('imagen'), (req, res) => {
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
     let imagen = req.file ? req.file.buffer : null; // Se coge del req por que las files estan aqui
     const facultades = JSON.parse(req.body.facultades);

@@ -5,13 +5,13 @@
         <!-- Enlace al inicio con el nombre del sitio como botón -->
         <a href="/home" class="btn text-dark border-0 ms-4 d-flex justify-content-start align-items-center">
             <!-- Título del sitio -->
-            <% if (!Buffer.isBuffer(session.orgIcono)) {
-                    session.orgIcono = Buffer.from(session.orgIcono, 'base64');
-            } %>
-            <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
-            <h5 style="font-family: 'Cambria', cursive; font-size: 33px;"><strong><%= session.orgNombre %></strong></h5>
+            <% if (!Buffer.isBuffer(session.orgIcono)) { session.orgIcono=Buffer.from(session.orgIcono, 'base64' ); } %>
+                <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
+                <h5 style="font-family: 'Cambria', cursive; font-size: 33px;"><strong>
+                        <%= session.orgNombre %>
+                    </strong></h5>
         </a>
-    </div>    
+    </div>
     <!-- Columna 2 con el formulario de búsqueda -->
     <div class="col-sm">
         <!-- Formulario de búsqueda -->
@@ -28,22 +28,28 @@
     <div class="col col-2 d-flex justify-content-center align-items-center">
         <!-- Botón del perfil con menú desplegable -->
         <button class="btn btn-dark dropdown-toggle p-2" type="button" id="perfilDropdown" data-bs-toggle="dropdown" aria-expanded="false">
-            <i class="bi bi-person-circle"></i>
-        </button>
+            <% if (!Buffer.isBuffer(session.imagen)) {
+                session.imagen = Buffer.from(session.imagen, 'base64');
+            %>
+                <img src="data:image/png;base64,<%= session.imagen.toString('base64') %>" alt="Imagen de perfil" style="width: 32px; height: 32px; border-radius: 50%;">
+            <% } else { %>
+                <i class="bi bi-person-circle"></i>
+            <% } %>
+        </button>        
         <!-- Menú desplegable del perfil -->
         <ul class="dropdown-menu" aria-labelledby="perfilDropdown">
             <li><a class="dropdown-item" href="/perfil">Perfil</a></li>
-            <% if (session.rol === '1') { %>
+            <% if (session.rol==='1' ) { %>
                 <li><a class="dropdown-item" href="/home/organizacion">Organizacion</a></li>
-            <% } else { %>
-                <li><a class="dropdown-item" href="/reservas_usuario">Reservas</a></li>
-            <% } %>
-            <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
+                <% } else { %>
+                    <li><a class="dropdown-item" href="/reservas_usuario">Reservas</a></li>
+                    <% } %>
+                        <li><a class="dropdown-item" href="/logout">Cerrar Sesión</a></li>
         </ul>
         <!-- Botón del correo -->
         <a href="/email" class="btn text-dark border-0">
             <button class="boton" type="login"><i class="bi bi-envelope-plus"></i></button>
         </a>
     </div>
-    
+
 </header>

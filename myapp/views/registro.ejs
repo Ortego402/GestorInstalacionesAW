@@ -20,7 +20,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h5 class="card-title text-center">Registrarse</h5>
-                        <form action="/registrar" method="post" class="general">
+                        <form action="/registrar" method="post" class="general" enctype="multipart/form-data">
                             <% if (mensaje==null) { %>
                                 <% } else if(mensaje) { %>
                                     <div class="alert alert-danger alert-sm py-1 bg-gradient text-dark" role="alert">
@@ -93,8 +93,8 @@
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword(this)">
                                                     <button type="button" class="btn btn-outline-dark" id="showPasswordBtn2" onclick="togglePassword('confirmPassword', 'showPasswordBtn2')">Mostrar</button>
-                                                    <div id="confirmPasswordError" style="color: red;"></div>
                                                 </div>
+                                                <div id="confirmPasswordError" style="color: red;"></div>
                                             </div>
                                         </div>
                                         <div class="row">
