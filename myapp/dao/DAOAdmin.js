@@ -23,23 +23,6 @@ class DAOAdmin {
         });
     }
 
-    mostrarReservas(callback) {
-        this.pool.getConnection(function (err, connection) {
-            if (err) {
-                return callback("Error de acceso a la base de datos", null);
-            } else {
-                connection.query("SELECT * FROM ucm_aw_riu_res_reservas ORDER BY dia DESC, hora DESC", function (err, users) {
-                    connection.release();
-                    if (err) {
-                        return callback("Error de acceso a la base de datos", null);
-                    } else {
-                        return callback(null, users);
-                    }
-                });
-            }
-        });
-    }
-
     mostraUsuario(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -184,7 +167,7 @@ class DAOAdmin {
             callback(null, result);
         });
     }
-    
+
     buscarUsuarios(campo, valor, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -217,11 +200,12 @@ class DAOAdmin {
     }
 
     buscarReservas(campo, valor, callback) {
-        let sql = "SELECT r.*, i.nombre AS nombre_instalacion FROM ucm_aw_riu_res_reservas r " +
-                  "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id ";
-        
+        let sql = "SELECT r.*, i.nombre AS nombre_instalacion, u.facultad FROM ucm_aw_riu_res_reservas r " +
+            "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +
+            "LEFT JOIN ucm_aw_riu_usu_usuarios u ON r.usuEmail = u.email ";
+
         const values = [];
-    
+
         if (campo === 'instId') {
             sql += "WHERE i.nombre LIKE ?";
             values.push(`%${valor}%`);
@@ -237,13 +221,16 @@ class DAOAdmin {
         } else if (campo === 'usuEmail') {
             sql += "WHERE r.usuEmail LIKE ?";
             values.push(`%${valor}%`);
+        } else if (campo === 'facultad') {
+            sql += "WHERE u.facultad LIKE ?";
+            values.push(`%${valor}%`);
         } else {
             // Si el campo seleccionado no es válido, llama al callback con un error
             return callback('Campo de búsqueda no válido', null);
         }
-    
+
         sql += " ORDER BY r.dia DESC, r.hora DESC";
-    
+
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 callback("Error de acceso a la base de datos", null);
@@ -259,9 +246,6 @@ class DAOAdmin {
             }
         });
     }
-    
-
 }
-
 
 module.exports = DAOAdmin;

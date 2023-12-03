@@ -148,6 +148,9 @@ router.get('/buscarReservas', (req, res) => {
         case 'id':
             campoBD = 'Id';
             break;
+        case 'facultad':
+            campoBD = 'facultad';
+            break;
         case 'email':
             campoBD = 'usuEmail';
             break;
@@ -222,13 +225,12 @@ router.get('/usuarios', (req, res) => {
 
 
 router.get('/reservas', (req, res) => {
-
     daoinstalaciones.obtenerReservasConNombreInstalacion((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
+        console.log(results)
         res.render('listarReservas', { results: results, session: req.session });
-
     });
 });
 
@@ -250,34 +252,5 @@ router.post('/nueva_instalacion', multerFactory.single('imagen'), (req, res) => 
         return res.redirect('/home');
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

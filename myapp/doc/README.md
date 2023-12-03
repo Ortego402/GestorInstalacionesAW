@@ -5,9 +5,7 @@ Funcionalidades del Administrador
 # a. Validar registros de usuarios nuevos para permitir su acceso a la plataforma.
 # b. Enviar correo de confirmación de registro a los usuarios validados.
 # 4. Asignación de Roles: a. Asignar roles de administrador a usuarios específicos.
-5. Estadísticas y Listados:
-a. Obtener estadísticas de reservas por usuario o por facultad.
-b. Generar listados de usuarios por facultad.
+# 5. Estadísticas y Listados: a. Obtener estadísticas de reservas por usuario o por facultad. b. Generar listados de usuarios por facultad.
 # 6. Comunicación Interna: a. Enviar mensajes a usuarios a través de un buzón de correo interno.
 7. Gestión de lista de espera:
 a. Se enviará una notificación al primer usuario de la lista cuando haya habido alguna cancelación de reservas.
@@ -33,7 +31,7 @@ Funcionalidades según la nota:
 # ● Administrador y Usuario: Cierre de sesión
 ● Usuario: Reserva de instalaciones (Falta formato para reserva) FALTARIA HACER QUE LAS HORAS DEL DIA QUE ESTEN OCUPADAS NO SE PUEDAN ESCOGER (//const horasDeReservas = results.map(reserva => reserva.hora);)
 # ● Administrador: Historial de reservas de un usuario.
-● Administrador: Historial de reservas de una instalación.
+# ● Administrador: Historial de reservas de una instalación.
 # ● Ventanas modales
 
 6
