@@ -335,7 +335,6 @@ router.post('/obtener_horas_disponibles', (req, res) => {
         if (err) {
             return res.status(500).send('Error al eliminar la reserva');
         }
-        console.log(data);
         res.json({ horasDisponibles: data });
     });
 });
