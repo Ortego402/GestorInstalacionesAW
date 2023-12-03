@@ -18,7 +18,7 @@ class DAOInstalaciones {
                 if (err) {
                     return callback("Error al ejecutar la consulta en la base de datos", null);
                 }
-                callback(null, instalaciones);
+                return callback(null, instalaciones);
             });
         });
     }
@@ -28,14 +28,14 @@ class DAOInstalaciones {
     searchInstalaciones(busqueda, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM UCM_AW_RIU_INS_Instalaciones WHERE nombre LIKE ?", [`%${busqueda}%`], function (err, instalaciones) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, instalaciones);
+                        return callback(null, instalaciones);
                     }
                 });
             }
@@ -45,14 +45,14 @@ class DAOInstalaciones {
     getInstalacion(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query("SELECT * FROM UCM_AW_RIU_INS_Instalaciones WHERE id LIKE ?", [id], function (err, instalacion) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos", null);
+                        return callback("Error de acceso a la base de datos", null);
                     } else {
-                        callback(null, instalacion[0]);
+                        return callback(null, instalacion[0]);
                     }
                 });
             }
@@ -86,9 +86,8 @@ class DAOInstalaciones {
     obtenerReservasPorInstalacion(id, callback){
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
-                console.log("holaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa")
                 connection.query(
                     "SELECT * FROM ucm_aw_riu_res_reservas r " +
                     "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +
@@ -96,10 +95,10 @@ class DAOInstalaciones {
                     [id], function (err, results) {
                         connection.release();
                         if (err) {
-                            callback("Error de acceso a la base de datos", null);
+                            return callback("Error de acceso a la base de datos", null);
                         } else {
                             console.log(results);
-                            callback(null, results);
+                            return callback(null, results);
                         }
                     }
                 );
@@ -110,14 +109,14 @@ class DAOInstalaciones {
     reservaInstalacion(id, dia, hora, email, callback){
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos");
             } else {
                 connection.query("INSERT INTO `ucm_aw_riu_res_reservas` (`dia`, `hora`, `usuEmail`, `instId`)VALUES ( ?, ?, ?, ?);", [dia, hora, email, id], function (err) {
                     connection.release();
                     if (err) {
-                        callback("Error de acceso a la base de datos");
+                        return callback("Error de acceso a la base de datos");
                     } else {
-                        callback(null);
+                        return callback(null);
                     }
                 });
             }

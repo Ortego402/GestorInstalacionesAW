@@ -29,7 +29,7 @@
                 <li class="breadcrumb-item d-flex align-items-center">
                     <a href="/home" class="text-decoration-none">Home</a>
                 </li>
-                <li class="breadcrumb-item active" aria-current="page">Instalación</li>
+                <li class="breadcrumb-item active" aria-current="page"><%= results.nombre %></li>
             </ol>
         </nav>
 
@@ -52,11 +52,8 @@
                             <!-- Columna para el contenido de la tarjeta (debajo de la imagen) -->
                             <div class="col-md-12">
                                 <div class="card-body">
-                                    <h5 class="card-title">
-                                        <%= results.nombre %>
-                                    </h5>
-                                    <p class="card-text">Tipo de reserva: <%= results.tipoReserva %>
-                                    </p>
+                                    <h5 class="card-title"><%= results.nombre %></h5>
+                                    <p class="card-text" id="tipo">Tipo de reserva: <%= results.tipoReserva %></p>
                                     <p class="card-text">Aforo: <%= results.aforo %> personas</p>
                                     <p class="card-text">Horario: <%= results.horaInicio %> - <%= results.horaFin %>
                                     </p>
@@ -70,39 +67,51 @@
                     <% if (session.rol==='1') { %>
                         <!-- Contenedor del historial de reservas con scrollbar -->
                         <div class="reserva-container mt-2">
-                            <% reservas.forEach(reserva => { %>
-                                <!-- Tarjeta de reserva -->
-                                <div class="card mb-2">
-                                    <div class="card-body ">
-                                        <div class="text-start">
-                                            <h5 class="card-title">Reserva </h5>
-                                            <div class ="d-flex justify-content-between mt-3">
-                                                <p class="card-text">Email: <%= reserva.usuEmail %></p>
-                                                <p class="card-text me-3">Día: <%= reserva.dia %></p>
-                                                <p class="card-text me-3">Hora: <%= reserva.hora %></p>
+                            <% if (reservas.length > 0) { %>
+                                <% reservas.forEach(reserva => { %>
+                                    <!-- Tarjeta de reserva -->
+                                    <div class="card mb-2">
+                                        <div class="card-body ">
+                                            <div class="text-start">
+                                                <h5 class="card-title">Reserva </h5>
+                                                <div class ="d-flex justify-content-between mt-3">
+                                                    <p class="card-text">Email: <%= reserva.usuEmail %></p>
+                                                    <p class="card-text me-3" id="tipo" >Día: <%= reserva.dia %></p>
+                                                    <p class="card-text me-3">Hora: <%= reserva.hora %></p>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
+                                <% }) %>                            
+                            <% } else { %>
+                                <!-- Mensaje si no hay reservas -->
+                                <div class="d-flex justify-content-center align-content-center mt-2">
+                                    <h5>No hay reservas en esta instalación.</h5>
                                 </div>
-                            <% }) %>                            
+                            <% } %>                                       
                         </div>
                     <% } else { %>
-                        <!-- Formulario de reserva -->
-                        <% if (mensaje==null) { %>
-                            <% } else if(mensaje) { %>
-                                <div class="alert alert-success bg-gradient text-dark" role="alert">
-                                    <%= mensaje %>
-                                </div>
+                        <% if(mensaje != 'null' && mensaje != "" ) { %>
+                        <div class="alert alert-danger bg-danger text-light" role="alert">
+                            <%= mensaje %>
+                        </div>
+                        <% } else if (mensaje == 'null' ) { %>
+                        <div class="alert alert-success bg-success bg-gradient text-light" role="alert">
+                            Reserva realizada con éxito.
+                        </div>
                         <% } %>
+                        <!-- Formulario de reserva -->
                         <form onsubmit="return validarFormulario()"  action="/realizar_reserva"  method="POST">
-                            <div class="mb-5">
+                            <div class="mb-3">
                                 <label for="dia" class="form-label text-start">Día de la Reserva</label>
                                 <input type="date" class="form-control" id="dia" name="dia" required>
                             </div>
-                            <div class="mb-5">
-                                <button type="button" class="btn btn-dark btn p-2" id="btnGenerarHoras">Ver las horas disponibles para el dia seleccionado</button>
+                            <div class="mb-4">
+                                <div class="d-grid gap-2">
+                                    <button type="button" class="btn btn-dark btn p-2" id="btnGenerarHoras">Ver las horas disponibles para el dia seleccionado</button>
+                                </div>
                             </div>
-                            <div class="mb-5" id="seleccionHoras">
+                            <div class="mb-3" id="seleccionHoras">
                                 <label for="hora" class="form-label text-start">Hora de la Reserva</label>
                                 <select class="form-select" id="hora" name="hora" required>
                                     <!-- Aquí se generan dinámicamente las opciones de horas cada media hora -->
@@ -111,6 +120,7 @@
                             <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
                             <input type="hidden" id="horaini" name="horaini" value="<%= results.horaInicio %>">
                             <input type="hidden" id="horafin" name="horafin" value="<%= results.horaFin %>">
+                            <input type="hidden" id="aforo" name="aforo" value="<%= results.aforo %>">
                             <div class="d-grid gap-2">
                                 <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
                             </div>

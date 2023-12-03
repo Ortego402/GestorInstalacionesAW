@@ -233,7 +233,6 @@ class DAOUsuarios {
         });
     }
 
-
     gethoras(idInstalacion, fecha, callback) {
         const query = 'SELECT hora FROM ucm_aw_riu_res_reservas WHERE instId = ? and dia = ?';
         this.pool.query(query, [idInstalacion, fecha], (err, result) => {
@@ -244,7 +243,18 @@ class DAOUsuarios {
         });
     }
 
-}
+    getNumReservas(idInstalacion, dia, hora, callback) {
+        const query = 'SELECT COUNT(*) AS numReservas FROM ucm_aw_riu_res_reservas WHERE instId = ? AND dia = ? AND hora = ?';
+        
+        this.pool.query(query, [idInstalacion, dia, hora], (err, result) => {
+            if (err) {
+                return callback('Error al obtener el número de reservas para ese día y hora', null);
+            }
+            const numReservas = result[0] ? result[0].numReservas : 0;
+            return callback(null, numReservas);
+        });
+    }    
 
+}
 
 module.exports = DAOUsuarios;

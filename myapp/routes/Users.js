@@ -175,16 +175,23 @@ router.get('/logout', (req, res) => {
 
 
 router.post('/realizar_reserva', (req, res) => {
-
-    const {instalacionId, dia, hora} = req.body;
+    const {instalacionId, dia, hora, aforo} = req.body;
     const email = req.session.email;
-    
-    daoinstalaciones.reservaInstalacion(instalacionId, dia, hora, email, (err, results) => {
+    daoUser.getNumReservas(instalacionId, dia, hora, (err, numReservas) => {
         if (err) {
-            return res.status(500).json({ error: 'Error de la base de datos' });
+            return res.status(500).send('Error al eliminar la reserva');
         }
-        req.session.mensaje = 'Reserva realizada';
-        return res.redirect('/reserva/'+ instalacionId);
+        if(numReservas >= aforo){
+            return res.redirect('/reserva/'+ instalacionId + '?mensaje=' + encodeURIComponent('Aforo lleno. Por favor, elige otra hora.'));
+        }
+        else{
+            daoinstalaciones.reservaInstalacion(instalacionId, dia, hora, email, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error de la base de datos' });
+                }
+                return res.redirect('/reserva/'+ instalacionId + '?mensaje=' + encodeURIComponent('null'));
+            });
+        }
     });
 });
 
@@ -192,7 +199,6 @@ router.post('/realizar_reserva', (req, res) => {
 router.get('/email', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
     daoUser.getEmailsUser(req.session.email, (err, results) => {
-        console.log(err);
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         } 
@@ -241,8 +247,9 @@ router.get('/servicios', (req, res) => {
 
 //no se como se hace lo que habia en app.js antes no lo entiendo
 router.get('/reserva/:id', (req, res) => {
-
     const id = req.params.id;
+    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
+
     daoinstalaciones.getInstalacion(id, (err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -251,9 +258,7 @@ router.get('/reserva/:id', (req, res) => {
             if (err) {
                 return res.status(500).json({ error: 'Error de la base de datos' });
             }
-            const mensaje = req.session.mensaje || '';
-            req.session.mensaje = '';
-            return res.render('reserva', { results: results, session: req.session, reservas, mensaje});
+            return res.render('reserva', { results: results, session: req.session, reservas : reservas, mensaje : mensaje});
         });
     });
 
