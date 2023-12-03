@@ -64,10 +64,8 @@ $(document).ready(function () {
                 // Mostrar todas las horas disponibles para instalación individual
                 for (var hora = new Date('1970-01-01T' + horaInicio + ':00'); hora <= new Date('1970-01-01T' + horaFin + ':00'); hora.setMinutes(hora.getMinutes() + 30)) {
                     var formattedHour = hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0');
-                    console.log(formattedHour)
                     // Contar el número de reservas para esta hora
                     var numReservas = reservas.filter(reserva => reserva.hora === formattedHour).length;
-                    console.log(numReservas)
 
                     // Verificar si el número de reservas es igual al aforo
                     var isDisabled = numReservas >= parseInt($('#aforo').val());
