@@ -204,12 +204,18 @@ router.get('/email', (req, res) => {
 router.get('/email/:id', (req, res) => {
     const id = req.params.id;
 
-    daoUser.getEmail(id, (err, results) => {
-
+    daoUser.getEmail(id, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('email_individual', { result: results[0], session: req.session });
+        if(result.leido == '0'){
+            daoUser.leerEmail(id, (err) => {
+                if (err) {
+                    return res.status(500).json({ error: 'Error de la base de datos' });
+                }
+            });
+        }
+        return res.render('email_individual', { result: result, session: req.session });
     });
 });
 

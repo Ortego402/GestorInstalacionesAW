@@ -60,7 +60,25 @@ class DAOUsuarios {
                         return callback("Error de acceso a la base de datos", null);
                     }
 
-                    return callback(null, result);
+                    return callback(null, result[0]);
+                });
+            };
+        });
+    }
+
+    leerEmail(id, callback) {
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos", null);
+            } else {
+                // Realizar el UPDATE para marcar el correo como leído
+                connection.query('UPDATE ucm_aw_riu_emails SET leido = ? WHERE id = ?', ['1', id], (err) => {
+                    connection.release();
+                    if (err) {
+                        return callback("Error al actualizar el estado de lectura");
+                    }
+
+                    return callback(null);
                 });
             };
         });
@@ -72,7 +90,7 @@ class DAOUsuarios {
                 return callback('Error de acceso a la base de datos');
             }
             console.log(mensaje)
-            connection.query('INSERT INTO ucm_aw_riu_emails (correo_envia, correo_destino, asunto, mensaje) VALUES (?, ?, ?, ?)', [correo_envia, correo_destino, asunto, mensaje], (err) => {
+            connection.query('INSERT INTO ucm_aw_riu_emails (correo_envia, correo_destino, asunto, mensaje, leido) VALUES (?, ?, ?, ?, ?)', [correo_envia, correo_destino, asunto, mensaje, '0'], (err) => {
                 connection.release();
                 if (err) {
                     return callback('Error al insertar el email en la base de datos');
@@ -106,15 +124,15 @@ class DAOUsuarios {
             if (err) {
                 return callback('Error en la consulta de la base de datos.', null);
             }
-    
+
             if (results.length === 0) {
                 return callback('El correo no existe.', null);
             }
-    
+
             return callback(null, results[0]);
         });
     }
-    
+
 
     updateUser(req, nombre, apellido1, apellido2, facultad, curso, grupo, email, imagen, callback) {
         const checkEmailQuery = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
@@ -154,7 +172,7 @@ class DAOUsuarios {
                 return callback(null);
             }
         });
-    }    
+    }
 
     reservasUser(email, callback) {
         this.pool.getConnection(function (err, connection) {

@@ -76,20 +76,21 @@
                                                             <div class="mb-3">
                                                                 <label for="facultad">Facultad</label>
                                                                 <select class="form-control" id="facultad" name="facultad" required>
-                                                                    <% facultades.forEach(facultad => { %>
-                                                                        <option value="<%= facultad.facultad %>" <% if (facultad.facultad === result.facultad) { %>selected<% } %>>
-                                                                            <%= facultad.facultad %>
+                                                                    <% facultades.forEach(facultad=> { %>
+                                                                        <option value="<%= facultad.facultad %>" <% if (facultad.facultad===result.facultad) { %>selected<% } %>>
+                                                                                <%= facultad.facultad %>
                                                                         </option>
-                                                                    <% }); %>
+                                                                        <% }); %>
                                                                 </select>
-                                                            </div>                                                            
+                                                            </div>
                                                             <div class="mb-3">
                                                                 <label for="curso">Curso</label>
-                                                                <input type="number" class="form-control" id="curso" name="curso" value="<%= result.curso %>" required>
+                                                                <input type="number" class="form-control" id="curso" name="curso" value="<%= result.curso %>" required min="1">
                                                             </div>
                                                             <div class="mb-3">
                                                                 <label for="grupo">Grupo</label>
-                                                                <input type="text" class="form-control" id="grupo" name="grupo" value="<%= result.grupo %>" required>
+                                                                <input type="text" class="form-control" id="grupo" name="grupo" value="<%= result.grupo %>" required oninput="validateGroup(this)">
+                                                                <div id="groupError" style="color: red;"></div>
                                                             </div>
                                                             <!-- Campo para cargar una nueva imagen -->
                                                             <div class="mb-3">
@@ -111,6 +112,19 @@
 
 <!-- Inclusión del pie de página -->
 <%- include('footer.ejs') %>
+    <script>
+        function validateGroup(input) {
+            var regex = /^[A-Z]+$/;
+            var errorMessage = document.getElementById('groupError');
+            if (!regex.test(input.value)) {
+                errorMessage.textContent = 'Debe ser una única letra mayúscula.';
+                input.setCustomValidity('Debe ser una única letra mayúscula.'); // Invalida el campo para que no se envíe el formulario
+            } else {
+                errorMessage.textContent = ''; // Borra el mensaje de error
+                input.setCustomValidity(''); // Restablece la validez del campo
+            }
+        }
+    </script>
     </body>
 
 </html>

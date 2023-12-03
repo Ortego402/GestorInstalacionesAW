@@ -8,15 +8,14 @@ Funcionalidades del Administrador
 5. Estadísticas y Listados:
 a. Obtener estadísticas de reservas por usuario o por facultad.
 b. Generar listados de usuarios por facultad.
-6. Comunicación Interna:
-a. Enviar mensajes a usuarios a través de un buzón de correo interno.
+# 6. Comunicación Interna: a. Enviar mensajes a usuarios a través de un buzón de correo interno.
 7. Gestión de lista de espera:
 a. Se enviará una notificación al primer usuario de la lista cuando haya habido alguna cancelación de reservas.
 
 Funcionalidades del Usuario
 # 1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
-# 2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
-3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
+2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
+# 3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
 
 Funcionalidades Comunes
 # 1. Inicio de Sesión: Iniciar sesión en la plataforma utilizando correo de la UCM y contraseña.
@@ -40,9 +39,9 @@ Funcionalidades según la nota:
 6
 ● Todas las anteriores
 # ● Administrador: Envío de correo de validación de usuario
-● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Organización
-● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Facultad.
-● Usuario: Envío de correo tanto al administrador como a cualquier otro usuario de la Organización.
+# ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Organización
+# ● Administrador: Envío de mensajes a cualquier usuario dentro de la misma Facultad.
+# ● Usuario: Envío de correo tanto al administrador como a cualquier otro usuario de la Organización.
 
 8
 ● Todas las anteriores
