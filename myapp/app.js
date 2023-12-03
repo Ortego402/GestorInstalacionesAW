@@ -29,7 +29,6 @@ app.use(session({
 }));
 app.use(logger('dev'));
 
-
 // Middleware para archivos estáticos (CSS, imágenes, etc.)
 app.use(express.static(path.join(__dirname, 'public')));
 

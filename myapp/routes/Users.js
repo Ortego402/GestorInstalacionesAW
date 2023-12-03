@@ -12,6 +12,7 @@ const multerFactory = multer({ storage: multer.memoryStorage() });
 // Crear un pool de conexiones a la base de datos de MySQL 
 const pool = mysql.createPool(config.mysqlConfig);
 
+
 daoUser = new DAOUser(pool);
 daoAdmin = new DAOAdmin(pool);
 daoinstalaciones = new DAOInstalaciones(pool);
@@ -22,14 +23,16 @@ router.get('/', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-    console.log(req.session)
+    console.log('Antes de la consulta a la base de datos:', req.session);
     daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        return res.render('home.ejs', { results: results, session: req.session});
+        console.log('Después de la consulta a la base de datos:', req.session);
+        return res.render('home.ejs', { results: results, session: req.session });
     });
 });
+
 
 router.get('/validado', (req, res) => {
     return res.render('validado.ejs', { session: req.session });

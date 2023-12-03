@@ -119,17 +119,21 @@ class DAOUsuarios {
     }
 
     getUserByEmail(email, callback) {
-        const query = 'SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
-        this.pool.query(query, [email], (err, results) => {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
-                return callback('Error en la consulta de la base de datos.', null);
+                return callback('Error de acceso a la base de datos');
             }
-
-            if (results.length === 0) {
-                return callback('El correo no existe.', null);
-            }
-
-            return callback(null, results[0]);
+            connection.query('SELECT * FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?', [email], (err, results) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al insertar el email en la base de datos', null);
+                }
+                if (results.length === 0) {
+                    return callback('El correo no existe.', null);
+                }
+    
+                return callback(null, results[0]);
+            });
         });
     }
 
