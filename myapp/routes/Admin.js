@@ -242,8 +242,9 @@ router.get('/instalacion', (req, res) => {
 
 router.post('/nueva_instalacion', multerFactory.single('imagen'), (req, res) => {
     // Desestructura los datos del cuerpo de la solicitud y el archivo cargado
-    const { nombre, tipoReserva, aforo, horaInicio, horaFin } = req.body;
+    const { nombre, tipoReserva, horaInicio, horaFin } = req.body;
     let imagen = req.file.buffer; // Ajusta para usar null en lugar de una cadena vacía
+    let aforo = req.body.aforo ? 0 : req.body.aforo;
 
     daoAdmin.insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, (err, results) => {
         if (err) {
