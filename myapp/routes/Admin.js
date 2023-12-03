@@ -119,9 +119,9 @@ router.get('/buscarUsuarios', (req, res) => {
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
-    daoUsuarios.buscarUsuarios(campoBD, nombreBuscar, (err, results) => {
+    daoAdmin.buscarUsuarios(campoBD, nombreBuscar, (err, results) => {
 
-        if (err) {
+        if (err != null) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         res.render('listarUsuarios', { results: results, session: req.session });
@@ -148,6 +148,9 @@ router.get('/buscarReservas', (req, res) => {
         case 'id':
             campoBD = 'Id';
             break;
+        case 'facultad':
+            campoBD = 'facultad';
+            break;
         case 'email':
             campoBD = 'usuEmail';
             break;
@@ -155,7 +158,6 @@ router.get('/buscarReservas', (req, res) => {
             // Si el campo seleccionado no es válido, llama al callback con un error
             return es.status(500).json({ error: 'Campo de búsqueda no válido' });
     }
-
     // Realiza la búsqueda en la base de datos según el campo seleccionado
     daoAdmin.buscarReservas(campoBD, nombreBuscar, (err, results) => {
         if (err != null) {
@@ -223,13 +225,12 @@ router.get('/usuarios', (req, res) => {
 
 
 router.get('/reservas', (req, res) => {
-
     daoinstalaciones.obtenerReservasConNombreInstalacion((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
+        console.log(results)
         res.render('listarReservas', { results: results, session: req.session });
-
     });
 });
 
@@ -251,34 +252,5 @@ router.post('/nueva_instalacion', multerFactory.single('imagen'), (req, res) => 
         return res.redirect('/home');
     });
 });
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 module.exports = router;

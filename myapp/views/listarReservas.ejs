@@ -19,75 +19,90 @@
 <body>
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
-        <%- include('nav.ejs') %>
+    <%- include('nav.ejs') %>
 
-            <!-- Contenido principal -->
-            <main class="p-3">
-                <div class="container">
-                    <h2 class="mb-3 text-center titulo-dest">Lista de Reservas</h2>
-                    <div class="mb-3 d-flex align-items-center justify-content-center">
-                        <!-- Etiqueta "Buscar por:" y menú desplegable -->
-                        <form action="/buscarReservas" method="GET" class="input-group">
-                            <label for="buscarPor" class="form-label p-2 mt-1">Filtrar:</label>
-                            <div class="form-group me-2 border border-dark rounded">
-                                <select class="form-select" id="buscarPor" name="campoBuscar">
-                                    <option value="id">Id</option>
-                                    <option value="email">Email</option>
-                                    <option value="instalacion">Instalación</option>
-                                    <option value="fecha_inicio">Fecha Inicio</option>
-                                    <option value="fecha_fin">Fecha Fin</option>
-                                </select>
-                            </div>
-                            <!-- Caja de búsqueda y botón de búsqueda dentro del formulario -->
-                            <input id="busquedaGlobal" type="search" class="form-control border-dark rounded" placeholder="Buscar reservas..." name="nombreBuscar" required>
-                            <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
-                        </form>
+    <!-- Contenido principal -->
+    <main class="p-3">
+        <div class="container">
+            <h2 class="mb-3 text-center titulo-dest">Lista de Reservas</h2>
+            <div class="mb-3 d-flex align-items-center justify-content-center">
+                <!-- Etiqueta "Buscar por:" y menú desplegable -->
+                <form action="/home/buscarReservas" method="GET" class="input-group">
+                    <label for="buscarPor" class="form-label p-2 mt-1">Filtrar:</label>
+                    <div class="form-group me-2 border border-dark rounded">
+                        <select class="form-select" id="buscarPor" name="campoBuscar">
+                            <option value="id">Id</option>
+                            <option value="email">Email</option>
+                            <option value="facultad">Facultad</option> <!-- Nueva opción para buscar por facultad -->
+                            <option value="instalacion">Instalación</option>
+                            <option value="fecha_inicio">Fecha Inicio</option>
+                            <option value="fecha_fin">Fecha Fin</option>
+                        </select>
                     </div>
-                    <table class="table table-bordered">
-                        <thead class="border-dark">
-                            <tr>
-                                <th>Id</th>
-                                <th>Correo Electrónico</th>
-                                <th>Instalación</th>
-                                <th>Día</th>
-                                <th>Hora</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% results.forEach(function(reserva) { %>
-                                <tr>
-                                    <!-- Celdas de la tabla -->
-                                    <td>
-                                        <%= reserva.Id %>
-                                    </td>
-                                    <td>
-                                        <%= reserva.usuEmail %>
-                                    </td>
-                                    <td>
-                                        <%= reserva.nombre_instalacion %>
-                                    </td>
-                                    <td>
-                                        <%= reserva.dia %>
-                                    </td>
-                                    <td>
-                                        <%= reserva.hora %>
-                                    </td>
-                                </tr>
-                                <% }); %>
-                        </tbody>
-                    </table>
-                </div>
-            </main>
+                    <!-- Caja de búsqueda y botón de búsqueda dentro del formulario -->
+                    <input id="busqueda" type="search" class="form-control border-dark rounded" placeholder="Buscar reservas..." name="nombreBuscar" required>
+                    <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+                </form>
+            </div>
+            <table class="table table-bordered">
+                <thead class="border-dark">
+                    <tr>
+                        <th>Id</th>
+                        <th>Correo Electrónico</th>
+                        <th>Facultad</th> <!-- Nueva columna para facultad -->
+                        <th>Instalación</th>
+                        <th>Día</th>
+                        <th>Hora</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <% results.forEach(function(reserva) { %>
+                        <tr>
+                            <td><%= reserva.Id %></td>
+                            <td><%= reserva.usuEmail %></td>
+                            <td><%= reserva.facultad %></td> <!-- Nueva columna para mostrar la facultad -->
+                            <td><%= reserva.nombre_instalacion %></td>
+                            <td><%= reserva.dia %></td>
+                            <td><%= reserva.hora %></td>
+                        </tr>
+                    <% }); %>
+                </tbody>
+            </table>
+        </div>
+    </main>
 
-            <!-- Inclusión del pie de página -->
-            <%- include('footer.ejs') %>
-                <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-                <script src="ruta/a/jquery.min.js"></script>
-                <!-- Popper.js -->
-                <script src="ruta/a/popper.min.js"></script>
-                <!-- Bootstrap JS Bundle -->
-                <script src="ruta/a/bootstrap.bundle.min.js"></script>
+    <!-- Inclusión del pie de página -->
+    <%- include('footer.ejs') %>
+    <script src="https://code.jquery.com/jquery-3.6.4.min.js" integrity="sha256-oP6HI9z1XaZNBrJURtCoUT5SUnxFr8s3BzRl+cbzUq8=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            // Manejar el cambio en el menú desplegable
+            $('#buscarPor').change(function () {
+                var selectedOption = $(this).val();
 
+                // Reemplazar el contenido actual del campo de búsqueda global
+                $('#busqueda').replaceWith('<input id="busqueda" type="search" class="form-control border-dark rounded" placeholder="Buscar reservas..." name="nombreBuscar" required>');
+
+                if (selectedOption === 'fecha_inicio' || selectedOption === 'fecha_fin') {
+                    // Si la opción seleccionada es fecha_inicio o fecha_fin, cambiar el tipo de entrada a fecha
+                    $('#busqueda').attr('type', 'date');
+                } else {
+                    // En caso contrario, volver a cambiar el tipo de entrada a texto
+                    $('#busqueda').attr('type', 'search');
+                }
+            });
+
+            // Manejar la presentación correcta del formulario
+            $('form').submit(function (event) {
+                // Evitar el envío del formulario si hay campos de fecha ocultos
+                if ($('#busqueda').attr('type') === 'date' && $('#busqueda').is(':hidden')) {
+                    event.preventDefault();
+                    alert('Por favor, selecciona una fecha válida.');
+                }
+            });
+        });
+    </script>
 </body>
 
 </html>

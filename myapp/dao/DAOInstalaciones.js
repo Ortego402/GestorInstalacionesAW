@@ -62,18 +62,20 @@ class DAOInstalaciones {
     obtenerReservasConNombreInstalacion(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
-                callback("Error de acceso a la base de datos", null);
+                return callback("Error de acceso a la base de datos", null);
             } else {
                 connection.query(
-                    "SELECT r.*, i.nombre AS nombre_instalacion FROM ucm_aw_riu_res_reservas r " +
+                    "SELECT r.*, i.nombre AS nombre_instalacion, u.facultad AS facultad " +
+                    "FROM ucm_aw_riu_res_reservas r " +
                     "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +
+                    "LEFT JOIN ucm_aw_riu_usu_usuarios u ON r.usuEmail = u.email " +
                     "ORDER BY r.dia DESC, r.hora DESC",
                     function (err, results) {
                         connection.release();
                         if (err) {
-                            callback("Error de acceso a la base de datos", null);
+                            return callback("Error de acceso a la base de datos", null);
                         } else {
-                            callback(null, results);
+                            return callback(null, results);
                         }
                     }
                 );
