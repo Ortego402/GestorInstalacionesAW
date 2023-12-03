@@ -5,11 +5,18 @@
         <!-- Enlace al inicio con el nombre del sitio como botón -->
         <a href="/home" class="btn text-dark border-0 ms-4 d-flex justify-content-start align-items-center">
             <!-- Título del sitio -->
-            <% if (session.orgIcono && !Buffer.isBuffer(session.orgIcono)) { session.orgIcono=Buffer.from(session.orgIcono, 'base64' ); } %>
-                <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
-                <h5 style="font-family: 'Cambria', cursive; font-size: 33px;" class="mt-2"><strong>
-                        <%= session.orgNombre %>
-                </strong></h5>
+            <% if (session.orgIcono && !Buffer.isBuffer(session.orgIcono)) { 
+                session.orgIcono = Buffer.from(session.orgIcono, 'base64' );
+            } %>
+          
+          <% if (session.orgIcono) { %>
+              <img src="data:image/png;base64, <%= session.orgIcono.toString('base64') %>" width="80" alt="Imagen">
+          <% } %>
+          
+          <h5 style="font-family: 'Cambria', cursive; font-size: 33px;" class="mt-2"><strong>
+              <%= session.orgNombre %>
+          </strong></h5>
+          
         </a>
     </div>
     <!-- Columna 2 con el formulario de búsqueda -->

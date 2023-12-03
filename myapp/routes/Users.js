@@ -311,13 +311,24 @@ router.get('/reservas_usuario',(req, res) => {
 // Eliminar reserva del usuario
 router.post('/reservas_usuario', (req, res) => {
     const idReserva = req.body.reservaId;
-    console.log("holaaaaaaaaaaaaaaaaa")
-    console.log(req.body.reservaId);
     daoUser.eliminarReserva(idReserva, (err) => {
         if (err) {
             return res.status(500).send('Error al eliminar la reserva');
         }
         return res.redirect('/reservas_usuario');
+    });
+});
+
+
+router.post('/obtener_horas_disponibles', (req, res) => {
+    const idInstalacion= req.body.instalacionId;
+    const fecha = req.body.fecha;
+    daoUser.gethoras(idInstalacion, fecha, (err, data) => {
+        if (err) {
+            return res.status(500).send('Error al eliminar la reserva');
+        }
+        console.log(data);
+        res.json({ horasDisponibles: data });
     });
 });
 

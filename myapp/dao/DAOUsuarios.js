@@ -233,6 +233,17 @@ class DAOUsuarios {
         });
     }
 
+
+    gethoras(idInstalacion, fecha, callback) {
+        const query = 'SELECT hora FROM ucm_aw_riu_res_reservas WHERE instId = ? and dia = ?';
+        this.pool.query(query, [idInstalacion, fecha], (err, result) => {
+            if (err) {
+                return callback('Error coger las horas para ese dia', null);
+            }
+            return callback(null, result);
+        });
+    }
+
 }
 
 
