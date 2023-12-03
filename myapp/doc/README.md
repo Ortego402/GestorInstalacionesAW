@@ -13,7 +13,7 @@ a. Se enviará una notificación al primer usuario de la lista cuando haya habid
 
 Funcionalidades del Usuario
 # 1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
-2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
+# 2. Reserva de Instalaciones: a. Realizar reservas de instalaciones seleccionando fecha y hora deseada.
 # 3. Correo Electrónico: a. Ver correos electrónicos recibidos. b. Enviar correos a otros usuarios de la misma organización.
 
 Funcionalidades Comunes
@@ -30,7 +30,7 @@ Funcionalidades según la nota:
 # ● Administrador: Validación de usuario
 # ● Administrador y Usuario: Inicio de sesión
 # ● Administrador y Usuario: Cierre de sesión
-● Usuario: Reserva de instalaciones (Falta formato para reserva) FALTARIA HACER QUE LAS HORAS DEL DIA QUE ESTEN OCUPADAS NO SE PUEDAN ESCOGER (//const horasDeReservas = results.map(reserva => reserva.hora);)
+# ● Usuario: Reserva de instalaciones (Falta formato para reserva)
 # ● Administrador: Historial de reservas de un usuario.
 # ● Administrador: Historial de reservas de una instalación.
 # ● Ventanas modales
@@ -56,6 +56,6 @@ Funcionalidades según la nota:
 
 10
 ● Todas las anteriores
-● Administrador y Usuario: Calendario interactivo de disponibilidad
+# ● Administrador y Usuario: Calendario interactivo de disponibilidad
 ● Administrador: Gestionar la Lista de espera
 ● Refactorización de código
