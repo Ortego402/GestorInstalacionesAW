@@ -119,9 +119,9 @@ router.get('/buscarUsuarios', (req, res) => {
     }
 
     // Realiza la búsqueda en la base de datos según el campo seleccionado
-    daoUsuarios.buscarUsuarios(campoBD, nombreBuscar, (err, results) => {
+    daoAdmin.buscarUsuarios(campoBD, nombreBuscar, (err, results) => {
 
-        if (err) {
+        if (err != null) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         res.render('listarUsuarios', { results: results, session: req.session });
@@ -155,7 +155,6 @@ router.get('/buscarReservas', (req, res) => {
             // Si el campo seleccionado no es válido, llama al callback con un error
             return es.status(500).json({ error: 'Campo de búsqueda no válido' });
     }
-
     // Realiza la búsqueda en la base de datos según el campo seleccionado
     daoAdmin.buscarReservas(campoBD, nombreBuscar, (err, results) => {
         if (err != null) {
