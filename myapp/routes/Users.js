@@ -333,11 +333,24 @@ router.post('/obtener_horas_disponibles', (req, res) => {
     const fecha = req.body.fecha;
     daoUser.gethoras(idInstalacion, fecha, (err, data) => {
         if (err) {
-            return res.status(500).send('Error al eliminar la reserva');
+            return res.status(500).send('Error al obtener las horas.');
         }
-        console.log(data);
         res.json({ horasDisponibles: data });
     });
 });
+
+router.post('/lista_espera', (req, res) => {
+    const idInstalacion = req.body.instalacionId;
+    const fecha = req.body.fecha;
+    const usuario = req.body.usuario;
+
+    daoUser.apuntarListaEspera(idInstalacion, fecha, usuario, (err) => {
+        if (err) {
+            return res.status(500).json({ success: false, message: 'Error al apuntarse en la lista.' });
+        }
+        res.json({ success: true, message: 'Te has apuntado a la lista de espera con éxito.' });
+    });
+});
+
 
 module.exports = router;

@@ -52,7 +52,7 @@ $(document).ready(function () {
         var fecha = $('#dia').val();
         var horaInicio = $('#horaini').val();
         var horaFin = $('#horafin').val();
-    
+        $('#hora').empty();
         // Hacer la petición AJAX para obtener las reservas
         $.ajax({
             url: '/obtener_horas_disponibles',
@@ -84,7 +84,16 @@ $(document).ready(function () {
     
                     $('#hora').append(option);
                 }
-    
+                var todasDeshabilitadas = $('#hora option:disabled').length === $('#hora option').length;
+
+                if (todasDeshabilitadas) {
+                    // Mostrar mensaje al usuario
+                    $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
+        
+                    // Mostrar botón para unirse a la lista de espera
+                    $('#btnListaEspera').show();
+                }
+        
                 // Mostrar el select después de generar las opciones
                 $('#seleccionHoras').show();
             },
@@ -93,7 +102,6 @@ $(document).ready(function () {
             }
         });
     }
-    
 
     function updateHourOptions(data, horaInicio, horaFin) {
         $('#hora').empty();
@@ -111,6 +119,59 @@ $(document).ready(function () {
             }
             $('#hora').append(option);
         }
+    
+        // Verificar si todas las opciones están deshabilitadas
+        var todasDeshabilitadas = $('#hora option:disabled').length === $('#hora option').length;
+    
+        if (todasDeshabilitadas) {
+            // Mostrar mensaje al usuario
+            $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
+    
+            // Mostrar botón para unirse a la lista de espera
+            $('#btnListaEspera').show();
+        }
     }
+
+     // Evento para unirse a la lista de espera
+     $('#btnListaEspera').on('click', function () {
+        apuntarseListaEspera();
+    });
+
+    function apuntarseListaEspera() {
+        // Deshabilitar el botón después de hacer clic
+        $('#btnListaEspera').prop('disabled', true);
+    
+        // Realizar la solicitud POST a /lista_espera
+        $.ajax({
+            url: '/lista_espera',
+            method: 'POST',
+            data: { fecha: $('#dia').val(), instalacionId: $('#instalacionId').val(), usuario: $('#usuario').val() },
+            success: function (response) {
+                // Éxito: mostrar mensaje de éxito al usuario en verde
+                mostrarMensaje(response.success, response.message, 'success');
+            },
+            error: function () {
+                // Error de red u otro: mostrar mensaje de error al usuario en rojo
+                mostrarMensaje(false, 'Error al apuntarse en la lista de espera.', 'error');
+            }
+        });
+    }
+    
+    function mostrarMensaje(esExito, mensaje, tipo) {
+        // Limpiar cualquier estilo anterior
+        $('#mensajeReservado').removeClass('text-success text-danger');
+    
+        // Agregar estilo según el tipo (success o error)
+        if (tipo === 'success') {
+            $('#mensajeReservado').addClass('text-success');
+        } else if (tipo === 'error') {
+            $('#mensajeReservado').addClass('text-danger');
+        }
+    
+        // Mostrar el mensaje
+        $('#mensajeReservado').text(mensaje);
+    }
+    
+    
 });
 

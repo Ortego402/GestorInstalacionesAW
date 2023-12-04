@@ -246,6 +246,16 @@ class DAOUsuarios {
         });
     }
 
+    apuntarListaEspera(idInstalacion, fecha, usuario, callback) {
+        const query = 'INSERT INTO ucm_aw_riu_list_listaespera (instId, fecha, usuEmail) VALUES (?, ?, ?)';
+        this.pool.query(query, [idInstalacion, fecha, usuario], (err) => {
+            if (err) {
+                return callback('Error al insertar en la lista de espera');
+            }
+            return callback(null);
+        });
+    }    
+
     getNumReservas(idInstalacion, dia, hora, callback) {
         const query = 'SELECT COUNT(*) AS numReservas FROM ucm_aw_riu_res_reservas WHERE instId = ? AND dia = ? AND hora = ?';
         

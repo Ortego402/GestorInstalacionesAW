@@ -54,12 +54,16 @@
                                                     <!-- Columna para el contenido de la tarjeta (debajo de la imagen) -->
                                                     <div class="col-md-12">
                                                         <div class="card-body">
-                                                            <h5 class="card-title"><%= results.nombre %></h5>
-                                                            <p class="card-text" id="tipo">Tipo de reserva: <%= results.tipoReserva %></p>
-                                                            <% if (results.aforo != 0) { %>
+                                                            <h5 class="card-title">
+                                                                <%= results.nombre %>
+                                                            </h5>
+                                                            <p class="card-text" id="tipo">Tipo de reserva: <%= results.tipoReserva %>
+                                                            </p>
+                                                            <% if (results.aforo !=0) { %>
                                                                 <p class="card-text">Aforo: <%= results.aforo %> personas</p>
-                                                            <% } %>
-                                                            <p class="card-text">Horario: <%= results.horaInicio %> - <%= results.horaFin %></p>
+                                                                <% } %>
+                                                                    <p class="card-text">Horario: <%= results.horaInicio %> - <%= results.horaFin %>
+                                                                    </p>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -119,6 +123,7 @@
                                                                         </select>
                                                                     </div>
                                                                     <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
+                                                                    <input type="hidden" id="usuario" name="usuario" value="<%= session.email %>">
                                                                     <input type="hidden" id="horaini" name="horaini" value="<%= results.horaInicio %>">
                                                                     <input type="hidden" id="horafin" name="horafin" value="<%= results.horaFin %>">
                                                                     <input type="hidden" id="aforo" name="aforo" value="<%= results.aforo %>">
@@ -126,7 +131,10 @@
                                                                         <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
                                                                     </div>
                                                                 </form>
-
+                                                                <div id="mensajeReservado" class="mb-3 mt-4 text-center fw-bold"></div>
+                                                                <div class="d-grid gap-2">
+                                                                    <button id="btnListaEspera" class="btn btn-dark btn p-2" style="display: none;">Unirse a la lista de espera</button>
+                                                                </div>
                                                                 <% } %>
                                         </div>
                                     </div>
