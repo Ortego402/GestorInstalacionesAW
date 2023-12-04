@@ -101,29 +101,38 @@
                                                                     <% } %>
                                                 </div>
                                                 <% } else { %>
-                                                    <% if(mensaje !='null' && mensaje !="" ) { %>
-                                                        <div class="alert alert-danger bg-danger text-light" role="alert">
-                                                            <%= mensaje %>
-                                                        </div>
-                                                        <% } else if (mensaje=='null' ) { %>
+                                                    <div id="mensaje-exitoerror">
+                                                        <% if (mensaje && mensaje !== 'null') { %>
+                                                            <div class="alert alert-danger bg-danger text-light" role="alert">
+                                                                <%= mensaje %>
+                                                            </div>
+                                                            <script>
+                                                                // Limpia el mensaje después de 3000 milisegundos (3 segundos)
+                                                                setTimeout(function() {
+                                                                    document.getElementById('mensaje-container').innerHTML = '';
+                                                                }, 3000);
+                                                            </script>
+                                                        <% } else if (mensaje === 'null') { %>
                                                             <div class="alert alert-success bg-success bg-gradient text-light" role="alert">
                                                                 Reserva realizada con éxito.
                                                             </div>
-                                                            <% } %>
+                                                        <% } %>
+                                                    </div>
                                                                 <!-- Formulario de reserva -->
                                                                 <form onsubmit="return validarFormulario()" action="/realizar_reserva" method="POST">
+                                                                    <div id="mensaje-container"></div>
                                                                     <div class="mb-3">
                                                                         <label for="dia" class="form-label text-start">Día de la Reserva</label>
                                                                         <input type="date" class="form-control" id="dia" name="dia" required>
                                                                     </div>
                                                                     <div class="mb-3" id="seleccionHoras">
                                                                         <label for="hora" class="form-label text-start">Hora de la Reserva</label>
-                                                                        <select class="form-select" id="hora" name="hora" required>
-                                                                            <!-- Aquí se generan dinámicamente las opciones de horas cada media hora -->
-                                                                        </select>
+                                                                        <div class="d-flex overflow-auto" id="horaContainer">
+                                                                            <!-- Aquí se generarán dinámicamente las tarjetas de horas -->
+                                                                        </div>
                                                                     </div>
+                                                                    <input type="hidden" id="hora" name="hora">                                                                    
                                                                     <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
-                                                                    <input type="hidden" id="usuario" name="usuario" value="<%= session.email %>">
                                                                     <input type="hidden" id="horaini" name="horaini" value="<%= results.horaInicio %>">
                                                                     <input type="hidden" id="horafin" name="horafin" value="<%= results.horaFin %>">
                                                                     <input type="hidden" id="aforo" name="aforo" value="<%= results.aforo %>">
@@ -131,6 +140,8 @@
                                                                         <button type="submit" class="btn btn-dark btn p-2">Reservar</button>
                                                                     </div>
                                                                 </form>
+
+                                                                
                                                                 <div id="mensajeReservado" class="mb-3 mt-4 text-center fw-bold"></div>
                                                                 <div class="d-grid gap-2">
                                                                     <button id="btnListaEspera" class="btn btn-dark btn p-2" style="display: none;">Unirse a la lista de espera</button>

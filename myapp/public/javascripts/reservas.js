@@ -104,38 +104,68 @@ $(document).ready(function () {
     }
 
     function updateHourOptions(data, horaInicio, horaFin) {
-        $('#hora').empty();
+        var horaContainer = $('#horaContainer');
+        horaContainer.empty();
+    
+        var todasDeshabilitadas = true;
+    
         for (var hora = new Date('1970-01-01T' + horaInicio + ':00'); hora <= new Date('1970-01-01T' + horaFin + ':00'); hora.setMinutes(hora.getMinutes() + 30)) {
             var formattedHour = hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0');
             var isDisabled = data.some(item => item.hora === formattedHour);
-            var option = $('<option>', {
-                value: formattedHour,
-                text: formattedHour,
-                disabled: isDisabled
-            });
-            if (isDisabled) {
-                option.css('background-color', 'grey');
-                option.css('color', 'white');
+    
+            if (!isDisabled) {
+                todasDeshabilitadas = false;
             }
-            $('#hora').append(option);
+    
+            var cardClass = isDisabled ? 'bg-danger text-black' : 'bg-primary text-black'; // Clase de tarjeta roja si está ocupada
+    
+            var card = $('<button>', {
+                type: 'button',
+                class: 'card col-md-2 mx-2 ' + cardClass, // btn para estilizar como botón
+                html: '<div class="card-body text-center">' + formattedHour + '</div>'
+            });
+    
+            horaContainer.append(card);
+    
+            // Asignar el evento de clic a la tarjeta utilizando "on" fuera de la función click
+            card.click(handleCardClick);
         }
     
-        // Verificar si todas las opciones están deshabilitadas
-        var todasDeshabilitadas = $('#hora option:disabled').length === $('#hora option').length;
-    
+        // Verificar si todas las tarjetas están deshabilitadas
         if (todasDeshabilitadas) {
             // Mostrar mensaje al usuario
             $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
     
             // Mostrar botón para unirse a la lista de espera
             $('#btnListaEspera').show();
+        } else {
+            // Ocultar mensaje y botón de lista de espera si hay al menos una hora disponible
+            $('#mensajeReservado').text('');
+            $('#btnListaEspera').hide();
         }
     }
-
-     // Evento para unirse a la lista de espera
-     $('#btnListaEspera').on('click', function () {
+    
+    function handleCardClick() {
+        var formattedHour = $(this).text();  // Obtener el texto del botón, que es la hora
+        var isDisabled = $(this).hasClass('bg-danger');
+    
+        if (!isDisabled && !$(this).hasClass('selected')) {
+            // Eliminar la clase 'selected' de todas las tarjetas
+            $('.card').removeClass('selected');
+    
+            // Añadir la clase 'selected' a la tarjeta actual
+            $(this).addClass('selected');
+    
+            // Establecer la hora seleccionada en el campo oculto
+            $('#hora').val(formattedHour);
+        }
+    }
+    
+    // Evento para unirse a la lista de espera
+    $('#btnListaEspera').on('click', function () {
         apuntarseListaEspera();
     });
+    
 
     function apuntarseListaEspera() {
         // Deshabilitar el botón después de hacer clic
@@ -170,8 +200,39 @@ $(document).ready(function () {
     
         // Mostrar el mensaje
         $('#mensajeReservado').text(mensaje);
-    }
-    
+    }   
     
 });
+
+function validarFormulario() {
+    var horaSeleccionada = $('#hora').val();
+
+    if (!horaSeleccionada) {
+        // Muestra un mensaje de error
+        mostrarMensaje('Por favor, selecciona una hora válida.');
+        return false;
+    }
+
+    // Resto de la lógica de validación (si la tienes)
+
+    // Si todo está bien, permite que el formulario se envíe
+    return true;
+}
+
+function mostrarMensaje(mensaje) {
+    // Construye la estructura del mensaje con la clase de contenedor adicional
+    var mensajeHtml = '<div class="mensaje-container"><div class="alert alert-danger  bg-danger bg-gradient text-black">' + mensaje + '</div></div>';
+
+    // Inserta el mensaje en el contenedor
+    $('#mensaje-container').html(mensajeHtml);
+
+    // Limpia el mensaje después de unos segundos (puedes ajustar este tiempo)
+    setTimeout(function() {
+        $('#mensaje-container').empty();
+    }, 3000); // 3000 milisegundos = 3 segundos
+}
+
+setTimeout(function() {
+    document.getElementById('mensaje-exitoerror').innerHTML = '';
+}, 3000);
 
