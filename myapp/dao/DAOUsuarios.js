@@ -224,7 +224,6 @@ class DAOUsuarios {
         });
     }
 
-
     // Método para eliminar una reserva por su ID
     eliminarReserva(idReserva, callback) {
         const query = 'DELETE FROM 	ucm_aw_riu_res_reservas WHERE id = ?';
@@ -233,6 +232,17 @@ class DAOUsuarios {
                 return callback('Error al eliminar la reserva', null);
             }
             return callback(null);
+        });
+    }
+
+    // Método para obtener una reserva por su ID
+    obtenerReserva(idReserva, callback) {
+        const query = 'SELECT * FROM ucm_aw_riu_res_reservas WHERE Id = ?';
+        this.pool.query(query, [idReserva], (err, result) => {
+            if (err) {
+                return callback('Error al eliminar la reserva', null);
+            }
+            return callback(null, result);
         });
     }
 
@@ -254,11 +264,33 @@ class DAOUsuarios {
             }
             return callback(null);
         });
+    }
+
+    obtenerListaEsperaInfo(idInstalacion, fecha, callback) {
+        const query = 'SELECT l.id, l.usuEmail, l.instId, l.fecha, i.nombre AS instalacion_nombre FROM ucm_aw_riu_list_listaespera l JOIN ucm_aw_riu_ins_instalaciones i ON l.instId = i.Id WHERE l.instId = ? AND l.fecha = ?';
+    
+        this.pool.query(query, [idInstalacion, fecha], (err, results) => {
+            if (err) {
+                return callback('Error al obtener información de la lista de espera', null);
+            }
+            return callback(null, results);
+        });
     }    
+
+    eliminarListaEspera(idLista, callback) {
+        const query = 'DELETE FROM ucm_aw_riu_list_listaespera WHERE id = ?';
+
+        this.pool.query(query, [idLista], (err) => {
+            if (err) {
+                return callback('Error al eliminar de la lista de espera');
+            }
+            return callback(null);
+        });
+    }
 
     getNumReservas(idInstalacion, dia, hora, callback) {
         const query = 'SELECT COUNT(*) AS numReservas FROM ucm_aw_riu_res_reservas WHERE instId = ? AND dia = ? AND hora = ?';
-        
+
         this.pool.query(query, [idInstalacion, dia, hora], (err, result) => {
             if (err) {
                 return callback('Error al obtener el número de reservas para ese día y hora', null);
@@ -266,7 +298,7 @@ class DAOUsuarios {
             const numReservas = result[0] ? result[0].numReservas : 0;
             return callback(null, numReservas);
         });
-    }    
+    }
 
 }
 

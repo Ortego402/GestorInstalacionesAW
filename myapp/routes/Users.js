@@ -315,18 +315,53 @@ router.get('/reservas_usuario',(req, res) => {
     });
 });
 
-
 // Eliminar reserva del usuario
 router.post('/reservas_usuario', (req, res) => {
     const idReserva = req.body.reservaId;
-    daoUser.eliminarReserva(idReserva, (err) => {
+    // Use the reservation ID to fetch details including instId and fecha_reserva
+    daoUser.obtenerReserva(idReserva, (err, reservaDetails) => {
         if (err) {
-            return res.status(500).send('Error al eliminar la reserva');
+            return res.status(500).send('Error al obtener detalles de la reserva');
         }
-        return res.redirect('/reservas_usuario');
+        const instId = reservaDetails[0].instId;
+        const fechaReserva = reservaDetails[0].dia;
+        // Now you have instId and fechaReserva, you can use them as needed
+        daoUser.obtenerListaEsperaInfo(instId, fechaReserva, (err, results) => {
+            if (err) {
+                return res.status(500).send('Error al obtener información de la lista de espera');
+            }
+            console.log(results)
+            if (results.length > 0) {
+                // Iterate over each row in the waiting list
+                results.forEach((filaListaEspera) => {
+                    // Delete the row from the waiting list
+                    daoUser.eliminarListaEspera(filaListaEspera.id, (err) => {
+                        if (err) {
+                            return res.status(500).send('Error al eliminar de la lista de espera');
+                        }
+                        // Call insertEmail to send an email to the user
+                        const correo_envia = 'Sistema@ucm.com';  // Set the sender's email address
+                        const correo_destino = filaListaEspera.usuEmail; // Set the recipient's email address
+                        const asunto = '¡Reserva Disponible!';
+                        const mensaje = 'Se ha liberado una reserva para la fecha ' + fechaReserva + ' en la instalación ' + filaListaEspera.instalacion_nombre + '.';
+                        
+                        daoUser.insertEmail(correo_envia, correo_destino, asunto, mensaje, (err) => {
+                            if (err) {
+                                return res.status(500).send('Error al enviar el correo');
+                            }
+                        });
+                    });
+                });
+            }
+            daoUser.eliminarReserva(idReserva, (err) => {
+                if (err) {
+                    return res.status(500).send('Error al eliminar la reserva');
+                }
+                return res.redirect('/reservas_usuario');
+            });
+        });
     });
 });
-
 
 router.post('/obtener_horas_disponibles', (req, res) => {
     const idInstalacion= req.body.instalacionId;
