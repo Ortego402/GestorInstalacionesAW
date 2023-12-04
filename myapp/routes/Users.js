@@ -23,13 +23,19 @@ router.get('/', (req, res) => {
 });
 
 router.get('/home', (req, res) => {
-    console.log('Antes de la consulta a la base de datos:', req.session);
     daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        console.log('Después de la consulta a la base de datos:', req.session);
-        return res.render('home.ejs', { results: results, session: req.session });
+        daoAdmin.mostrarOrganizacion((err, result) => {
+            if (err) {
+                return res.status(500).json({ error: 'Error interno del servidor' });
+            }
+            req.session.orgNombre = result.nombre;
+            req.session.orgDir = result.direccion;
+            req.session.orgIcono = result.imagen;
+            return res.render('home.ejs', { results: results, session: req.session });
+        });
     });
 });
 
@@ -38,7 +44,7 @@ router.get('/validado', (req, res) => {
     return res.render('validado.ejs', { session: req.session });
 });
 
-router.post('/InicioSesion', async (req, res) => {
+router.post('/InicioSesion', (req, res) => {
     const { email, password } = req.body;
     daoUser.getUserByEmail(email, (err, user) => {
         if (err) {
@@ -51,20 +57,11 @@ router.post('/InicioSesion', async (req, res) => {
                     req.session.email = email;
                     req.session.Id = user.Id;
                     req.session.rol = user.rol;
-                    console.log(user.imagen_perfil);
                     req.session.imagen = user.imagen_perfil;
-
-                    if (user.validado == '0') {
-                        return res.redirect('/validado');
-                    }
-                    daoAdmin.mostrarOrganizacion((err, result) => {
-                        if (err) {
-                            return res.status(500).json({ error: 'Error interno del servidor' });
+                    req.session.save(() => {
+                        if (user.validado === '0') {
+                            return res.redirect('/validado');
                         }
-                        req.session.orgNombre = result.nombre;
-                        req.session.orgDir = result.direccion;
-                        req.session.orgIcono = result.imagen;
-                        console.log(req.session)
                         return res.redirect('/home');
                     });
                 } else {
@@ -129,6 +126,7 @@ router.post('/registrar', multerFactory.single('imagen'), (req, res) => {
 
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
+    console.log(req.session);
     daoUser.checkEmail(req.session.email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -335,6 +333,7 @@ router.post('/obtener_horas_disponibles', (req, res) => {
         if (err) {
             return res.status(500).send('Error al eliminar la reserva');
         }
+        console.log(data);
         res.json({ horasDisponibles: data });
     });
 });

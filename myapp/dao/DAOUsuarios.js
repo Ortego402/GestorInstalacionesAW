@@ -131,7 +131,6 @@ class DAOUsuarios {
                 if (results.length === 0) {
                     return callback('El correo no existe.', null);
                 }
-    
                 return callback(null, results[0]);
             });
         });
