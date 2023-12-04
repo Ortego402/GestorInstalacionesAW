@@ -27,15 +27,7 @@ router.get('/home', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        daoAdmin.mostrarOrganizacion((err, result) => {
-            if (err) {
-                return res.status(500).json({ error: 'Error interno del servidor' });
-            }
-            req.session.orgNombre = result.nombre;
-            req.session.orgDir = result.direccion;
-            req.session.orgIcono = result.imagen;
-            return res.render('home.ejs', { results: results, session: req.session });
-        });
+        return res.render('home.ejs', { results: results, session: req.session });
     });
 });
 
@@ -62,7 +54,17 @@ router.post('/InicioSesion', (req, res) => {
                         if (user.validado === '0') {
                             return res.redirect('/validado');
                         }
-                        return res.redirect('/home');
+                        daoAdmin.mostrarOrganizacion((err, result) => {
+                            if (err) {
+                                return res.status(500).json({ error: 'Error interno del servidor' });
+                            }
+                            req.session.orgNombre = result.nombre;
+                            req.session.orgDir = result.direccion;
+                            req.session.orgIcono = result.imagen;
+                            req.session.save(() => {
+                                return res.redirect('/home');
+                            });
+                        });
                     });
                 } else {
                     return res.render('login.ejs', { mensaje: 'Contraseña incorrecta.' });
