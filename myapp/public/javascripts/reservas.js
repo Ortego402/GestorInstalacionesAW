@@ -77,9 +77,10 @@ $(document).ready(function () {
     
                     var card = $('<button>', {
                         type: 'button',
-                        class: 'card col-md-2 mx-2 ' + cardClass,
+                        class: 'mx-2 fixed-width-card ' + cardClass,  // Agrega la clase fixed-width-card
                         html: '<div class="card-body text-center">' + formattedHour + '</div>'
                     });
+                    
     
                     // Asignar el evento de clic a la tarjeta utilizando "on" fuera de la función click
                     card.click(handleCardClick);
@@ -134,10 +135,11 @@ $(document).ready(function () {
     
             var card = $('<button>', {
                 type: 'button',
-                class: 'card col-md-2 mx-2 ' + cardClass, // btn para estilizar como botón
+                class: 'mx-2 fixed-width-card ' + cardClass,  // Agrega la clase fixed-width-card
                 html: '<div class="card-body text-center">' + formattedHour + '</div>'
             });
-    
+            
+
             horaContainer.append(card);
     
             // Asignar el evento de clic a la tarjeta utilizando "on" fuera de la función click

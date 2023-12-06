@@ -310,3 +310,13 @@ nav a {
 .breadcrumb {
     margin-left: 20px;
 }
+
+.fixed-width-card {
+    width: 600px;
+    cursor: pointer;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
+    height: 50px;
+}
+

@@ -1,24 +1,5 @@
 FALTA POR HACER:
 -Poner lo de miga de pan donde no haya y haga falta (miga de pan es: Home / Perfil)
--Responsive:
-    -Home HECHO
-    -Email HECHO
-    -Email individual HECHO
-    -Error HECHO
-    -Footer HECHO
-    -Header HECHO
-    -Instalacion HECHO
-    -ListarReservas HECHO
-    -ListarUsuarios HECHO
-    -Login HECHO
-    -MostrarReservas HECHO
-    -Nav HECHO
-    -Organización HECHO
-    -Perfil HECHO
-    -Registro HECHO
-    -Reserva (Falta las cards de las horas que salen mal)
-    -Validacion HECHO
-    -Validado HECHO
 
 SET GLOBAL max_allowed_packet=67108864;
 Funcionalidades del Administrador
