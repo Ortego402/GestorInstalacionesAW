@@ -221,17 +221,6 @@ nav a {
     z-index: -1; /* Coloca el fondo detrás de otros elementos */
 }
 
-/* Estilos para la tabla */
-.table {
-    border-radius: 10px; /* Bordes redondeados para la tabla */
-}
-
-/* Estilos para las celdas de la tabla */
-.table th,
-.table td {
-    text-align: center; /* Centrar el texto en las celdas */
-}
-
 .email-mensaje {
     display: none;
     padding-top: 10px;

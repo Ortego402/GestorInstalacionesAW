@@ -8,8 +8,8 @@ FALTA POR HACER:
     -Footer HECHO
     -Header
     -Instalacion HECHO
-    -ListarReservas
-    -ListarUsuarios
+    -ListarReservas HECHO
+    -ListarUsuarios HECHO
     -Login HECHO
     -MostrarReservas HECHO
     -Nav

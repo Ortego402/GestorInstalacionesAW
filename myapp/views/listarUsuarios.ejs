@@ -20,87 +20,102 @@
     <!-- Inclusión del encabezado y la barra de navegación -->
     <%- include('header.ejs') %>
         <%- include('nav.ejs') %>
-
+        <!-- Barra de navegación de migas de pan -->
+        <nav style="--bs-breadcrumb-divider: '/';" aria-label="breadcrumb" class="border border-1 border-top-0 border-dark breadcrumb-nav">
+            <ol class="breadcrumb align-items-center me-auto my-auto">
+                <!-- Elementos de las migas de pan -->
+                <li class="breadcrumb-item d-flex align-items-center">
+                    <a href="/home" class="text-decoration-none">Home</a>
+                </li>
+                <li class="breadcrumb-item active" aria-current="page">Usuarios</li>
+            </ol>
+        </nav>
             <!-- Contenido principal -->
             <main class="p-3">
                 <div class="container">
                     <h2 class="mb-3 text-center titulo-dest">Lista de Usuarios</h2>
                     <div class="mb-3 d-flex align-items-center justify-content-center">
                         <!-- Etiqueta "Buscar por:" y menú desplegable -->
-                        <form action="/home/buscarUsuarios" method="GET" class="input-group">
-                            <label for="buscarPor" class="form-label p-2 mt-1">Filtrar:</label>
-                            <div class="form-group me-2 border border-dark rounded">
-                                <select class="form-select" id="buscarPor" name="campoBuscar">
-                                    <option value="email">Email</option>
-                                    <option value="nombre">Nombre</option>
-                                    <option value="apellido">Apellido</option>
-                                    <option value="facultad">Facultad</option>
-                                </select>
+                        <form action="/home/buscarUsuarios" method="GET" class="row g-2">
+                            <div class="col-12 col-sm-auto d-flex align-items-center">
+                                <label for="buscarPor" class="form-label p-2 mt-1">Filtrar:</label>
+                                <div class="form-group me-2 border border-dark rounded">
+                                    <select class="form-select" id="buscarPor" name="campoBuscar">
+                                        <option value="email">Email</option>
+                                        <option value="nombre">Nombre</option>
+                                        <option value="apellido">Apellido</option>
+                                        <option value="facultad">Facultad</option>
+                                    </select>
+                                </div>
                             </div>
-                            <!-- Caja de búsqueda y botón de búsqueda dentro del formulario -->
-                            <input id="busquedaGlobal" type="search" class="form-control border-dark rounded" placeholder="Buscar usuarios..." name="nombreBuscar" required>
-                            <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+                            <div class="col-12 col-sm-auto d-flex align-items-center">
+                                <!-- Caja de búsqueda y botón de búsqueda dentro del formulario -->
+                                <input id="busquedaGlobal" type="search" class="form-control border-dark rounded" placeholder="Buscar usuarios..." name="nombreBuscar" required>
+                                <button class="btn btn-dark" type="submit"><i class="bi bi-search"></i></button>
+                            </div>
                         </form>
-                    </div>                                                      
-                    <table class="table table-bordered">
-                        <thead class="border-dark">
-                            <tr>
-                                <th>Id</th>
-                                <th>Nombre</th>
-                                <th>Primer Apellido</th>
-                                <th>Segundo Apellido</th>
-                                <th>Correo Electrónico</th>
-                                <th>Facultad</th>
-                                <th>Curso</th>
-                                <th>Grupo</th>
-                                <th>Rol</th>
-                                <th>Validado</th>
-                                <th>Acciones</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            <% results.forEach(function(user) { %>
-                                <% if (user.Id !==session.Id) { %>
-                                    <tr>
-                                        <!-- Celdas de la tabla -->
-                                        <td>
-                                            <%= user.Id %>
-                                        </td>
-                                        <td>
-                                            <%= user.nombre %>
-                                        </td>
-                                        <td>
-                                            <%= user.apellido1 %>
-                                        </td>
-                                        <td>
-                                            <%= user.apellido2 %>
-                                        </td>
-                                        <td>
-                                            <%= user.email %>
-                                        </td>
-                                        <td>
-                                            <%= user.facultad %>
-                                        </td>
-                                        <td>
-                                            <%= user.curso %>
-                                        </td>
-                                        <td>
-                                            <%= user.grupo %>
-                                        </td>
-                                        <td>
-                                            <% if (user.rol=='1' ) { %>ADMIN<% } else { %>USUARIO<% } %>
-                                        </td>
-                                        <td>
-                                            <% if (user.validado =='1' ) { %>SI<% } else { %>NO<% } %>
-                                        </td>
-                                        <td>
-                                            <a href="#" class="btn btn-sm btn-dark abrir-modal-btn" data-id="<%= user.Id %>">Cambiar Rol</a>
-                                        </td>
-                                    </tr>
-                                    <% } %>
-                                        <% }); %>
-                        </tbody>
-                    </table>
+                    </div>
+                    <div class="table-responsive">
+                        <table class="table table-bordered">
+                            <thead class="border-dark">
+                                <tr>
+                                    <th class="align-middle">Id</th>
+                                    <th class="align-middle">Nombre</th>
+                                    <th class="align-middle">Primer Apellido</th>
+                                    <th class="align-middle">Segundo Apellido</th>
+                                    <th class="align-middle">Correo Electrónico</th>
+                                    <th class="align-middle">Facultad</th>
+                                    <th class="align-middle">Curso</th>
+                                    <th class="align-middle">Grupo</th>
+                                    <th class="align-middle">Rol</th>
+                                    <th class="align-middle">Validado</th>
+                                    <th class="align-middle">Acciones</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <% results.forEach(function(user) { %>
+                                    <% if (user.Id !==session.Id) { %>
+                                        <tr>
+                                            <!-- Celdas de la tabla -->
+                                            <td class="align-middle">
+                                                <%= user.Id %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.nombre %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.apellido1 %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.apellido2 %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.email %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.facultad %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.curso %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <%= user.grupo %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <% if (user.rol=='1' ) { %>ADMIN<% } else { %>USUARIO<% } %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <% if (user.validado=='1' ) { %>SI<% } else { %>NO<% } %>
+                                            </td>
+                                            <td class="align-middle">
+                                                <a href="#" class="btn btn-sm btn-dark abrir-modal-btn" data-id="<%= user.Id %>">Cambiar Rol</a>
+                                            </td>
+                                        </tr>
+                                        <% } %>
+                                            <% }); %>
+                            </tbody>
+                        </table>
+                    </div>
                 </div>
             </main>
             <!-- Modal de confirmación -->
