@@ -155,7 +155,6 @@ footer {
 
 /* Estilos para la barra de navegación */
 nav {
-    background-color: #00BCD4;
     text-align: center;
     padding: 10px 0;
     display: flex;
@@ -165,14 +164,58 @@ nav {
 
 /* Estilos para los elementos <a> en la barra de navegación */
 nav a {
-    color: #fff;
+    color: #000000;
     text-decoration: none;
-    margin: 0;
-    padding: 10px 0;
-    width: calc(100% / 3);
-    box-sizing: border-box;
-    display: block;
+    padding: 10px 20px;
+    display: inline-block;
+    transition: background-color 0.3s;
 }
+
+/* Estilos para el botón de menú en pantallas pequeñas */
+.navbar-toggler {
+    background-color: #141414;
+    border: none;
+}
+
+/* Estilos para el icono de menú en el botón */
+.navbar-toggler-icon {
+    background-color: #000000;
+}
+
+/* Estilos para los elementos del menú desplegable */
+.navbar-nav .nav-item {
+    text-align: center;
+}
+
+/* Estilos para los botones del nav en el menú desplegable */
+.navbar-nav .nav-link {
+    text-align: center;
+}
+
+/* Estilos para hover en los elementos del menú */
+.navbar-nav .nav-link:hover {
+    background-color: #333;
+}
+
+/* Estilos adicionales para hacer más bonito el menú */
+@media (min-width: 992px) {
+    nav a {
+        width: auto; /* Permitir que cada elemento del menú tenga su propio ancho */
+        box-sizing: content-box; /* Evitar que el ancho incluya el relleno y el borde */
+        text-align: center; /* Alinear texto al centro */
+    }
+
+    .navbar-nav {
+        width: 100%;
+        justify-content: space-between;
+    }
+
+    .navbar-nav .nav-item {
+        flex: 1;
+    }
+}
+
+
 /* Estilos para las tarjetas en la vista de rejilla */
 .destinos-grid {
     display: grid;

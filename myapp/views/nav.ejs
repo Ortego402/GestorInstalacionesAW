@@ -1,13 +1,27 @@
 <!-- Barra de navegación -->
-<nav class="navbar">
-    <!-- Enlace a la página "Nosotros" con estilo de botón de navegación -->
-    <a href="/home/usuarios" class="botonnav border-end border-1">Usuarios</a>
-    <% if (session.rol == '1') { %>
-        <a href="/home/reservas" class="botonnav border-end border-1">Reservas</a>
-    <% } else { %>
-    <!-- Enlace a la página "Servicios" con estilo de botón de navegación -->
-        <a href="/home" class="botonnav border-end border-1">Instalaciones</a>
-    <% } %>  
-    <!-- Enlace a la página Gestion de Usuarios nuevos por administrador -->
-    <a href="/home/validaciones" class="botonnav">Validacion</a>
+<nav class="navbar navbar-expand-lg">
+    <!-- Contenedor para centrar el botón en el medio -->
+    <div class="container-fluid">
+        <!-- Botón de menú para pantallas pequeñas -->
+        <button class="navbar-toggler text-light p-2 border-light" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-list"></i>
+        </button>
+
+        <!-- Contenedor de enlaces de navegación -->
+        <div class="collapse navbar-collapse" id="navbarNav">
+            <ul class="navbar-nav mx-auto d-lg-flex"> <!-- mx-auto centra los elementos en pantallas pequeñas -->
+                <!-- Enlace a la página "Nosotros" con estilo de botón de navegación -->
+                <li class="nav-item border rounded flex-fill">
+                    <a href="/home/usuarios" class="nav-link botonnav border-end border-1 text-white">Usuarios</a>
+                </li>
+                <li class="nav-item flex-fill border rounded">
+                    <a href="/home/reservas" class="nav-link botonnav border-end border-1 text-white">Reservas</a>
+                </li>
+                <!-- Enlace a la página Gestion de Usuarios nuevos por administrador -->
+                <li class="nav-item flex-fill border rounded">
+                    <a href="/home/validaciones" class="nav-link botonnav text-white">Validacion</a>
+                </li>
+            </ul>
+        </div>
+    </div>
 </nav>

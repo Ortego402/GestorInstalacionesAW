@@ -12,11 +12,11 @@ FALTA POR HACER:
     -ListarUsuarios HECHO
     -Login HECHO
     -MostrarReservas HECHO
-    -Nav
+    -Nav HECHO
     -Organización HECHO
     -Perfil HECHO
     -Registro HECHO
-    -Reserva (Falta las cards de las horas que salen mal, y la lista de reservas salen cortadas)
+    -Reserva (Falta las cards de las horas que salen mal)
     -Validacion HECHO
     -Validado HECHO
 
