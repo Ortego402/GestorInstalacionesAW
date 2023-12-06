@@ -1,9 +1,6 @@
 /* Estilos para el contenedor del encabezado */
 header {
-    display: flex;
-    align-items: center;
     background-color: #cfcfcf;
-    padding: 20px;
 }
 
 body {
