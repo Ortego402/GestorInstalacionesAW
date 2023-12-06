@@ -52,7 +52,8 @@ $(document).ready(function () {
         var fecha = $('#dia').val();
         var horaInicio = $('#horaini').val();
         var horaFin = $('#horafin').val();
-        $('#hora').empty();
+        $('#horaContainer').empty(); // Limpiar el contenedor de horas
+    
         // Hacer la petición AJAX para obtener las reservas
         $.ajax({
             url: '/obtener_horas_disponibles',
@@ -60,40 +61,51 @@ $(document).ready(function () {
             data: { instalacionId: instalacionId, fecha: fecha },
             success: function (data) {
                 var reservas = data.horasDisponibles;
-                console.log(reservas)
-                // Mostrar todas las horas disponibles para instalación individual
+                console.log(reservas);
+                var todasDeshabilitadas = true;
+                // Mostrar horas como tarjetas
                 for (var hora = new Date('1970-01-01T' + horaInicio + ':00'); hora <= new Date('1970-01-01T' + horaFin + ':00'); hora.setMinutes(hora.getMinutes() + 30)) {
                     var formattedHour = hora.getHours().toString().padStart(2, '0') + ':' + hora.getMinutes().toString().padStart(2, '0');
-                    // Contar el número de reservas para esta hora
                     var numReservas = reservas.filter(reserva => reserva.hora === formattedHour).length;
-
-                    // Verificar si el número de reservas es igual al aforo
                     var isDisabled = numReservas >= parseInt($('#aforo').val());
     
-                    var option = $('<option>', {
-                        value: formattedHour,
-                        text: formattedHour,
-                        disabled: isDisabled
+                    if (!isDisabled) {
+                        todasDeshabilitadas = false;
+                    }
+
+                    var cardClass = isDisabled ? 'bg-danger text-black' : 'bg-primary text-black';
+    
+                    var card = $('<button>', {
+                        type: 'button',
+                        class: 'card col-md-2 mx-2 ' + cardClass,
+                        html: '<div class="card-body text-center">' + formattedHour + '</div>'
                     });
     
-                    // Si está deshabilitado, aplicar estilos
-                    if (isDisabled) {
-                        option.css('background-color', 'grey');
-                        option.css('color', 'white');
-                    }
+                    // Asignar el evento de clic a la tarjeta utilizando "on" fuera de la función click
+                    card.click(handleCardClick);
     
-                    $('#hora').append(option);
+                    // Agregar la tarjeta al contenedor
+                    $('#horaContainer').append(card);
                 }
-                var todasDeshabilitadas = $('#hora option:disabled').length === $('#hora option').length;
+                // var todasDeshabilitadas = $('#horaContainer .card:disabled').length === $('#horaContainer .card').length;
 
                 if (todasDeshabilitadas) {
-                    // Mostrar mensaje al usuario
-                    $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
+                    if ($('#btnListaEspera').prop('disabled')) {
+                        // Button is disabled, do not show the message
+                        $('#mensajeReservado').text('Te has apuntado a la lista de espera con éxito.');
         
+                    } else {
+                        // Button is enabled, show the message
+                        $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
+                    }
                     // Mostrar botón para unirse a la lista de espera
                     $('#btnListaEspera').show();
+                } else {
+                    // Ocultar mensaje y botón de lista de espera si hay al menos una hora disponible
+                    $('#mensajeReservado').text('');
+                    $('#btnListaEspera').hide();
                 }
-        
+                
                 // Mostrar el select después de generar las opciones
                 $('#seleccionHoras').show();
             },
@@ -102,6 +114,7 @@ $(document).ready(function () {
             }
         });
     }
+    
 
     function updateHourOptions(data, horaInicio, horaFin) {
         var horaContainer = $('#horaContainer');
@@ -133,9 +146,14 @@ $(document).ready(function () {
     
         // Verificar si todas las tarjetas están deshabilitadas
         if (todasDeshabilitadas) {
-            // Mostrar mensaje al usuario
-            $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
-    
+            if ($('#btnListaEspera').prop('disabled')) {
+                // Button is disabled, do not show the message
+                $('#mensajeReservado').text('Te has apuntado a la lista de espera con éxito.');
+
+            } else {
+                // Button is enabled, show the message
+                $('#mensajeReservado').text('¡Todas las horas están reservadas! Apuntándote a la lista de espera, se le notificará cuando una reserva sea anulada.');
+            }
             // Mostrar botón para unirse a la lista de espera
             $('#btnListaEspera').show();
         } else {
@@ -144,8 +162,11 @@ $(document).ready(function () {
             $('#btnListaEspera').hide();
         }
     }
-    
+
     function handleCardClick() {
+        // Reset the background color for all cards
+        $('.card').removeClass('selected bg-black');
+    
         var formattedHour = $(this).text();  // Obtener el texto del botón, que es la hora
         var isDisabled = $(this).hasClass('bg-danger');
     
@@ -158,6 +179,9 @@ $(document).ready(function () {
     
             // Establecer la hora seleccionada en el campo oculto
             $('#hora').val(formattedHour);
+    
+            // Cambiar el color de fondo de la tarjeta seleccionada a un tono más oscuro
+            $(this).addClass('selected bg-black');
         }
     }
     

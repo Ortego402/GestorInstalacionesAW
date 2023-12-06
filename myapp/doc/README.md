@@ -1,3 +1,25 @@
+FALTA POR HACER:
+-Poner lo de miga de pan donde no haya y haga falta (miga de pan es: Home / Perfil)
+-Responsive:
+    -Home HECHO
+    -Email HECHO
+    -Email individual HECHO
+    -Error HECHO
+    -Footer HECHO
+    -Header
+    -Instalacion HECHO
+    -ListarReservas
+    -ListarUsuarios
+    -Login HECHO
+    -MostrarReservas HECHO
+    -Nav
+    -Organización HECHO
+    -Perfil HECHO
+    -Registro HECHO
+    -Reserva (Falta las cards de las horas que salen mal, y la lista de reservas salen cortadas)
+    -Validacion HECHO
+    -Validado HECHO
+
 SET GLOBAL max_allowed_packet=67108864;
 Funcionalidades del Administrador
 # 1. Configuración del Sistema: a. Personalizar la apariencia del sistema con nombre, dirección e icono de la organización.
@@ -8,8 +30,7 @@ Funcionalidades del Administrador
 # 4. Asignación de Roles: a. Asignar roles de administrador a usuarios específicos.
 # 5. Estadísticas y Listados: a. Obtener estadísticas de reservas por usuario o por facultad. b. Generar listados de usuarios por facultad.
 # 6. Comunicación Interna: a. Enviar mensajes a usuarios a través de un buzón de correo interno.
-7. Gestión de lista de espera:
-a. Se enviará una notificación al primer usuario de la lista cuando haya habido alguna cancelación de reservas.
+# 7. Gestión de lista de espera: a. Se enviará una notificación al primer usuario de la lista cuando haya habido alguna cancelación de reservas.
 
 Funcionalidades del Usuario
 # 1. Registro de Usuarios: a. Registrarse en la plataforma proporcionando información como nombre, apellidos, facultad, curso, grupo, contraseña, contraseña visible e imagen de perfil.
@@ -57,5 +78,5 @@ Funcionalidades según la nota:
 10
 ● Todas las anteriores
 # ● Administrador y Usuario: Calendario interactivo de disponibilidad
-● Administrador: Gestionar la Lista de espera
-● Refactorización de código
+# ● Administrador: Gestionar la Lista de espera
+# ● Refactorización de código

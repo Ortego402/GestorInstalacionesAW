@@ -15,7 +15,7 @@
 
 <body class="bg-light">
     <main class=" main-fondo">
-        <div class="container">
+        <div class="container-fluid d-flex justify-content-center align-content-center p-5">
             <div class="col-md-6 border border-1 border-dark">
                 <div class="card">
                     <div class="card-body">
@@ -84,7 +84,7 @@
                                                 <label for="password">Contraseña</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" id="password" name="password" required oninput="validatePassword(this)">
-                                                    <button type="button" class="btn btn-outline-dark" id="showPasswordBtn" onclick="togglePassword('password', 'showPasswordBtn')">Mostrar</button>
+                                                    <button type="button" class="btn btn-outline-dark" id="showPasswordBtn">Mostrar</button>
                                                     <div id="passwordError" style="color: red;"></div>
                                                 </div>
                                             </div>
@@ -92,7 +92,7 @@
                                                 <label for="confirmPassword">Confirmar Contraseña</label>
                                                 <div class="input-group">
                                                     <input type="password" class="form-control" id="confirmPassword" name="confirmPassword" required oninput="validateConfirmPassword(this)">
-                                                    <button type="button" class="btn btn-outline-dark" id="showPasswordBtn2" onclick="togglePassword('confirmPassword', 'showPasswordBtn2')">Mostrar</button>
+                                                    <button type="button" class="btn btn-outline-dark" id="showPasswordBtn2">Mostrar</button>
                                                 </div>
                                                 <div id="confirmPasswordError" style="color: red;"></div>
                                             </div>
@@ -175,6 +175,8 @@
 
         var passwordInput = document.getElementById('password');
         var showPasswordBtn = document.getElementById('showPasswordBtn');
+        var passwordInput2 = document.getElementById('confirmPassword');
+        var showPasswordBtn2 = document.getElementById('showPasswordBtn2');
 
         // Agrega el event listener fuera de la función
         showPasswordBtn.addEventListener('click', function () {
@@ -187,6 +189,16 @@
             }
         });
 
+        // Agrega el event listener fuera de la función
+        showPasswordBtn2.addEventListener('click', function () {
+            if (passwordInput2.type === 'password') {
+                passwordInput2.type = 'text';
+                showPasswordBtn2.textContent = 'Ocultar';
+            } else {
+                passwordInput2.type = 'password';
+                showPasswordBtn2.textContent = 'Mostrar';
+            }
+        });
     </script>
 </body>
 

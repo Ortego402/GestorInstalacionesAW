@@ -25,10 +25,20 @@ router.get('/validaciones', (req, res) => {
             // Manejar el error aquí, por ejemplo, renderizando una página de error
             return res.status(500).send('Error interno del servidor');
         }
+        // Formatear la fecha en cada resultado
+        results = results.map(result => {
+            result.fecha_creacion = formatearFecha(result.fecha_creacion);
+            return result;
+        });
         return res.render('validacion', { validaciones: results, session: req.session });
     });
 });
 
+// Función para formatear la fecha
+function formatearFecha(fecha) {
+    const opciones = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return new Date(fecha).toLocaleDateString('es-ES', opciones);
+}
 
 router.get('/cambiarRol/:id', (req, res) => {
     const id = req.params.id;

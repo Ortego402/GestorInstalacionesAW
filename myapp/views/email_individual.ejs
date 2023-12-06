@@ -12,7 +12,7 @@
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.3/font/bootstrap-icons.css">
     <!-- Título de la página y favicon -->
     <title>UCM | Email</title>
-    <link rel="icon" href="/images/logo.png" type="image/x-icon">
+    <link rel="icon" href="/images/icon.png" type="image/x-icon">
 </head>
 
 <body>
@@ -40,7 +40,7 @@
                     <!-- Detalles del correo electrónico -->
                     <div class="card">
                         <div class="card-header d-flex justify-content-between align-items-center">
-                            <h4 class="card-title text-center mb-0">Detalles del Email</h4>
+                            <h4 class="card-title text-center mb-0">Detalles Email</h4>
                             <div>
                                 <button type="button" class="btn btn-warning" data-bs-toggle="modal" data-bs-target="#enviarEmailModal" id="responderBtn">
                                     Responder
@@ -48,14 +48,17 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            <div class="mb-3 d-flex justify-content-between">
-                                <div><strong>Origen:</strong>
+                            <div class="mb-3 d-md-flex justify-content-between">
+                                <div class="mb-3 mb-md-0">
+                                    <strong>Origen:</strong>
                                     <%= result.correo_envia %>
                                 </div>
-                                <div><strong>Asunto:</strong>
+                                <div class="mb-3 mb-md-0">
+                                    <strong>Asunto:</strong>
                                     <%= result.asunto %>
                                 </div>
-                                <div><strong>Fecha:</strong>
+                                <div class="mb-3 mb-md-0">
+                                    <strong>Fecha:</strong>
                                     <%= result.fecha %>
                                 </div>
                             </div>

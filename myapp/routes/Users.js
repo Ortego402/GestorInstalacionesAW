@@ -200,31 +200,46 @@ router.post('/realizar_reserva', (req, res) => {
 
 
 router.get('/email', (req, res) => {
-    const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    daoUser.getEmailsUser(req.session.email, (err, results) => {
+    const mensaje = req.query.mensaje || "";
+
+    daoUser.getEmailsUser(req.session.email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         } 
+
+        // Formatear la fecha en cada email
+        const results = result.map(email => {
+            email.fecha = formatearFecha(email.fecha);
+            return email;
+        });
+
         return res.render('email', { results: results, session: req.session, mensaje: mensaje });
     });
 });
+
+// Función para formatear la fecha
+function formatearFecha(fecha) {
+    const opciones = { year: 'numeric', month: 'short', day: 'numeric', hour: 'numeric', minute: 'numeric' };
+    return new Date(fecha).toLocaleDateString('es-ES', opciones);
+}
 
 
 router.get('/email/:id', (req, res) => {
     const id = req.params.id;
 
-    daoUser.getEmail(id, (err, result) => {
+    daoUser.getEmail(id, (err, email) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        if(result.leido == '0'){
+        if(email.leido == '0'){
             daoUser.leerEmail(id, (err) => {
                 if (err) {
                     return res.status(500).json({ error: 'Error de la base de datos' });
                 }
             });
         }
-        return res.render('email_individual', { result: result, session: req.session });
+        email.fecha = formatearFecha(email.fecha);
+        return res.render('email_individual', { result: email, session: req.session });
     });
 });
 
@@ -332,24 +347,24 @@ router.post('/reservas_usuario', (req, res) => {
             }
             console.log(results)
             if (results.length > 0) {
-                // Iterate over each row in the waiting list
-                results.forEach((filaListaEspera) => {
-                    // Delete the row from the waiting list
-                    daoUser.eliminarListaEspera(filaListaEspera.id, (err) => {
+                // Process only the first row in the waiting list
+                const filaListaEspera = results[0];
+
+                // Delete the row from the waiting list
+                daoUser.eliminarListaEspera(filaListaEspera.id, (err) => {
+                    if (err) {
+                        return res.status(500).send('Error al eliminar de la lista de espera');
+                    }
+                    // Call insertEmail to send an email to the user
+                    const correo_envia = 'Sistema@ucm.com';  // Set the sender's email address
+                    const correo_destino = filaListaEspera.usuEmail; // Set the recipient's email address
+                    const asunto = '¡Reserva Disponible!';
+                    const mensaje = 'Se ha liberado una reserva para la fecha ' + fechaReserva + ' en la instalación ' + filaListaEspera.instalacion_nombre + '.';
+
+                    daoUser.insertEmail(correo_envia, correo_destino, asunto, mensaje, (err) => {
                         if (err) {
-                            return res.status(500).send('Error al eliminar de la lista de espera');
+                            return res.status(500).send('Error al enviar el correo');
                         }
-                        // Call insertEmail to send an email to the user
-                        const correo_envia = 'Sistema@ucm.com';  // Set the sender's email address
-                        const correo_destino = filaListaEspera.usuEmail; // Set the recipient's email address
-                        const asunto = '¡Reserva Disponible!';
-                        const mensaje = 'Se ha liberado una reserva para la fecha ' + fechaReserva + ' en la instalación ' + filaListaEspera.instalacion_nombre + '.';
-                        
-                        daoUser.insertEmail(correo_envia, correo_destino, asunto, mensaje, (err) => {
-                            if (err) {
-                                return res.status(500).send('Error al enviar el correo');
-                            }
-                        });
                     });
                 });
             }
@@ -378,7 +393,7 @@ router.post('/lista_espera', (req, res) => {
     const idInstalacion = req.body.instalacionId;
     const fecha = req.body.fecha;
     const usuario = req.body.usuario;
-
+    console.log(idInstalacion + " " + fecha + " " + usuario)
     daoUser.apuntarListaEspera(idInstalacion, fecha, usuario, (err) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Error al apuntarse en la lista.' });

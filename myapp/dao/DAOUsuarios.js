@@ -267,7 +267,7 @@ class DAOUsuarios {
     }
 
     obtenerListaEsperaInfo(idInstalacion, fecha, callback) {
-        const query = 'SELECT l.id, l.usuEmail, l.instId, l.fecha, i.nombre AS instalacion_nombre FROM ucm_aw_riu_list_listaespera l JOIN ucm_aw_riu_ins_instalaciones i ON l.instId = i.Id WHERE l.instId = ? AND l.fecha = ?';
+        const query = 'SELECT l.id, l.usuEmail, l.instId, l.fecha, i.nombre AS instalacion_nombre FROM ucm_aw_riu_list_listaespera l JOIN ucm_aw_riu_ins_instalaciones i ON l.instId = i.Id WHERE l.instId = ? AND l.fecha = ? ORDER BY id DESC';
     
         this.pool.query(query, [idInstalacion, fecha], (err, results) => {
             if (err) {

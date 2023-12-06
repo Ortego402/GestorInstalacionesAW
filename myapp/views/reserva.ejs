@@ -131,7 +131,8 @@
                                                                             <!-- Aquí se generarán dinámicamente las tarjetas de horas -->
                                                                         </div>
                                                                     </div>
-                                                                    <input type="hidden" id="hora" name="hora">                                                                    
+                                                                    <input type="hidden" id="hora" name="hora">
+                                                                    <input type="hidden" id="usuario" name="usuario" value="<%= session.email %>">                                                             
                                                                     <input type="hidden" id="instalacionId" name="instalacionId" value="<%= results.Id %>">
                                                                     <input type="hidden" id="horaini" name="horaini" value="<%= results.horaInicio %>">
                                                                     <input type="hidden" id="horafin" name="horafin" value="<%= results.horaFin %>">
