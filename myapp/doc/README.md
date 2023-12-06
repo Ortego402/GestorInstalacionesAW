@@ -6,7 +6,7 @@ FALTA POR HACER:
     -Email individual HECHO
     -Error HECHO
     -Footer HECHO
-    -Header
+    -Header HECHO
     -Instalacion HECHO
     -ListarReservas HECHO
     -ListarUsuarios HECHO
