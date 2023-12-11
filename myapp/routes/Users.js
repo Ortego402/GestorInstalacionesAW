@@ -50,6 +50,7 @@ router.post('/InicioSesion', (req, res) => {
                     req.session.Id = user.Id;
                     req.session.rol = user.rol;
                     req.session.imagen = user.imagen_perfil;
+                    req.session.facultad = user.facultad;
                     req.session.save(() => {
                         if (user.validado === '0') {
                             return res.redirect('/validado');
@@ -263,7 +264,6 @@ router.get('/servicios', (req, res) => {
 });
 
 
-//no se como se hace lo que habia en app.js antes no lo entiendo
 router.get('/reserva/:id', (req, res) => {
     const id = req.params.id;
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
@@ -282,6 +282,29 @@ router.get('/reserva/:id', (req, res) => {
 
 });
 
+router.get('/validarEmail', (req, res) => {
+    const email = req.query.email;
+
+    // Lógica para comprobar si el usuario existe, pertenece a la misma facultad o tiene rol de admin
+    daoUser.checkEmail(email, (err, results) => {
+        if (err) {
+            return res.status(500).json({ error: 'Error de la base de datos' });
+        }
+
+        // Realiza las comprobaciones adicionales según tus requisitos
+        const usuarioValido = results && results.length > 0 && 
+        ((results[0].rol === '1' || req.session.rol === '1') ||
+         (results[0].facultad === req.session.facultad));    
+
+
+        // Ejemplo de mensaje y respuesta
+        if (usuarioValido) {
+            return res.send({ success: true, mensaje: 'Usuario válido' });
+        } else {
+            return res.send({ success: false, error: 'El usuario tiene que existir y pertenecer a la misma facultad que usted o el usuario debe ser un administrador.' });
+        }
+    });
+});
 
 router.get('/buscar', (req, res) => {
     const searchTerm = req.query.nombreBuscar;

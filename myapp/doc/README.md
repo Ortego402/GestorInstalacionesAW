@@ -1,5 +1,9 @@
 FALTA POR HACER:
 -Poner lo de miga de pan donde no haya y haga falta (miga de pan es: Home / Perfil)
+-Poner todos los javascript de las vistas en js a parte
+-Poner comentarios de información en los archivos
+-Eliminar console.log()
+-Poner bonita la base de datos
 
 SET GLOBAL max_allowed_packet=67108864;
 Funcionalidades del Administrador
