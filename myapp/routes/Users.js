@@ -129,7 +129,6 @@ router.post('/registrar', multerFactory.single('imagen'), (req, res) => {
 
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
-    console.log(req.session);
     daoUser.checkEmail(req.session.email, (err, result) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
@@ -250,7 +249,6 @@ router.post('/email', (req, res) => {
     const email_envio = req.session.email;
 
     daoUser.insertEmail(email_envio, destinatario, asunto, mensaje, (err) => {
-        console.log(err)
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         } 
@@ -368,7 +366,6 @@ router.post('/reservas_usuario', (req, res) => {
             if (err) {
                 return res.status(500).send('Error al obtener información de la lista de espera');
             }
-            console.log(results)
             if (results.length > 0) {
                 // Process only the first row in the waiting list
                 const filaListaEspera = results[0];
@@ -416,7 +413,6 @@ router.post('/lista_espera', (req, res) => {
     const idInstalacion = req.body.instalacionId;
     const fecha = req.body.fecha;
     const usuario = req.body.usuario;
-    console.log(idInstalacion + " " + fecha + " " + usuario)
     daoUser.apuntarListaEspera(idInstalacion, fecha, usuario, (err) => {
         if (err) {
             return res.status(500).json({ success: false, message: 'Error al apuntarse en la lista.' });

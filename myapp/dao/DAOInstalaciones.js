@@ -91,12 +91,10 @@ class DAOInstalaciones {
                 connection.query(
                     "SELECT * FROM ucm_aw_riu_res_reservas WHERE instId = ?",
                     [id], function (err, results) {
-                        console.log(results);
                         connection.release();
                         if (err) {
                             return callback("Error de acceso a la base de datos", null);
                         } else {
-                            console.log(results);
                             return callback(null, results);
                         }
                     }

@@ -89,7 +89,6 @@ class DAOUsuarios {
             if (err) {
                 return callback('Error de acceso a la base de datos');
             }
-            console.log(mensaje)
             connection.query('INSERT INTO ucm_aw_riu_emails (correo_envia, correo_destino, asunto, mensaje, leido) VALUES (?, ?, ?, ?, ?)', [correo_envia, correo_destino, asunto, mensaje, '0'], (err) => {
                 connection.release();
                 if (err) {
@@ -205,13 +204,11 @@ class DAOUsuarios {
             } else {
                 // Verificar si id_instalaciones es un array no vacío
                 if (id_instalaciones.length > 0) {
-                    console.log(id_instalaciones[0]);
                     connection.query("SELECT id, nombre FROM ucm_aw_riu_ins_instalaciones WHERE id IN (?)", [id_instalaciones], function (err, results) {
                         connection.release();
                         if (err) {
                             return callback("Error de acceso a la base de datos dao", null);
                         } else {
-                            console.log(results);
                             return callback(null, results);
                         }
                     });

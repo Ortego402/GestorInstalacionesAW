@@ -1,9 +1,10 @@
 FALTA POR HACER:
--Poner lo de miga de pan donde no haya y haga falta (miga de pan es: Home / Perfil)
+# -Poner lo de miga de pan donde no haya y haga falta (miga de pan es: Home / Perfil) no falta en ningun lado miralo por si aca
 -Poner todos los javascript de las vistas en js a parte
 -Poner comentarios de información en los archivos
--Eliminar console.log()
--Poner bonita la base de datos
+# -Eliminar console.log()
+# -Poner bonita la base de datos
+- solucinar seleccionador de reservas te deja seleccionar varias pero solo se registra una.
 
 SET GLOBAL max_allowed_packet=67108864;
 Funcionalidades del Administrador

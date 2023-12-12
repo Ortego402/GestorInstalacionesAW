@@ -61,7 +61,6 @@ $(document).ready(function () {
             data: { instalacionId: instalacionId, fecha: fecha },
             success: function (data) {
                 var reservas = data.horasDisponibles;
-                console.log(reservas);
                 var todasDeshabilitadas = true;
                 // Mostrar horas como tarjetas
                 for (var hora = new Date('1970-01-01T' + horaInicio + ':00'); hora <= new Date('1970-01-01T' + horaFin + ':00'); hora.setMinutes(hora.getMinutes() + 30)) {

@@ -205,7 +205,6 @@ router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) =
     const nombre_original = req.session.orgNombre;
     daoAdmin.editarOrganizacion(nombre, direccion, imagen, nombre_original, (err) => {
         if (err != null) {
-            console.log(err);
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
         daoAdmin.mostrarOrganizacion((error, result) => {
@@ -239,7 +238,6 @@ router.get('/reservas', (req, res) => {
         if (err) {
             return res.status(500).json({ error: 'Error de la base de datos' });
         }
-        console.log(results)
         res.render('listarReservas', { results: results, session: req.session });
     });
 });
