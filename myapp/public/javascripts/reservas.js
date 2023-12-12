@@ -165,16 +165,13 @@ $(document).ready(function () {
     }
 
     function handleCardClick() {
-        // Reset the background color for all cards
-        $('.card').removeClass('selected bg-black');
-    
         var formattedHour = $(this).text();  // Obtener el texto del botón, que es la hora
         var isDisabled = $(this).hasClass('bg-danger');
     
-        if (!isDisabled && !$(this).hasClass('selected')) {
-            // Eliminar la clase 'selected' de todas las tarjetas
-            $('.card').removeClass('selected');
+        // Eliminar la clase 'selected' y el color negro de todas las tarjetas
+        $('.fixed-width-card').removeClass('selected bg-black');
     
+        if (!isDisabled) {
             // Añadir la clase 'selected' a la tarjeta actual
             $(this).addClass('selected');
     
@@ -182,10 +179,11 @@ $(document).ready(function () {
             $('#hora').val(formattedHour);
     
             // Cambiar el color de fondo de la tarjeta seleccionada a un tono más oscuro
-            $(this).addClass('selected bg-black');
+            $(this).addClass('bg-black');
         }
     }
     
+
     // Evento para unirse a la lista de espera
     $('#btnListaEspera').on('click', function () {
         apuntarseListaEspera();
