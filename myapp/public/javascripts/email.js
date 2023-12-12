@@ -1,3 +1,4 @@
+// Validar email para mandar el correo
 $(document).ready(function () {
     $('#destinatario').on('input', function () {
         const email = $(this).val();
@@ -19,6 +20,36 @@ $(document).ready(function () {
             error: function (error) {
                 console.error('Error en la solicitud AJAX:', error);
             }
+        });
+    });
+});
+
+// Modal para enviar respuesta a un correo
+document.addEventListener('DOMContentLoaded', function () {
+    // Obtén los datos del correo
+    const destinatario = '<%= result.correo_envia %>'; // Asigna el correo del remitente
+    const asunto = 'Re: <%= result.asunto %>'; // Agrega "Re:" al asunto original
+
+    // Rellena el modal al hacer clic en el botón Responder
+    const responderBtn = document.getElementById('responderBtn');
+    responderBtn.addEventListener('click', function () {
+        const destinatarioInput = document.getElementById('destinatario');
+        const asuntoInput = document.getElementById('asunto');
+
+        destinatarioInput.value = destinatario;
+        asuntoInput.value = asunto;
+    });
+});
+
+// Ver email individual
+document.addEventListener('DOMContentLoaded', function () {
+    const emailRows = document.querySelectorAll('.email-item');
+
+    // Al hacer click habre el email 
+    emailRows.forEach(function (row) {
+        row.addEventListener('click', function () {
+            const url = row.getAttribute('data-href');
+            window.location.href = url;
         });
     });
 });

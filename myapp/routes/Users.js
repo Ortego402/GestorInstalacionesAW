@@ -17,11 +17,13 @@ daoUser = new DAOUser(pool);
 daoAdmin = new DAOAdmin(pool);
 daoinstalaciones = new DAOInstalaciones(pool);
 
+// Metodo principal, login
 router.get('/', (req, res) => {
     let mensaje = "";
     return res.render("login.ejs", { session: req.session, mensaje: mensaje });
 });
 
+// Metodo home donde aparecen las instalaciones para reservar
 router.get('/home', (req, res) => {
     daoinstalaciones.getAllInstalaciones((err, results) => {
         if (err) {
@@ -31,11 +33,12 @@ router.get('/home', (req, res) => {
     });
 });
 
-
+// Metodo mostrar view de espera hasta ser validado cuando te acabas de registrar
 router.get('/validado', (req, res) => {
     return res.render('validado.ejs', { session: req.session });
 });
 
+// Metodo para inciar sesion
 router.post('/InicioSesion', (req, res) => {
     const { email, password } = req.body;
     daoUser.getUserByEmail(email, (err, user) => {
@@ -75,7 +78,7 @@ router.post('/InicioSesion', (req, res) => {
     });
 });
 
-
+// Metodo para mostrar el registro
 router.get('/registro', (req, res) => {
     daoUser.getFacultades((err, facultades) => {
         if (err) {
@@ -86,6 +89,7 @@ router.get('/registro', (req, res) => {
     });
 });
 
+// Metodo para registrarse
 router.post('/registrar', multerFactory.single('imagen'), (req, res) => {
     const { nombre, apellido1, apellido2, email, facultad, curso, grupo, password, confirmPassword } = req.body;
     let imagen = req.file ? req.file.buffer : null; // Se coge del req por que las files estan aqui
@@ -126,7 +130,7 @@ router.post('/registrar', multerFactory.single('imagen'), (req, res) => {
     });
 });
 
-
+// Metodo para mostrar los datos del perfil
 router.get('/perfil', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
     daoUser.checkEmail(req.session.email, (err, result) => {
@@ -143,7 +147,7 @@ router.get('/perfil', (req, res) => {
     });
 });
 
-
+// Metodo para editar los datos del perfil
 router.post('/editar/:id', multerFactory.single('imagen'), (req, res) => {
     const { email, nombre, apellido1, apellido2, facultad, curso, grupo } = req.body;
     let imagen;
@@ -166,7 +170,7 @@ router.post('/editar/:id', multerFactory.single('imagen'), (req, res) => {
     });
 });
 
-
+// Metodo para logout
 router.get('/logout', (req, res) => {
     req.session.destroy((err) => {
         if (err) {
@@ -176,7 +180,7 @@ router.get('/logout', (req, res) => {
     });
 });
 
-
+// Metodo para realizar una instalacion
 router.post('/realizar_reserva', (req, res) => {
     const {instalacionId, dia, hora, aforo} = req.body;
     const email = req.session.email;
@@ -198,7 +202,7 @@ router.post('/realizar_reserva', (req, res) => {
     });
 });
 
-
+// Metodo para mostrar emails de un usuario
 router.get('/email', (req, res) => {
     const mensaje = req.query.mensaje || "";
 
@@ -223,7 +227,7 @@ function formatearFecha(fecha) {
     return new Date(fecha).toLocaleDateString('es-ES', opciones);
 }
 
-
+// Metodo para mostrar un email en concreto
 router.get('/email/:id', (req, res) => {
     const id = req.params.id;
 
@@ -243,7 +247,7 @@ router.get('/email/:id', (req, res) => {
     });
 });
 
-
+// Metodo para enviar un email
 router.post('/email', (req, res) => {
     const { destinatario, asunto, mensaje } = req.body;
     const email_envio = req.session.email;
@@ -256,12 +260,7 @@ router.post('/email', (req, res) => {
     });
 });
 
-
-router.get('/servicios', (req, res) => {
-    res.render('servicios', { session: req.session });
-});
-
-
+// Metodo para mostrar una instalacion
 router.get('/reserva/:id', (req, res) => {
     const id = req.params.id;
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
@@ -280,6 +279,7 @@ router.get('/reserva/:id', (req, res) => {
 
 });
 
+// Metodo para validar email al mandar un email
 router.get('/validarEmail', (req, res) => {
     const email = req.query.email;
 
@@ -304,6 +304,7 @@ router.get('/validarEmail', (req, res) => {
     });
 });
 
+// Metodo para buscar instalacion
 router.get('/buscar', (req, res) => {
     const searchTerm = req.query.nombreBuscar;
     daoinstalaciones.searchInstalaciones(searchTerm, (err, instalaciones) => {
@@ -315,7 +316,7 @@ router.get('/buscar', (req, res) => {
     });
 });
 
-
+// Metodo para mostrar reservas de un usuario
 router.get('/reservas_usuario',(req, res) => {
     const email = req.session.email;
     daoUser.reservasUser(email, (err, reservas) => {
@@ -398,6 +399,7 @@ router.post('/reservas_usuario', (req, res) => {
     });
 });
 
+// Metodo para obtener horas disponibles de una instalacion en un dia en concreto
 router.post('/obtener_horas_disponibles', (req, res) => {
     const idInstalacion= req.body.instalacionId;
     const fecha = req.body.fecha;
@@ -409,6 +411,7 @@ router.post('/obtener_horas_disponibles', (req, res) => {
     });
 });
 
+// Metodo para apuntar en la lista de espera a un usuario
 router.post('/lista_espera', (req, res) => {
     const idInstalacion = req.body.instalacionId;
     const fecha = req.body.fecha;

@@ -1,11 +1,12 @@
 "use strict";
 
-
+// Clase que representa el acceso a datos para las instalaciones
 class DAOInstalaciones {
     constructor(pool) {
         this.pool = pool;
     }
 
+    // Obtiene todas las instalaciones desde la base de datos
     getAllInstalaciones(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -22,9 +23,8 @@ class DAOInstalaciones {
             });
         });
     }
-    
 
-
+    // Busca instalaciones por nombre
     searchInstalaciones(busqueda, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -42,6 +42,7 @@ class DAOInstalaciones {
         });
     }
 
+    // Obtiene detalles de una instalación por su ID
     getInstalacion(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -59,6 +60,7 @@ class DAOInstalaciones {
         });
     }
 
+    // Obtiene todas las reservas con información extendida de la instalación y el usuario
     obtenerReservasConNombreInstalacion(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -83,6 +85,7 @@ class DAOInstalaciones {
         });
     }
 
+    // Obtiene todas las reservas para una instalación específica
     obtenerReservasPorInstalacion(id, callback){
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -102,7 +105,8 @@ class DAOInstalaciones {
             }
         });
     }
-    
+
+    // Realiza la reserva de una instalación
     reservaInstalacion(id, dia, hora, email, callback){
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -119,8 +123,7 @@ class DAOInstalaciones {
             }
         });
     }
-
 }
 
-
+// Exporta la clase para su uso en otros módulos
 module.exports = DAOInstalaciones;

@@ -1,9 +1,6 @@
-FALTA POR HACER:
--Poner todos los javascript de las vistas en js a parte
--Poner comentarios de información en los archivos
-# -Poner bonita la base de datos
-
+PONER SIEMPRE EN LA BASE DE DATOS ANTES DE EJECUTAR:
 SET GLOBAL max_allowed_packet=67108864;
+
 Funcionalidades del Administrador
 # 1. Configuración del Sistema: a. Personalizar la apariencia del sistema con nombre, dirección e icono de la organización.
 # 2. Gestión de Instalaciones: a. Crear nuevas instalaciones con nombre, disponibilidad horaria, tipo de reserva (individual o colectiva), y aforo (si aplica). b. Adjuntar fotografía/icono a la instalación.

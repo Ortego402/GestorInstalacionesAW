@@ -116,57 +116,8 @@
             <!-- Inclusión del pie de página -->
             <%- include('footer.ejs') %>
                 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha1/dist/js/bootstrap.bundle.min.js"></script>
-                <script>
-                    // Obtiene todos los elementos con la clase 'abrir-modal-btn'
-                    const abrirModalButtons = document.querySelectorAll('.abrir-modal-btn');
-                    const abrirModalButtons2 = document.querySelectorAll('.abrir-modal-btn2');
-
-                    // Obtiene el elemento del botón de confirmar dentro del modal
-                    const confirmarBtn = document.getElementById('confirmarBtn');
-                    const confirmarBtn2 = document.getElementById('confirmarBtn2');
-
-                    // Variables para almacenar el ID y el correo electrónico del usuario
-                    let userId;
-                    let userEmail;
-
-                    // Función para abrir el modal de confirmación
-                    function abrirModal(event, modalId) {
-                        event.preventDefault();
-                        // Obtiene el ID y el correo electrónico del usuario del atributo de datos
-                        userId = event.target.getAttribute('data-id');
-                        userEmail = event.target.getAttribute('data-email');
-                        // Abre el modal de confirmación
-                        const confirmacionModal = new bootstrap.Modal(document.getElementById(modalId));
-                        confirmacionModal.show();
-                    }
-
-                    // Agrega un evento de clic a cada botón "Validar"
-                    abrirModalButtons.forEach(button => {
-                        button.addEventListener('click', function (event) {
-                            abrirModal(event, 'validarModal_' + this.getAttribute('data-id'));
-                        });
-                    });
-
-                    // Agrega un evento de clic a cada botón "Denegar"
-                    abrirModalButtons2.forEach(button => {
-                        button.addEventListener('click', function (event) {
-                            abrirModal(event, 'denegarModal_' + this.getAttribute('data-id'));
-                        });
-                    });
-
-                    // Agrega un evento de clic al botón "Confirmar" dentro del modal de Validar
-                    confirmarBtn.addEventListener('click', function (event) {
-                        // Redirige al endpoint para cambiar el rol con el ID y correo electrónico del usuario
-                        window.location.href = `/home/validar/${userId}?email=${userEmail}`;
-                    });
-
-                    // Agrega un evento de clic al botón "Confirmar" dentro del modal de Denegar
-                    confirmarBtn2.addEventListener('click', function (event) {
-                        // Redirige al endpoint para cambiar el rol con el ID y correo electrónico del usuario
-                        window.location.href = `/home/novalidar/${userId}?email=${userEmail}`;
-                    });
-
-                </script>
+                <script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+                <script src="/javascripts/registro.js"></script>
 
 
 </body>

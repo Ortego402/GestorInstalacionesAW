@@ -6,6 +6,7 @@ class DAOAdmin {
         this.pool = pool;
     }
 
+    // Obtiene todos los usuarios de la base de datos
     mostrarUsuarios(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -23,6 +24,7 @@ class DAOAdmin {
         });
     }
 
+    // Obtiene un usuario de la base de datos
     mostraUsuario(id, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -40,6 +42,7 @@ class DAOAdmin {
         });
     }
 
+    // Obtiene datos de la organización
     mostrarOrganizacion(callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -57,6 +60,7 @@ class DAOAdmin {
         });
     }
 
+    // Actualiza los datos de la organizacion
     editarOrganizacion(nombre, direccion, imagenData, nombre_original, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -76,9 +80,8 @@ class DAOAdmin {
         });
     }
 
-
+    // Inserta los datos de una nueva instalacion
     insertarInnstalacion(nombre, tipoReserva, imagen, aforo, horaInicio, horaFin, callback) {
-
         this.pool.getConnection(function (err, connection) {
             if (err) {
                 return callback('Error de acceso a la base de datos', null);
@@ -94,39 +97,60 @@ class DAOAdmin {
         });
 
     }
-
+    // Obtiene todas las validaciones desde la base de datos
     obtenerValidaciones(callback) {
         const query = "SELECT * FROM UCM_AW_RIU_Validaciones ORDER BY fecha_creacion desc;";
-        this.pool.query(query, (err, results) => {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
-                return callback(err, null);
+                return callback("Error de acceso a la base de datos", null);
             }
-            return callback(null, results);
+            connection.query(query, (err, results) => {
+                connection.release();
+                if (err) {
+                    return callback(err, null);
+                }
+                return callback(null, results);
+            });
         });
     }
 
+    // Valida un usuario en la base de datos
     validarUsuario(email, callback) {
         const query = 'UPDATE UCM_AW_RIU_USU_Usuarios SET validado = ? WHERE email = ?';
-        this.pool.query(query, ['1', email], (err, results) => {
-            if (err || results.length === 0) {
-                return callback('El usuario no existe.');
-            } else {
-                return callback(null);
+        this.pool.getConnection(function (err, connection) {
+            if (err) {
+                return callback("Error de acceso a la base de datos");
             }
+            connection.query(query, ['1', email], (err, results) => {
+                connection.release();
+                if (err || results.length === 0) {
+                    return callback('El usuario no existe.');
+                } else {
+                    return callback(null);
+                }
+            });
         });
     }
 
+    // Elimina una validación por su ID
     eliminarValidacion(id, callback) {
         const query = 'DELETE FROM UCM_AW_RIU_Validaciones WHERE id = ?';
-        this.pool.query(query, [id], (err, results) => {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
-                return callback('Error al eliminar la validación.');
-            } else {
-                return callback(null);
+                return callback("Error de acceso a la base de datos");
             }
+            connection.query(query, [id], (err, results) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al eliminar la validación.');
+                } else {
+                    return callback(null);
+                }
+            });
         });
     }
 
+    // Envía un correo de validación
     enviarCorreoValidacion(correo_envia, correo_destino, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -142,29 +166,42 @@ class DAOAdmin {
         });
     }
 
+    // Elimina un usuario por su email
     eliminarUsuario(email, callback) {
         const query = 'DELETE FROM UCM_AW_RIU_USU_Usuarios WHERE email = ?';
-        this.pool.query(query, [email], (err, results) => {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
-                return callback('Error al eliminar la validación.', null);
-            } else {
-                return callback(null, 'Validación eliminada correctamente.');
+                return callback("Error de acceso a la base de datos");
             }
+            connection.query(query, [email], (err, results) => {
+                connection.release();
+                if (err) {
+                    return callback('Error al eliminar el usuario.');
+                } else {
+                    return callback(null, 'Usuario eliminado correctamente.');
+                }
+            });
         });
     }
 
+    // Cambia el rol de un usuario por su ID
     cambiarRolUsuario(id, nuevoRol, callback) {
-        // Realiza la actualización del rol en tu base de datos.
         const query = 'UPDATE UCM_AW_RIU_USU_Usuarios SET rol = ? WHERE Id = ?';
-        this.pool.query(query, [nuevoRol, id], (err, result) => {
+        this.pool.getConnection(function (err, connection) {
             if (err) {
-                return callback(err);
+                return callback("Error de acceso a la base de datos");
             }
-            // Devuelve el resultado al servicio.
-            callback(null, result);
+            connection.query(query, [nuevoRol, id], (err, result) => {
+                connection.release();
+                if (err) {
+                    return callback(err);
+                }
+                return callback(null, result);
+            });
         });
     }
 
+    // Obtiene los usuarios segun la busqueda
     buscarUsuarios(campo, valor, callback) {
         this.pool.getConnection(function (err, connection) {
             if (err) {
@@ -196,6 +233,7 @@ class DAOAdmin {
         });
     }
 
+    // Obtiene los usuarios segun el filtro de busqueda
     buscarReservas(campo, valor, callback) {
         let sql = "SELECT r.*, i.nombre AS nombre_instalacion, u.facultad FROM ucm_aw_riu_res_reservas r " +
             "LEFT JOIN UCM_AW_RIU_INS_Instalaciones i ON r.instId = i.id " +

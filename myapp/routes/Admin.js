@@ -16,8 +16,7 @@ daoAdmin = new DAOAdmin(pool);
 daoinstalaciones = new DAOInstalaciones(pool);
 daoUsuarios = new DAOUsuarios(pool);
 
-
-
+// Mostrar lista de nuevos usuarios registrados
 router.get('/validaciones', (req, res) => {
 
     daoAdmin.obtenerValidaciones((err, results) => {
@@ -40,6 +39,7 @@ function formatearFecha(fecha) {
     return new Date(fecha).toLocaleDateString('es-ES', opciones);
 }
 
+// Metodo para cambiar de rol a un usuario
 router.get('/cambiarRol/:id', (req, res) => {
     const id = req.params.id;
     // Primero, obtén el rol actual del usuario.
@@ -61,6 +61,7 @@ router.get('/cambiarRol/:id', (req, res) => {
     });
 });
 
+// Metodo para validar un nuevo usuario
 router.get('/validar/:id', (req, res) => {
     const emailId = req.params.id;
     const userEmail = req.query.email;
@@ -103,6 +104,7 @@ router.get('/novalidar/:id', (req, res) => {
     });
 });
 
+// Metodo para buscar mediante filtros en una lista de usuarios
 router.get('/buscarUsuarios', (req, res) => {
     const { campoBuscar, nombreBuscar } = req.query;
 
@@ -138,7 +140,7 @@ router.get('/buscarUsuarios', (req, res) => {
     });
 });
 
-
+// Metodo para buscar mediante filtros en una lista de reservas
 router.get('/buscarReservas', (req, res) => {
     const { campoBuscar, nombreBuscar } = req.query;
 
@@ -178,7 +180,7 @@ router.get('/buscarReservas', (req, res) => {
     });
 });
 
-
+// Metodo para mostrar los datos de la organización
 router.get('/organizacion', (req, res) => {
     const mensaje = req.query.mensaje || ""; // Recupera el mensaje de la consulta, si está presente
 
@@ -190,7 +192,7 @@ router.get('/organizacion', (req, res) => {
     });
 });
 
-
+// Metodo para editar los datos de la organización
 router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) => {
     const { nombre, direccion } = req.body;
     let imagen;
@@ -219,7 +221,7 @@ router.post('/organizacion_editar', multerFactory.single('imagen'), (req, res) =
     });
 });
 
-
+// Mostrar una lista de todos los usuarios
 router.get('/usuarios', (req, res) => {
     // Realiza una consulta a la base de datos para obtener detalles del destino y sus imágenes y comentarios asociados
     daoAdmin.mostrarUsuarios((err, results) => {
@@ -232,7 +234,7 @@ router.get('/usuarios', (req, res) => {
     });
 });
 
-
+// Mostrar una lista de todas las reservas
 router.get('/reservas', (req, res) => {
     daoinstalaciones.obtenerReservasConNombreInstalacion((err, results) => {
         if (err) {
@@ -242,12 +244,12 @@ router.get('/reservas', (req, res) => {
     });
 });
 
-
+// Metodo para mostrar una instalacion
 router.get('/instalacion', (req, res) => {
     return res.render('instalacion', { session: req.session });
 });
 
-
+// Metodo para crear una nueva instalacion
 router.post('/nueva_instalacion', multerFactory.single('imagen'), (req, res) => {
     // Desestructura los datos del cuerpo de la solicitud y el archivo cargado
     const { nombre, tipoReserva, horaInicio, horaFin } = req.body;
